@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
+    id("io.sentry.android.gradle") version "6.1.0"
 }
 
 kotlin {
@@ -77,3 +79,13 @@ dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
 
+
+
+sentry {
+    org.set("universidad-catolica-bolivi-4y")
+    projectName.set("ucb")
+
+    // this will upload your source code to Sentry to show it as part of the stack traces
+    // disable if you don't want to expose your sources
+    includeSourceContext.set(true)
+}

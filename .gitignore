@@ -17,3 +17,8 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+iosApp/iosApp.xcworkspace/xcuserdata/
+
+# Sentry Config File
+sentry.properties
+sentry-wizard
