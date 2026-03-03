@@ -31,6 +31,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -41,6 +42,9 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -49,11 +53,11 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.project"
+    namespace = "com.ucb.proyectofinal"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.project"
+        applicationId = "com.ucb.proyectofinal"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -88,4 +92,16 @@ sentry {
     // this will upload your source code to Sentry to show it as part of the stack traces
     // disable if you don't want to expose your sources
     includeSourceContext.set(true)
+}
+
+// Workaround: Sentry tasks need to depend on Compose resource generation tasks
+tasks.configureEach {
+    if (name.startsWith("generateSentryBundleId")) {
+        tasks.findByName("generateResourceAccessorsForAndroidMain")?.let {
+            dependsOn(it)
+        }
+        tasks.findByName("generateActualResourceCollectorsForAndroidMain")?.let {
+            dependsOn(it)
+        }
+    }
 }
