@@ -9,6 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://222f952557780645d090f21d1bb0f19e@o4510977991049216.ingest.us.sentry.io/4510977994326016" />
+        <meta-data
+            android:name="io.sentry.debug"
+            android:value="true" />
+
         <activity
             android:exported="true"
             android:name=".MainActivity">
