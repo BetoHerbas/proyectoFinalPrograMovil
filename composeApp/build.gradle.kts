@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
 
     id("io.sentry.android.gradle") version "6.1.0"
+    alias(libs.plugins.google.gms.google.services)
 }
 
 kotlin {
@@ -33,6 +34,10 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.config)
+            implementation(libs.firebase.database)
+            implementation(libs.kotlinx.coroutines.play.services)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -83,6 +88,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.database)
     debugImplementation(libs.compose.uiTooling)
 }
 
