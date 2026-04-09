@@ -18,36 +18,70 @@ fun AppNavHost() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = NavRoute.Login) {
-        composable<NavRoute.Register> {
-            RegisterScreen()
-        }
 
         composable<NavRoute.Login> {
-            LoginScreen()
+            LoginScreen(
+                onNavigateToRegister = { navController.navigate(NavRoute.Register) },
+                onLoginSuccess = {
+                    navController.navigate(NavRoute.ContentLists) {
+                        popUpTo(NavRoute.Login) { inclusive = true }
+                    }
+                }
+            )
         }
 
-        composable<NavRoute.Profile> {
-            ProfileScreen()
+        composable<NavRoute.Register> {
+            RegisterScreen(
+                onNavigateToLogin = { navController.popBackStack() },
+                onRegisterSuccess = {
+                    navController.navigate(NavRoute.ContentLists) {
+                        popUpTo(NavRoute.Register) { inclusive = true }
+                    }
+                }
+            )
         }
 
         composable<NavRoute.ContentLists> {
-            ContentListsScreen()
-        }
-
-        composable<NavRoute.Settings> {
-            SettingsScreen()
+            ContentListsScreen(
+                onListClick = { navController.navigate(NavRoute.ListDetail) },
+                onCreateList = { navController.navigate(NavRoute.CreateList) },
+                onNavigateToProfile = { navController.navigate(NavRoute.Profile) }
+            )
         }
 
         composable<NavRoute.ListDetail> {
-            ListDetailScreen()
+            ListDetailScreen(
+                onBack = { navController.popBackStack() },
+                onAddItem = { navController.navigate(NavRoute.AddItem) }
+            )
         }
 
         composable<NavRoute.CreateList> {
-            CreateListScreen()
+            CreateListScreen(
+                onCancel = { navController.popBackStack() },
+                onSave = { navController.popBackStack() }
+            )
         }
 
         composable<NavRoute.AddItem> {
-            AddItemScreen()
+            AddItemScreen(
+                onCancel = { navController.popBackStack() },
+                onSave = { navController.popBackStack() }
+            )
+        }
+
+        composable<NavRoute.Profile> {
+            ProfileScreen(
+                onNavigateToSettings = { navController.navigate(NavRoute.Settings) },
+                onNavigateToLists = { navController.popBackStack() }
+            )
+        }
+
+        composable<NavRoute.Settings> {
+            SettingsScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
+
