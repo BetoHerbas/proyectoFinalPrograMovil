@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 
     id("io.sentry.android.gradle") version "6.1.0"
     alias(libs.plugins.google.gms.google.services)
@@ -34,6 +36,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(libs.androidx.room.sqlite.wrapper)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.config)
             implementation(libs.firebase.database)
@@ -53,6 +56,8 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -90,9 +95,16 @@ android {
 dependencies {
     implementation(libs.firebase.database)
     debugImplementation(libs.compose.uiTooling)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    // Add any other platform target you use in your project, for example kspDesktop
+
 }
 
-
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
 sentry {
     org.set("universidad-catolica-bolivi-4y")
@@ -113,4 +125,8 @@ tasks.configureEach {
             dependsOn(it)
         }
     }
+}
+
+tasks.register<LocoSyncTask>("syncTranslations") {
+    apiKey = EnvLoader.get("LOCO_API_KEY") ?: "TU_API_KEY_AQUI"
 }
