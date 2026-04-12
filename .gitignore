@@ -25,3 +25,6 @@ sentry-wizard
 
 # Environment variables
 .env
+
+# Firebase private config
+google-services.json
