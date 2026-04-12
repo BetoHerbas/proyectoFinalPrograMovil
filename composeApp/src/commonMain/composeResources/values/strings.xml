@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Proyecto Final</string>
+    <string name="hello_world">Hola Mundo!</string>
+    <string name="welcome_message">Bienvenido a la aplicación de prueba</string>
+</resources>
