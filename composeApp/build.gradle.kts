@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.androidx.room)
 
     id("io.sentry.android.gradle") version "6.1.0"
+    alias(libs.plugins.google.gms.google.services)
 }
 
 kotlin {
@@ -36,6 +37,10 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.androidx.room.sqlite.wrapper)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.config)
+            implementation(libs.firebase.database)
+            implementation(libs.kotlinx.coroutines.play.services)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -88,6 +93,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.database)
     debugImplementation(libs.compose.uiTooling)
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
