@@ -120,3 +120,7 @@ tasks.configureEach {
         }
     }
 }
+
+tasks.register<LocoSyncTask>("syncTranslations") {
+    apiKey = "TU_API_KEY_AQUI"
+}
