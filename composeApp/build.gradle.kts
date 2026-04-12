@@ -122,5 +122,5 @@ tasks.configureEach {
 }
 
 tasks.register<LocoSyncTask>("syncTranslations") {
-    apiKey = "TU_API_KEY_AQUI"
+    apiKey = EnvLoader.get("LOCO_API_KEY") ?: "TU_API_KEY_AQUI"
 }
