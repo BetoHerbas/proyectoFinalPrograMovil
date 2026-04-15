@@ -9,6 +9,12 @@ class MainApplication : Application() {
         super.onCreate()
         initKoin {
             androidContext(this@MainApplication)
+            modules(org.koin.dsl.module {
+                single { com.ucb.proyectofinal.worker.FetchPopularMoviesUseCase() }
+            })
         }
+        
+        // Inicializa y agenda la subida de logs
+        com.ucb.proyectofinal.worker.LogScheduler(this).schedulePeriodicaUpload()
     }
 }

@@ -2,6 +2,7 @@
 room = "2.8.4"
 sqlite = "2.6.2"
 ksp = "2.3.6"
+workRuntimeKtx = "2.11.0"
 
 agp = "8.13.0"
 android-compileSdk = "36"
@@ -25,6 +26,7 @@ firebaseBom = "34.11.0"
 firebaseMessaging = "25.0.1"
 
 [libraries]
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
