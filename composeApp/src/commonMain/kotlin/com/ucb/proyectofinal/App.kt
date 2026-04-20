@@ -1,15 +1,25 @@
 package com.ucb.proyectofinal
 
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import com.ucb.proyectofinal.navigation.AppNavHost
-import com.ucb.proyectofinal.remoteconfig.MaintenanceGate
-
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import com.ucb.proyectofinal.designsystem.theme.DsTheme
+import com.ucb.proyectofinal.designsystem.theme.ThemeMode
+import com.ucb.proyectofinal.navigation.AppNavHost
 import com.ucb.proyectofinal.notification.getToken
+import com.ucb.proyectofinal.remoteconfig.MaintenanceGate
 
 @Composable
 fun App() {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val isDark = isSystemInDarkTheme()
+
     LaunchedEffect(Unit) {
         try {
             val token = getToken()
@@ -19,12 +29,16 @@ fun App() {
         }
     }
 
-    MaterialTheme {
-        // Verifica Remote Config antes de mostrar cualquier pantalla.
-        // Si "mantainence" == true → muestra MaintenanceScreen.
-        // Si false (o error) → muestra la app normal.
+    DsTheme(
+        mode = if (isDark) ThemeMode.DARK else ThemeMode.LIGHT
+    ) {
         MaintenanceGate {
-            AppNavHost()
+            Scaffold(
+                contentWindowInsets = WindowInsets.safeDrawing,
+                snackbarHost = { SnackbarHost(snackbarHostState) }
+            ) { _ ->
+                AppNavHost()
+            }
         }
     }
 }

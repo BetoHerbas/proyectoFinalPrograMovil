@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.play.services)
         }
         commonMain.dependencies {
+            implementation(project(":designsystem"))
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
