@@ -2,11 +2,13 @@ package com.ucb.proyectofinal.designsystem.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.ucb.proyectofinal.designsystem.theme.AppTheme
 
@@ -19,6 +21,9 @@ fun BasicInput(
     enabled: Boolean = true,
     singleLine: Boolean = true,
     isError: Boolean = false,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     supportingText: String? = null
 ) {
     OutlinedTextField(
@@ -29,6 +34,9 @@ fun BasicInput(
         singleLine = singleLine,
         isError = isError,
         label = { Text(label) },
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        visualTransformation = visualTransformation,
         supportingText = supportingText?.let { { Text(it) } },
         textStyle = AppTheme.typography.bodyMedium.copy(
             color = AppTheme.colors.textPrimary
