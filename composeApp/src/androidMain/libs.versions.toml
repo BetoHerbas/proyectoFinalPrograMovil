@@ -1,0 +1,6 @@
+toml
+[libraries]
+# ... other libraries
+compose-material-icons-extended = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "composeMultiplatform" }
+# Note: In Compose Multiplatform, extended icons are often bundled or require the specific group:
+compose-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "composeMultiplatform" }
