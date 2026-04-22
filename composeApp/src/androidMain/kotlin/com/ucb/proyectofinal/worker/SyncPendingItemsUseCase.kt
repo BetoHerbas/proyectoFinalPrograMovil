@@ -17,12 +17,16 @@ import kotlinx.coroutines.tasks.await
 class SyncPendingItemsUseCase(
     private val dao: TodoDao
 ) {
+    // URL explícita de la Realtime Database (necesaria cuando no está en google-services.json)
+    private val RTDB_URL = "https://proyectofinalmobile-5363d-default-rtdb.firebaseio.com/"
+
+    private val dbRef get() = FirebaseDatabase.getInstance(RTDB_URL).getReference("sync_queue")
+
     suspend operator fun invoke(): Result<Int> {
         return try {
             val pending = dao.getPendingTodos()
             if (pending.isEmpty()) return Result.success(0)
 
-            val dbRef = FirebaseDatabase.getInstance().getReference("sync_queue")
             val now = System.currentTimeMillis()
             var syncedCount = 0
 
@@ -34,7 +38,9 @@ class SyncPendingItemsUseCase(
                     "isCompleted" to item.isCompleted,
                     "syncedAt"    to now
                 )
-                dbRef.child(item.id.toString()).setValue(payload).await()
+                // push() genera un ID único en Firebase (ej: -NxKj8abc123...)
+                // evita colisiones entre dispositivos con IDs de Room idénticos
+                dbRef.push().setValue(payload).await()
                 dao.markAsSynced(item.id, now)
                 syncedCount++
             }
