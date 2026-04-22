@@ -22,3 +22,9 @@ iosApp/iosApp.xcworkspace/xcuserdata/
 # Sentry Config File
 sentry.properties
 sentry-wizard
+
+# Environment variables
+.env
+
+# Firebase private config
+google-services.json

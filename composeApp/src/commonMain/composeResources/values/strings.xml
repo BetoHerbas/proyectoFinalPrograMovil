@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Proyecto Final</string>
+    <string name="hello_world">Hola Mundo!</string>
+    <string name="welcome_message">Bienvenido a la aplicación de prueba</string>
+
+    <!-- Screen Titles -->
+    <string name="login_screen_title">Login Screen</string>
+    <string name="register_screen_title">Register Screen</string>
+    <string name="add_item_screen_title">Add Item Screen</string>
+    <string name="content_lists_screen_title">Content Lists Screen</string>
+    <string name="create_list_screen_title">Create List Screen</string>
+    <string name="list_detail_screen_title">List Detail Screen</string>
+    <string name="profile_screen_title">Profile Screen</string>
+    <string name="settings_screen_title">Settings Screen</string>
+</resources>
