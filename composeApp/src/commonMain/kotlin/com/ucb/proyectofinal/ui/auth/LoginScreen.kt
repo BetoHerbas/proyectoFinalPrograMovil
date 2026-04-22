@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.ucb.proyectofinal.designsystem.theme.AppTheme
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onNavigateToSettings: () -> Unit = {}) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -39,25 +39,25 @@ fun LoginScreen() {
         Spacer(modifier = Modifier.height(40.dp))
 
         Box(modifier = Modifier.size(200.dp), contentAlignment = Alignment.Center) {
-             Canvas(modifier = Modifier.fillMaxSize()) {
-                 drawCircle(color = Color(0xFF1A2421), radius = size.minDimension / 2.5f)
-                 drawCircle(
-                     color = Color.White.copy(alpha = 0.05f), 
-                     radius = size.minDimension / 2f, 
-                     style = Stroke(width = 2f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f))
-                 )
-                 drawCircle(
-                     color = Color.White.copy(alpha = 0.02f), 
-                     radius = size.minDimension / 1.5f, 
-                     style = Stroke(width = 2f)
-                 )
-             }
-             Text("▶️", fontSize = 32.sp)
-             
-             Text("📖", modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp), fontSize = 20.sp)
-             Text("🎙️", modifier = Modifier.align(Alignment.TopEnd).offset(x = (-20).dp, y = 40.dp), fontSize = 20.sp)
-             Text("🎬", modifier = Modifier.align(Alignment.BottomStart).offset(x = 20.dp, y = (-40).dp), fontSize = 20.sp)
-             Text("🎵", modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-30).dp, y = (-20).dp), fontSize = 20.sp)
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                drawCircle(color = Color(0xFF1A2421), radius = size.minDimension / 2.5f)
+                drawCircle(
+                    color = Color.White.copy(alpha = 0.05f),
+                    radius = size.minDimension / 2f,
+                    style = Stroke(width = 2f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f))
+                )
+                drawCircle(
+                    color = Color.White.copy(alpha = 0.02f),
+                    radius = size.minDimension / 1.5f,
+                    style = Stroke(width = 2f)
+                )
+            }
+            Text("▶️", fontSize = 32.sp)
+
+            Text("📖", modifier = Modifier.align(Alignment.TopCenter).offset(y = 20.dp), fontSize = 20.sp)
+            Text("🎙️", modifier = Modifier.align(Alignment.TopEnd).offset(x = (-20).dp, y = 40.dp), fontSize = 20.sp)
+            Text("🎬", modifier = Modifier.align(Alignment.BottomStart).offset(x = 20.dp, y = (-40).dp), fontSize = 20.sp)
+            Text("🎵", modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-30).dp, y = (-20).dp), fontSize = 20.sp)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -69,9 +69,9 @@ fun LoginScreen() {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
             text = "Conecta con todo tu contenido favorito.",
             style = AppTheme.typography.bodyLarge,
@@ -117,7 +117,7 @@ fun LoginScreen() {
                 onValueChange = { password = it },
                 placeholder = { Text("........", color = Color.Gray) },
                 leadingIcon = { Text("🔒") },
-                trailingIcon = { 
+                trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Text(if(passwordVisible) "👁️" else "🙈")
                     }
@@ -145,13 +145,13 @@ fun LoginScreen() {
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E5B6), contentColor = Color(0xFF101715))
         ) {
             if (isLoading) {
-                 CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color(0xFF101715))
+                CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color(0xFF101715))
             } else {
-                 Row(verticalAlignment = Alignment.CenterVertically) {
-                     Text("Iniciar Sesión", fontWeight = FontWeight.Bold, style = AppTheme.typography.bodyLarge)
-                     Spacer(modifier = Modifier.width(8.dp))
-                     Text("➔")
-                 }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Iniciar Sesión", fontWeight = FontWeight.Bold, style = AppTheme.typography.bodyLarge)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("➔")
+                }
             }
         }
 
@@ -212,6 +212,27 @@ fun LoginScreen() {
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Botón para navegar a Configuración Remota (SettingsScreen)
+        Button(
+            onClick = onNavigateToSettings,
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF1A2421),
+                contentColor = Color.White
+            )
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("⚙️", fontSize = 18.sp)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Configuración Remota", fontWeight = FontWeight.Medium)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 

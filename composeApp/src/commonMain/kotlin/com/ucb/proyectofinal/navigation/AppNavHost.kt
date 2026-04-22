@@ -23,7 +23,9 @@ fun AppNavHost() {
         }
 
         composable<NavRoute.Login> {
-            LoginScreen()
+            LoginScreen(
+                onNavigateToSettings = { navController.navigate(NavRoute.Settings) }
+            )
         }
 
         composable<NavRoute.Profile> {
