@@ -4,6 +4,8 @@ import com.ucb.proyectofinal.core.data.db.NoteDao
 import com.ucb.proyectofinal.core.data.db.NoteEntity
 import com.ucb.proyectofinal.feature.notes.domain.model.Note
 import com.ucb.proyectofinal.feature.notes.domain.repository.NoteRepository
+import com.ucb.proyectofinal.feature.notes.data.mapper.toDomain
+import com.ucb.proyectofinal.feature.notes.data.mapper.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -25,21 +27,4 @@ class NoteRepositoryImpl(
         noteDao.markSynced(id)
     }
 
-    // ── Mappers ──────────────────────────────────────────────────────────────
-
-    private fun Note.toEntity() = NoteEntity(
-        id = id,
-        title = title,
-        body = body,
-        isPending = isPending,
-        createdAt = createdAt
-    )
-
-    private fun NoteEntity.toDomain() = Note(
-        id = id,
-        title = title,
-        body = body,
-        isPending = isPending,
-        createdAt = createdAt
-    )
 }
