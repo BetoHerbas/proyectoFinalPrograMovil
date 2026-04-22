@@ -12,4 +12,20 @@
     <string name="list_detail_screen_title">List Detail Screen</string>
     <string name="profile_screen_title">Profile Screen</string>
     <string name="settings_screen_title">Settings Screen</string>
+
+    <!-- Offline Sync Demo -->
+    <string name="sync_demo_title">Cola Offline</string>
+    <string name="sync_demo_subtitle">Sincronización con Firebase RTDB</string>
+    <string name="sync_demo_add_button">Agregar nota offline</string>
+    <string name="sync_demo_force_sync">Forzar sincronización ahora (WorkManager)</string>
+    <string name="sync_demo_empty_title">Sin notas todavía</string>
+    <string name="sync_demo_empty_hint">Agrega una nota para probar la cola offline</string>
+    <string name="sync_demo_stat_total">Total</string>
+    <string name="sync_demo_stat_pending">Pendientes</string>
+    <string name="sync_demo_stat_synced">Subidos</string>
+    <string name="sync_demo_status_pending">⏳ Pendiente (en Room)</string>
+    <string name="sync_demo_status_synced">✅ Subido a RTDB</string>
+    <string name="sync_demo_uploaded">Subido a Firebase RTDB</string>
+    <string name="sync_notification_title">✅ Sincronización completada</string>
 </resources>
+

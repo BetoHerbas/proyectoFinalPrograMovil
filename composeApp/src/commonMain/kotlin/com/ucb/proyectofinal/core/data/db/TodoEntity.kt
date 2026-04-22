@@ -9,5 +9,9 @@ data class TodoEntity(
     val id: Long = 0,
     val title: String,
     val description: String,
-    val isCompleted: Boolean = false
+    val isCompleted: Boolean = false,
+    /** true = guardado localmente, pendiente de subir a Firebase */
+    val isPending: Boolean = true,
+    /** epoch-millis cuando se sincronizó; 0 si aún no se sincronizó */
+    val syncedAt: Long = 0L
 )

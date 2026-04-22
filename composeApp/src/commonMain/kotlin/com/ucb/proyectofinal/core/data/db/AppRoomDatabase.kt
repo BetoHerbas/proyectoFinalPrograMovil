@@ -2,7 +2,11 @@ package com.ucb.proyectofinal.core.data.db
 
 import androidx.room.*
 
-@Database(entities = [TodoEntity::class], version = 1)
+@Database(
+    entities = [TodoEntity::class],
+    version = 2,
+    exportSchema = false
+)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getDao(): TodoDao

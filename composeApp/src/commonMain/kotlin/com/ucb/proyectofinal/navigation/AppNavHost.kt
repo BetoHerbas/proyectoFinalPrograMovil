@@ -12,12 +12,18 @@ import com.ucb.proyectofinal.ui.lists.CreateListScreen
 import com.ucb.proyectofinal.ui.lists.ListDetailScreen
 import com.ucb.proyectofinal.ui.profile.ProfileScreen
 import com.ucb.proyectofinal.ui.settings.SettingsScreen
+import com.ucb.proyectofinal.ui.sync.OfflineSyncDemoScreen
 
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = NavRoute.Login) {
+    NavHost(navController = navController, startDestination = NavRoute.OfflineSyncDemo) {
+
+        composable<NavRoute.OfflineSyncDemo> {
+            OfflineSyncDemoScreen()
+        }
+
         composable<NavRoute.Register> {
             RegisterScreen()
         }

@@ -6,26 +6,34 @@ import androidx.work.WorkerParameters
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+/**
+ * Worker que se ejecuta en segundo plano cuando hay conexión a internet.
+ * Procesa la cola offline: sube los ítems pendientes de Room a Firebase RTDB
+ * y envía una notificación local de resumen al terminar.
+ */
 class LogUploadWorker(
    appContext: Context,
    workerParameters: WorkerParameters
 ) : CoroutineWorker(appContext, workerParameters), KoinComponent {
 
-   // Inyectando el caso de uso
-   private val fetchPopularMoviesUseCase: FetchPopularMoviesUseCase by inject()
+   private val syncUseCase: SyncPendingItemsUseCase by inject()
 
    override suspend fun doWork(): Result {
-       println("ejecutar instrucción para subir datos")
-       val response = fetchPopularMoviesUseCase.invoke()
-       
-       return response.fold(
+       return syncUseCase().fold(
            onFailure = {
+               println("SyncWorker: error al sincronizar → ${it.message}")
                Result.failure()
            },
-           onSuccess = { list ->
-               println("datos subidos ${list.size}")
+           onSuccess = { count ->
+               if (count > 0) {
+                   println("SyncWorker: $count ítems sincronizados con Firebase")
+                   LocalNotificationHelper.showSyncSummary(applicationContext, count)
+               } else {
+                   println("SyncWorker: sin ítems pendientes")
+               }
                Result.success()
            }
        )
    }
 }
+

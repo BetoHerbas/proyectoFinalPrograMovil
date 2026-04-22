@@ -4,8 +4,11 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import com.ucb.proyectofinal.core.data.db.getDatabaseBuilder
 import com.ucb.proyectofinal.di.initKoin
+import com.ucb.proyectofinal.worker.SyncPendingItemsUseCase
 import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -13,12 +16,17 @@ class MainApplication : Application() {
         createNotificationChannel()
         initKoin {
             androidContext(this@MainApplication)
-            modules(org.koin.dsl.module {
-                single { com.ucb.proyectofinal.worker.FetchPopularMoviesUseCase() }
+            modules(module {
+                // Base de datos Room (con destructive migration para la demo)
+                single { getDatabaseBuilder(get<android.app.Application>()).build() }
+                // DAO — expuesto para que OfflineSyncViewModel (en appModule) lo resuelva
+                single { get<com.ucb.proyectofinal.core.data.db.AppDatabase>().getDao() }
+                // Use case de sincronización offline
+                single { SyncPendingItemsUseCase(get()) }
             })
         }
-        
-        // Inicializa y agenda la subida de logs
+
+        // Agenda la sincronización periódica en segundo plano (cada 15 min, requiere red)
         com.ucb.proyectofinal.worker.LogScheduler(this).schedulePeriodicaUpload()
     }
 

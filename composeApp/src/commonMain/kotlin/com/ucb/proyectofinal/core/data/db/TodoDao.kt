@@ -24,4 +24,12 @@ interface TodoDao {
 
     @Query("SELECT * FROM todo_entity WHERE id = :id")
     suspend fun getTodoById(id: Long): TodoEntity?
+
+    /** Retorna todos los ítems aún pendientes de sincronización */
+    @Query("SELECT * FROM todo_entity WHERE isPending = 1")
+    suspend fun getPendingTodos(): List<TodoEntity>
+
+    /** Marca un ítem como sincronizado y registra el timestamp */
+    @Query("UPDATE todo_entity SET isPending = 0, syncedAt = :syncedAt WHERE id = :id")
+    suspend fun markAsSynced(id: Long, syncedAt: Long)
 }

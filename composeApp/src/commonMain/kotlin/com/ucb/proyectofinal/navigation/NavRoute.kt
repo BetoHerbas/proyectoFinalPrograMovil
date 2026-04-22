@@ -28,4 +28,7 @@ sealed class NavRoute {
 
     @Serializable
     object AddItem : NavRoute()
+
+    @Serializable
+    object OfflineSyncDemo : NavRoute()
 }
