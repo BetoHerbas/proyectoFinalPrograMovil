@@ -119,7 +119,7 @@ fun OfflineSyncDemoScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "① Guardar en Room (offline)",
+                        text = "① Guardar en Room → sync automático al conectar",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = AccentBlue,
@@ -172,29 +172,12 @@ fun OfflineSyncDemoScreen(
                         )
                     ) {
                         Text(
-                            text = "Agregar nota offline",
+                            text = "Agregar nota",
                             fontWeight = FontWeight.SemiBold,
                             color = if (titleInput.isNotBlank()) Color.White else TextSecondary
                         )
                     }
                 }
-            }
-
-            Spacer(Modifier.height(12.dp))
-
-            // ── Botón forzar sincronización ──────────────────────────────────
-            Button(
-                onClick = { triggerImmediateSync() },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AccentPurple)
-            ) {
-                Text(
-                    text = "② Forzar sincronización ahora (WorkManager)",
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
-                    fontSize = 13.sp
-                )
             }
 
             Spacer(Modifier.height(20.dp))

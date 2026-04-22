@@ -13,9 +13,15 @@ import kotlinx.coroutines.launch
  * ViewModel para la pantalla de demo de sincronización offline.
  *
  * Expone:
- *  - [todos]       → lista reactiva de todos los ítems en Room
- *  - [addTodo]     → inserta un ítem nuevo con isPending=true
- *  - [forceSyncNow] → callback que la UI invoca para disparar sync inmediato
+ *  - [todos]   → lista reactiva de todos los ítems en Room
+ *  - [addTodo] → inserta un ítem con isPending=true y encola sync automático
+ *
+ * Al llamar [addTodo]:
+ *  1. Guarda el ítem en Room con isPending=true (funciona sin internet).
+ *  2. Llama a [triggerImmediateSync] que encola un OneTimeWorkRequest con
+ *     restricción NetworkType.CONNECTED.
+ *     → Si hay red: sincroniza de inmediato.
+ *     → Si no hay red: WorkManager espera y sincroniza en cuanto se conecte.
  */
 class OfflineSyncViewModel(
     private val dao: TodoDao
@@ -30,7 +36,10 @@ class OfflineSyncViewModel(
             initialValue = emptyList()
         )
 
-    /** Agrega un ítem nuevo en Room con isPending=true */
+    /**
+     * Guarda la nota en Room con [isPending]=true y programa la sincronización
+     * automática (se ejecuta cuando haya red disponible).
+     */
     fun addTodo(title: String, description: String) {
         if (title.isBlank()) return
         viewModelScope.launch {
@@ -41,6 +50,8 @@ class OfflineSyncViewModel(
                     isPending   = true
                 )
             )
+            // Encola el sync: se ejecuta ahora si hay red, o cuando vuelva la red
+            triggerImmediateSync()
         }
     }
 }
