@@ -28,6 +28,11 @@ class MainApplication : Application() {
         // Firebase Realtime Database datasource
         single { FirebaseNotesDataSource() }
 
+        // Sync controller (Android-only: triggers immediate WorkManager sync)
+        single<com.ucb.proyectofinal.feature.notes.domain.usecase.SyncController> { 
+            com.ucb.proyectofinal.feature.notes.domain.usecase.AndroidSyncController(androidContext()) 
+        }
+
         // Sync use case (Android-only: depende de FirebaseNotesDataSource)
         single { SyncPendingNotesUseCase(get(), get()) }
 

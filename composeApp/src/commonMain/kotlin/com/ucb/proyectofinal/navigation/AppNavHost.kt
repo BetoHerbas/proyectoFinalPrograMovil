@@ -17,7 +17,7 @@ import com.ucb.proyectofinal.ui.settings.SettingsScreen
 fun AppNavHost() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = NavRoute.Login) {
+    NavHost(navController = navController, startDestination = NavRoute.ContentLists) {
         composable<NavRoute.Register> {
             RegisterScreen()
         }

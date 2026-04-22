@@ -22,7 +22,7 @@ val notesModule = module {
     single<NoteRepository> { NoteRepositoryImpl(get()) }
 
     // Use Cases
-    factory { CreateNoteUseCase(get()) }
+    factory { CreateNoteUseCase(get(), getOrNull()) }
     factory { GetAllNotesUseCase(get()) }
 
     // ViewModels
