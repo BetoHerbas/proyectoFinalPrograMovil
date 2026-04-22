@@ -20,8 +20,8 @@ class LogUploadWorker(
 
    override suspend fun doWork(): Result {
        return syncUseCase().fold(
-           onFailure = {
-               println("SyncWorker: error al sincronizar → ${it.message}")
+           onFailure = { error ->
+               println("SyncWorker: error al sincronizar → ${error.message}")
                Result.failure()
            },
            onSuccess = { count ->
@@ -36,4 +36,3 @@ class LogUploadWorker(
        )
    }
 }
-

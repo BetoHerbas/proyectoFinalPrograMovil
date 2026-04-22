@@ -32,15 +32,19 @@ class MainApplication : Application() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Default Channel"
-            val descriptionText = "Canal para notificaciones generales"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("default_channel", name, importance).apply {
-                description = descriptionText
+            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+            // Canal general (existente)
+            NotificationChannel("default_channel", "Default Channel", NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = "Canal para notificaciones generales"
+                manager.createNotificationChannel(this)
             }
-            val notificationManager: NotificationManager =
-                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+
+            // Canal de sync — IMPORTANCE_HIGH para que aparezca como popup (heads-up)
+            NotificationChannel("sync_channel", "Sincronización Offline", NotificationManager.IMPORTANCE_HIGH).apply {
+                description = "Notificaciones cuando los datos se sincronizan con Firebase"
+                manager.createNotificationChannel(this)
+            }
         }
     }
 }

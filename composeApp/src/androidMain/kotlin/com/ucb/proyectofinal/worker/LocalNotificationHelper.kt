@@ -9,15 +9,20 @@ import com.ucb.proyectofinal.MainActivity
 
 /**
  * Helper para lanzar notificaciones locales de resumen de sincronización.
+ *
+ * Usa el canal "sync_channel" (IMPORTANCE_HIGH) para que aparezca como
+ * heads-up popup en pantalla, no solo en el panel de notificaciones.
+ *
+ * ⚠️ Si instalaste la app antes de este cambio, desinstala y reinstala
+ *    para que Android tome el nuevo canal de alta importancia.
  */
 object LocalNotificationHelper {
-    private const val CHANNEL_ID   = "default_channel"
+    private const val CHANNEL_ID      = "sync_channel"
     private const val NOTIFICATION_ID = 1001
 
     /**
      * Muestra una notificación local con el resumen de la sincronización.
-     * @param context contexto de la aplicación
-     * @param syncedCount número de ítems que se subieron a Firebase
+     * @param syncedCount número de ítems que se subieron a Firebase.
      */
     fun showSyncSummary(context: Context, syncedCount: Int) {
         val intent = Intent(context, MainActivity::class.java).apply {
@@ -28,19 +33,19 @@ object LocalNotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val title = "✅ Sincronización completada"
-        val body  = if (syncedCount == 1)
+        val body = if (syncedCount == 1)
             "1 ítem subido a Firebase Realtime Database"
         else
             "$syncedCount ítems subidos a Firebase Realtime Database"
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(title)
+            .setContentTitle("✅ Sincronización completada")
             .setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setAutoCancel(true)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            // PRIORITY_HIGH → heads-up popup visible en pantalla inmediatamente
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .build()
 

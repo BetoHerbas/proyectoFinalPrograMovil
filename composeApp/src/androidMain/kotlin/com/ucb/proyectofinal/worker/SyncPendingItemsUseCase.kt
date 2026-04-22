@@ -22,11 +22,9 @@ class SyncPendingItemsUseCase(
             val pending = dao.getPendingTodos()
             if (pending.isEmpty()) return Result.success(0)
 
-            val dbRef = FirebaseDatabase.getInstance()
-                .getReference("sync_queue")
-
-            var syncedCount = 0
+            val dbRef = FirebaseDatabase.getInstance().getReference("sync_queue")
             val now = System.currentTimeMillis()
+            var syncedCount = 0
 
             for (item in pending) {
                 val payload = mapOf(
@@ -36,9 +34,7 @@ class SyncPendingItemsUseCase(
                     "isCompleted" to item.isCompleted,
                     "syncedAt"    to now
                 )
-                // Sube el ítem a Firebase RTDB
                 dbRef.child(item.id.toString()).setValue(payload).await()
-                // Marca como sincronizado en Room
                 dao.markAsSynced(item.id, now)
                 syncedCount++
             }
