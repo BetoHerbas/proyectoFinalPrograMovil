@@ -1,9 +1,6 @@
-package com.ucb.proyectofinal.ui.lists
+package com.ucb.proyectofinal.feature.notes.presentation.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -16,73 +13,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ucb.proyectofinal.feature.notes.domain.model.Note
-import com.ucb.proyectofinal.feature.notes.presentation.NoteListViewModel
-import org.koin.compose.viewmodel.koinViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContentListsScreen(
-    onNavigateToAdd: () -> Unit = {}
-) {
-    val viewModel: NoteListViewModel = koinViewModel()
-    val notes by viewModel.notes.collectAsState()
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = "Mis Notas",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp
-                        )
-                        Text(
-                            text = "${notes.size} nota(s) guardadas",
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAdd,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Text("+", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            }
-        }
-    ) { padding ->
-        if (notes.isEmpty()) {
-            EmptyNotesState(modifier = Modifier.padding(padding))
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(notes) { note ->
-                    NoteCard(note = note)
-                }
-                item { Spacer(modifier = Modifier.height(80.dp)) }
-            }
-        }
-    }
-}
-
-@Composable
-private fun NoteCard(note: Note) {
+fun NoteCard(note: Note) {
     val dateFormat = remember { SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()) }
 
     Card(
@@ -136,7 +72,7 @@ private fun NoteCard(note: Note) {
 }
 
 @Composable
-private fun SyncBadge(isPending: Boolean) {
+fun SyncBadge(isPending: Boolean) {
     val bgColor = if (isPending)
         MaterialTheme.colorScheme.errorContainer
     else
@@ -173,7 +109,7 @@ private fun SyncBadge(isPending: Boolean) {
 }
 
 @Composable
-private fun EmptyNotesState(modifier: Modifier = Modifier) {
+fun EmptyNotesState(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

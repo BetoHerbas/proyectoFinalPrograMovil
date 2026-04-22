@@ -6,8 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ucb.proyectofinal.ui.auth.LoginScreen
 import com.ucb.proyectofinal.ui.auth.RegisterScreen
-import com.ucb.proyectofinal.ui.lists.AddItemScreen
-import com.ucb.proyectofinal.ui.lists.ContentListsScreen
+import com.ucb.proyectofinal.feature.notes.presentation.screen.CreateNoteScreen
+import com.ucb.proyectofinal.feature.notes.presentation.screen.NoteListScreen
 import com.ucb.proyectofinal.ui.lists.CreateListScreen
 import com.ucb.proyectofinal.ui.lists.ListDetailScreen
 import com.ucb.proyectofinal.ui.profile.ProfileScreen
@@ -31,7 +31,7 @@ fun AppNavHost() {
         }
 
         composable<NavRoute.ContentLists> {
-            ContentListsScreen(
+            NoteListScreen(
                 onNavigateToAdd = { navController.navigate(NavRoute.AddItem) }
             )
         }
@@ -49,7 +49,7 @@ fun AppNavHost() {
         }
 
         composable<NavRoute.AddItem> {
-            AddItemScreen(
+            CreateNoteScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }

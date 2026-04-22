@@ -1,20 +1,13 @@
-package com.ucb.proyectofinal.feature.notes.presentation
+package com.ucb.proyectofinal.feature.notes.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.feature.notes.domain.usecase.CreateNoteUseCase
+import com.ucb.proyectofinal.feature.notes.presentation.state.CreateNoteUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
-data class CreateNoteUiState(
-    val title: String = "",
-    val body: String = "",
-    val isSaving: Boolean = false,
-    val saved: Boolean = false,
-    val error: String? = null
-)
 
 class CreateNoteViewModel(
     private val createNoteUseCase: CreateNoteUseCase

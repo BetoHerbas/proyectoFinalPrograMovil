@@ -1,7 +1,7 @@
 package com.ucb.proyectofinal.feature.notes.data.repository
 
 import com.ucb.proyectofinal.core.data.db.NoteDao
-import com.ucb.proyectofinal.core.data.db.NoteEntity
+import com.ucb.proyectofinal.feature.notes.data.entity.NoteEntity
 import com.ucb.proyectofinal.feature.notes.domain.model.Note
 import com.ucb.proyectofinal.feature.notes.domain.repository.NoteRepository
 import com.ucb.proyectofinal.feature.notes.data.mapper.toDomain

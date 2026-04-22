@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.ui.lists
+package com.ucb.proyectofinal.feature.notes.presentation.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,18 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ucb.proyectofinal.feature.notes.presentation.CreateNoteViewModel
+import com.ucb.proyectofinal.feature.notes.presentation.viewmodel.CreateNoteViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemScreen(
+fun CreateNoteScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     val viewModel: CreateNoteViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
-    // Volver automáticamente tras guardar
     LaunchedEffect(uiState.saved) {
         if (uiState.saved) {
             viewModel.resetSaved()
@@ -77,7 +76,6 @@ fun AddItemScreen(
                 }
             }
 
-            // Campo Título
             OutlinedTextField(
                 value = uiState.title,
                 onValueChange = viewModel::onTitleChange,
@@ -89,7 +87,6 @@ fun AddItemScreen(
                 singleLine = true
             )
 
-            // Campo Cuerpo
             OutlinedTextField(
                 value = uiState.body,
                 onValueChange = viewModel::onBodyChange,
@@ -103,7 +100,6 @@ fun AddItemScreen(
                 minLines = 4
             )
 
-            // Mensaje de error (Simple sin animación)
             if (uiState.error != null) {
                 uiState.error?.let { errorMsg ->
                     Card(
@@ -124,7 +120,6 @@ fun AddItemScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Botón guardar
             Button(
                 onClick = viewModel::saveNote,
                 modifier = Modifier

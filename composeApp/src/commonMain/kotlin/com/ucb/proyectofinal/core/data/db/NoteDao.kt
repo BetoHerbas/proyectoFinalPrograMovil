@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.ucb.proyectofinal.feature.notes.data.entity.NoteEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

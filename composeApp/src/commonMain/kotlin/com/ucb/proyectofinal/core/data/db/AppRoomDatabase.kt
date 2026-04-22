@@ -1,6 +1,7 @@
 package com.ucb.proyectofinal.core.data.db
 
 import androidx.room.*
+import com.ucb.proyectofinal.feature.notes.data.entity.NoteEntity
 
 @Database(
     entities = [TodoEntity::class, NoteEntity::class],

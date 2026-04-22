@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.core.data.db
+package com.ucb.proyectofinal.feature.notes.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
