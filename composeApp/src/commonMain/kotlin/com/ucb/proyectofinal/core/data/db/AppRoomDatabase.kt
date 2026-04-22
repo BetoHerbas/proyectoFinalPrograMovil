@@ -2,10 +2,14 @@ package com.ucb.proyectofinal.core.data.db
 
 import androidx.room.*
 
-@Database(entities = [TodoEntity::class], version = 1)
+@Database(
+    entities = [TodoEntity::class, NoteEntity::class],
+    version = 2
+)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getDao(): TodoDao
+    abstract fun getNoteDao(): NoteDao
 }
 
 // The Room compiler generates the `actual` implementations.

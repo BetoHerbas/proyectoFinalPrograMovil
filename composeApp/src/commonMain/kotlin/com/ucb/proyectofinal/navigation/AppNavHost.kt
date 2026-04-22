@@ -31,7 +31,9 @@ fun AppNavHost() {
         }
 
         composable<NavRoute.ContentLists> {
-            ContentListsScreen()
+            ContentListsScreen(
+                onNavigateToAdd = { navController.navigate(NavRoute.AddItem) }
+            )
         }
 
         composable<NavRoute.Settings> {
@@ -47,7 +49,10 @@ fun AppNavHost() {
         }
 
         composable<NavRoute.AddItem> {
-            AddItemScreen()
+            AddItemScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }
+

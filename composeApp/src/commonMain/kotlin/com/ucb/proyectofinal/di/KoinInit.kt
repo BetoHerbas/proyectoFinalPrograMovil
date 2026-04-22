@@ -6,6 +6,7 @@ import org.koin.core.KoinApplication
 fun initKoin(config: (KoinApplication.() -> Unit)? = null) {
     startKoin {
         config?.invoke(this)
-        modules(appModule)
+        modules(appModule, notesModule)
     }
 }
+
