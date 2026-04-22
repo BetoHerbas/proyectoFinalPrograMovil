@@ -7,8 +7,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.googleServices)
-    alias(libs.plugins.sentry)
+
+    id("io.sentry.android.gradle") version "6.1.0"
 }
 
 kotlin {
@@ -33,14 +33,6 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
-            
-            // Firebase
-            implementation(platform(libs.firebase.bom))
-            implementation(libs.firebase.analytics)
-            implementation(libs.firebase.database)
-            
-            // Sentry
-            implementation(libs.sentry.android)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -56,7 +48,6 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.androidx.work.runtime.ktx)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -95,12 +86,18 @@ dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
 
+
+
 sentry {
     org.set("universidad-catolica-bolivi-4y")
     projectName.set("ucb")
+
+    // this will upload your source code to Sentry to show it as part of the stack traces
+    // disable if you don't want to expose your sources
     includeSourceContext.set(true)
 }
 
+// Workaround: Sentry tasks need to depend on Compose resource generation tasks
 tasks.configureEach {
     if (name.startsWith("generateSentryBundleId")) {
         tasks.findByName("generateResourceAccessorsForAndroidMain")?.let {
