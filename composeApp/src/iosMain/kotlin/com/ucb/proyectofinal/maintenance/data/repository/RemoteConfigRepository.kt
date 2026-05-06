@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.remoteconfig
+package com.ucb.proyectofinal.maintenance.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

@@ -13,7 +13,7 @@ import com.ucb.proyectofinal.designsystem.theme.DsTheme
 import com.ucb.proyectofinal.designsystem.theme.ThemeMode
 import com.ucb.proyectofinal.navigation.AppNavHost
 import com.ucb.proyectofinal.notification.getToken
-import com.ucb.proyectofinal.remoteconfig.MaintenanceGate
+import com.ucb.proyectofinal.maintenance.presentation.composable.MaintenanceGate
 
 @Composable
 fun App() {

@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.remoteconfig
+package com.ucb.proyectofinal.maintenance.data.repository
 
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener

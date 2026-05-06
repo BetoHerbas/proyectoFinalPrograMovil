@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.ui.auth
+package com.ucb.proyectofinal.auth.presentation.screen
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background

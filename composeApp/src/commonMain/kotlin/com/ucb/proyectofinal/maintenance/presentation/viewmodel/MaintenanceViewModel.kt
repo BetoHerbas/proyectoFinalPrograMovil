@@ -1,26 +1,14 @@
-package com.ucb.proyectofinal.remoteconfig
+package com.ucb.proyectofinal.maintenance.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
+import com.ucb.proyectofinal.maintenance.presentation.state.MaintenanceState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-
-/**
- * Estado de la verificación de mantenimiento.
- */
-sealed class MaintenanceState {
-    /** Todavía cargando / verificando Remote Config */
-    data object Loading : MaintenanceState()
-    /** App en mantenimiento */
-    data object UnderMaintenance : MaintenanceState()
-    /** App operativa con normalidad */
-    data object Operational : MaintenanceState()
-    /** Error al consultar Remote Config (se permite continuar) */
-    data class Error(val message: String) : MaintenanceState()
-}
 
 /**
  * ViewModel que observa continuamente el flag "mantainence" de Firebase Remote Config.

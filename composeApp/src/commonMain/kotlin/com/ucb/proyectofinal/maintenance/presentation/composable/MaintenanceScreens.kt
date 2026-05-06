@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.remoteconfig
+package com.ucb.proyectofinal.maintenance.presentation.composable
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -30,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.koin.compose.viewmodel.koinViewModel
+import com.ucb.proyectofinal.maintenance.presentation.state.MaintenanceState
+import com.ucb.proyectofinal.maintenance.presentation.viewmodel.MaintenanceViewModel
 
 /**
  * Pantalla que se muestra mientras se verifica el estado de mantenimiento
