@@ -4,22 +4,45 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import android.util.Log
+import com.google.firebase.FirebaseApp
+import com.ucb.proyectofinal.core.data.db.DatabaseFactory
 import com.ucb.proyectofinal.di.initKoin
 import org.koin.android.ext.koin.androidContext
 
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        ensureFirebaseInitialized()
         createNotificationChannel()
-        initKoin {
+        initKoin(
+            platformModules = listOf(
+                org.koin.dsl.module {
+                    single { DatabaseFactory(get()) }
+                    single { com.ucb.proyectofinal.worker.FetchPopularMoviesUseCase() }
+                }
+            )
+        ) {
             androidContext(this@MainApplication)
-            modules(org.koin.dsl.module {
-                single { com.ucb.proyectofinal.worker.FetchPopularMoviesUseCase() }
-            })
         }
         
         // Inicializa y agenda la subida de logs
         com.ucb.proyectofinal.worker.LogScheduler(this).schedulePeriodicaUpload()
+    }
+
+    private fun ensureFirebaseInitialized() {
+        val app = FirebaseApp.initializeApp(this)
+        if (app == null) {
+            Log.e(
+                "MainApplication",
+                "Firebase no pudo inicializarse. Verifica composeApp/google-services.json y applicationId."
+            )
+            return
+        }
+        Log.i(
+            "MainApplication",
+            "Firebase inicializado: appId=${app.options.applicationId}, projectId=${app.options.projectId}"
+        )
     }
 
     private fun createNotificationChannel() {

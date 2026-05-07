@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.ucb.proyectofinal.auth.presentation.screen.LoginScreen
 import com.ucb.proyectofinal.auth.presentation.screen.RegisterScreen
 import com.ucb.proyectofinal.lists.presentation.screen.AddItemScreen
@@ -18,36 +19,70 @@ fun AppNavHost() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = NavRoute.Login) {
-        composable<NavRoute.Register> {
-            RegisterScreen()
-        }
 
         composable<NavRoute.Login> {
-            LoginScreen()
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(NavRoute.ContentLists) {
+                        popUpTo<NavRoute.Login> { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = { navController.navigate(NavRoute.Register) }
+            )
         }
 
-        composable<NavRoute.Profile> {
-            ProfileScreen()
+        composable<NavRoute.Register> {
+            RegisterScreen(
+                onRegisterSuccess = {
+                    navController.navigate(NavRoute.ContentLists) {
+                        popUpTo<NavRoute.Register> { inclusive = true }
+                    }
+                },
+                onNavigateToLogin = { navController.popBackStack() }
+            )
         }
 
         composable<NavRoute.ContentLists> {
-            ContentListsScreen()
+            ContentListsScreen(
+                onNavigateToDetail = { listId, listName ->
+                    navController.navigate(NavRoute.ListDetail(listId, listName))
+                },
+                onNavigateToCreate = { navController.navigate(NavRoute.CreateList) },
+                onNavigateToProfile = { navController.navigate(NavRoute.Profile) },
+                onNavigateToSettings = { navController.navigate(NavRoute.Settings) }
+            )
         }
 
-        composable<NavRoute.Settings> {
-            SettingsScreen()
-        }
-
-        composable<NavRoute.ListDetail> {
-            ListDetailScreen()
+        composable<NavRoute.ListDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.ListDetail>()
+            ListDetailScreen(
+                listId = route.listId,
+                listName = route.listName,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         composable<NavRoute.CreateList> {
-            CreateListScreen()
+            CreateListScreen(onNavigateBack = { navController.popBackStack() })
         }
 
         composable<NavRoute.AddItem> {
-            AddItemScreen()
+            AddItemScreen(onNavigateBack = { navController.popBackStack() })
+        }
+
+        composable<NavRoute.Profile> {
+            ProfileScreen(
+                onLogout = {
+                    navController.navigate(NavRoute.Login) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<NavRoute.Settings> {
+            SettingsScreen(onNavigateBack = { navController.popBackStack() })
         }
     }
 }

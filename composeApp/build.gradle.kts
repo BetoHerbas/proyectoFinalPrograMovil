@@ -14,6 +14,18 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
 }
 
+// Sentry Android Gradle plugin injects its Android-only artifacts into ALL Gradle
+// configurations, including KMP iOS ones. Explicitly exclude them from every
+// configuration whose name indicates an iOS / Kotlin-Native target.
+configurations.configureEach {
+    if (name.contains("ios", ignoreCase = true) ||
+        name.startsWith("native") ||
+        name.contains("Native")
+    ) {
+        exclude(group = "io.sentry")
+    }
+}
+
 kotlin {
     androidTarget {
         compilerOptions {
@@ -39,15 +51,24 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.androidx.room.sqlite.wrapper)
             implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.auth)
             implementation(libs.firebase.config)
             implementation(libs.firebase.database)
             implementation(libs.kotlinx.coroutines.play.services)
+            implementation(libs.ktor.client.okhttp)
+            // Sentry scoped to Android only (plugin auto-install is disabled for KMP compatibility)
+            implementation("io.sentry:sentry-android:8.33.0")
+            implementation("io.sentry:sentry-compose-android:8.33.0")
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
             implementation(project(":designsystem"))
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
+            implementation(compose.materialIconsExtended)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
@@ -60,6 +81,10 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.logging)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -116,12 +141,19 @@ room {
 }
 
 sentry {
-    org.set("universidad-catolica-bolivi-4y")
+    org.set("universidad-katolica-bolivi-4y")
     projectName.set("ucb")
 
-    // this will upload your source code to Sentry to show it as part of the stack traces
-    // disable if you don't want to expose your sources
     includeSourceContext.set(true)
+
+    // Prevent the plugin from auto-adding sentry-android artifacts to all
+    // Gradle configurations (including iOS KMP targets, which are Android-only).
+    autoInstallation {
+        enabled.set(false)
+    }
+    tracingInstrumentation {
+        enabled.set(false)
+    }
 }
 
 // Workaround: Sentry tasks need to depend on Compose resource generation tasks

@@ -6,26 +6,26 @@ import kotlinx.serialization.Serializable
 sealed class NavRoute {
 
     @Serializable
-    object Register : NavRoute()
+    data object Register : NavRoute()
 
     @Serializable
-    object Login : NavRoute()
+    data object Login : NavRoute()
 
     @Serializable
-    object Profile : NavRoute()
+    data object Profile : NavRoute()
 
     @Serializable
-    object ContentLists : NavRoute()
+    data object ContentLists : NavRoute()
 
     @Serializable
-    object Settings : NavRoute()
+    data object Settings : NavRoute()
 
     @Serializable
-    object ListDetail : NavRoute()
+    data class ListDetail(val listId: String, val listName: String = "") : NavRoute()
 
     @Serializable
-    object CreateList : NavRoute()
+    data object CreateList : NavRoute()
 
     @Serializable
-    object AddItem : NavRoute()
+    data object AddItem : NavRoute()
 }
