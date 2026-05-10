@@ -12,5 +12,5 @@ val repositoryModule = module {
     single { FirebaseAuthDataSource() }
     single { FirebaseRealtimeListsDataSource() }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
-    single<ContentListRepository> { ContentListRepositoryImpl(get(), get()) }
+    single<ContentListRepository> { ContentListRepositoryImpl(get(), get(), get()) }
 }

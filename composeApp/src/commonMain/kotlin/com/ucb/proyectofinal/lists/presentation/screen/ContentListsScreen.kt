@@ -70,7 +70,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ContentListsScreen(
-    onNavigateToDetail: (listId: String, listName: String) -> Unit,
+    onNavigateToDetail: (listId: String, listName: String, listType: ContentType) -> Unit,
     onNavigateToCreate: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -84,7 +84,8 @@ fun ContentListsScreen(
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
             when (effect) {
-                is ContentListsEffect.NavigateToDetail -> onNavigateToDetail(effect.listId, effect.listName)
+                is ContentListsEffect.NavigateToDetail ->
+                    onNavigateToDetail(effect.listId, effect.listName, effect.listType)
                 is ContentListsEffect.ShowError -> snackbarHostState.showSnackbar(effect.message)
                 is ContentListsEffect.ShowSuccess -> snackbarHostState.showSnackbar(effect.message)
             }
@@ -302,7 +303,8 @@ fun ContentListsScreen(
                                     viewModel.onIntent(
                                         ContentListsIntent.NavigateToDetail(
                                             list.id.value,
-                                            list.name.value
+                                            list.name.value,
+                                            list.type
                                         )
                                     )
                                 }

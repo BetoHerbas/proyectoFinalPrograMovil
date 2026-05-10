@@ -1,5 +1,31 @@
+import java.util.Properties
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+fun Project.readPropertiesFile(path: String): Properties {
+    val props = Properties()
+    val file = rootProject.file(path)
+    if (file.exists()) {
+        file.inputStream().use { props.load(it) }
+    }
+    return props
+}
+
+fun Project.readLocalProperty(key: String): String {
+    val props = readPropertiesFile("local.properties")
+    return (props.getProperty(key) ?: "").trim()
+}
+
+fun Project.readEnvProperty(key: String): String {
+    val props = readPropertiesFile(".env")
+    return (props.getProperty(key) ?: "").trim()
+}
+
+fun Project.readSecret(envKey: String, localKey: String): String {
+    val fromEnv = readEnvProperty(envKey)
+    if (fromEnv.isNotBlank()) return fromEnv
+    return readLocalProperty(localKey)
+}
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -85,6 +111,8 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.logging)
+            implementation(libs.coil3.compose)
+            implementation(libs.coil3.network.ktor3)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -102,12 +130,26 @@ android {
     namespace = "com.ucb.proyectofinal"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.ucb.proyectofinal"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        buildConfigField(
+            "String",
+            "TMDB_READ_TOKEN",
+            "\"${project.readSecret("TMDB_READ_TOKEN", "tmdb.read.token")}\""
+        )
+        buildConfigField(
+            "String",
+            "GOOGLE_BOOKS_API_KEY",
+            "\"${project.readSecret("GOOGLE_BOOKS_API_KEY", "google.books.api.key")}\""
+        )
     }
     packaging {
         resources {

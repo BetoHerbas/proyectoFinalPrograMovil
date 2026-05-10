@@ -27,13 +27,13 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ListDetailScreen(
     listId: String,
     listName: String,
+    listType: String,
     onNavigateBack: () -> Unit,
+    onNavigateToAddItem: () -> Unit,
     viewModel: ListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    var newItemTitle by remember { mutableStateOf("") }
-    var newItemType by remember { mutableStateOf(ContentType.MOVIE) }
 
     LaunchedEffect(listId) {
         viewModel.onIntent(ListDetailIntent.LoadDetail(listId, listName))
@@ -49,68 +49,11 @@ fun ListDetailScreen(
         }
     }
 
-    // Add item dialog
-    if (state.showAddDialog) {
-        AlertDialog(
-            onDismissRequest = { viewModel.onIntent(ListDetailIntent.HideAddDialog) },
-            containerColor = Color(0xFF1A2421),
-            title = { Text("Agregar Ítem", color = Color.White) },
-            text = {
-                Column {
-                    OutlinedTextField(
-                        value = newItemTitle,
-                        onValueChange = { newItemTitle = it },
-                        placeholder = { Text("Título", color = Color.Gray) },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color(0xFF101715),
-                            focusedContainerColor = Color(0xFF101715),
-                            unfocusedBorderColor = Color.Gray,
-                            focusedBorderColor = Color(0xFF00E5B6),
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        ContentType.entries.forEach { type ->
-                            FilterChip(
-                                selected = newItemType == type,
-                                onClick = { newItemType = type },
-                                label = { Text(type.name.take(3), style = MaterialTheme.typography.labelSmall) },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = Color(0xFF00E5B6),
-                                    selectedLabelColor = Color(0xFF101715),
-                                    containerColor = Color(0xFF101715),
-                                    labelColor = Color.White
-                                )
-                            )
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    viewModel.onIntent(ListDetailIntent.AddItem(newItemTitle, newItemType))
-                    newItemTitle = ""
-                }) {
-                    Text("Agregar", color = Color(0xFF00E5B6))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { viewModel.onIntent(ListDetailIntent.HideAddDialog) }) {
-                    Text("Cancelar", color = Color.Gray)
-                }
-            }
-        )
-    }
-
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.onIntent(ListDetailIntent.ShowAddDialog) },
+                onClick = onNavigateToAddItem,
                 containerColor = Color(0xFF00E5B6),
                 contentColor = Color(0xFF101715)
             ) {
@@ -137,6 +80,12 @@ fun ListDetailScreen(
                     style = MaterialTheme.typography.titleLarge
                 )
             }
+            Text(
+                text = "Tipo: ${runCatching { ContentType.valueOf(listType) }.getOrDefault(ContentType.MOVIE).name}",
+                color = Color(0xFF8FB3BC),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 12.dp)
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
             when {

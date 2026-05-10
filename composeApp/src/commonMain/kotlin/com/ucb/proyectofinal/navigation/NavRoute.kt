@@ -21,11 +21,19 @@ sealed class NavRoute {
     data object Settings : NavRoute()
 
     @Serializable
-    data class ListDetail(val listId: String, val listName: String = "") : NavRoute()
+    data class ListDetail(
+        val listId: String,
+        val listName: String = "",
+        val listType: String = "MOVIE"
+    ) : NavRoute()
 
     @Serializable
     data object CreateList : NavRoute()
 
     @Serializable
-    data object AddItem : NavRoute()
+    data class AddItem(
+        val listId: String,
+        val listName: String = "",
+        val listType: String = "MOVIE"
+    ) : NavRoute()
 }

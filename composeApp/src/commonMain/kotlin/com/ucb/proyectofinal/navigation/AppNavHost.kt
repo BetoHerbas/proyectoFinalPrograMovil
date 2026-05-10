@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.ucb.proyectofinal.auth.presentation.screen.LoginScreen
 import com.ucb.proyectofinal.auth.presentation.screen.RegisterScreen
+import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.lists.presentation.screen.AddItemScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ContentListsScreen
 import com.ucb.proyectofinal.lists.presentation.screen.CreateListScreen
@@ -44,8 +45,14 @@ fun AppNavHost() {
 
         composable<NavRoute.ContentLists> {
             ContentListsScreen(
-                onNavigateToDetail = { listId, listName ->
-                    navController.navigate(NavRoute.ListDetail(listId, listName))
+                onNavigateToDetail = { listId, listName, listType ->
+                    navController.navigate(
+                        NavRoute.ListDetail(
+                            listId = listId,
+                            listName = listName,
+                            listType = listType.name
+                        )
+                    )
                 },
                 onNavigateToCreate = { navController.navigate(NavRoute.CreateList) },
                 onNavigateToProfile = { navController.navigate(NavRoute.Profile) },
@@ -58,7 +65,17 @@ fun AppNavHost() {
             ListDetailScreen(
                 listId = route.listId,
                 listName = route.listName,
-                onNavigateBack = { navController.popBackStack() }
+                listType = route.listType,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToAddItem = {
+                    navController.navigate(
+                        NavRoute.AddItem(
+                            listId = route.listId,
+                            listName = route.listName,
+                            listType = route.listType
+                        )
+                    )
+                }
             )
         }
 
@@ -66,8 +83,15 @@ fun AppNavHost() {
             CreateListScreen(onNavigateBack = { navController.popBackStack() })
         }
 
-        composable<NavRoute.AddItem> {
-            AddItemScreen(onNavigateBack = { navController.popBackStack() })
+        composable<NavRoute.AddItem> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.AddItem>()
+            AddItemScreen(
+                listId = route.listId,
+                listName = route.listName,
+                listType = runCatching { ContentType.valueOf(route.listType) }
+                    .getOrDefault(ContentType.MOVIE),
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         composable<NavRoute.Profile> {

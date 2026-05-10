@@ -12,5 +12,9 @@ sealed class ContentListsIntent {
         val isPublic: Boolean = true
     ) : ContentListsIntent()
     data class DeleteList(val listId: String) : ContentListsIntent()
-    data class NavigateToDetail(val listId: String, val listName: String) : ContentListsIntent()
+    data class NavigateToDetail(
+        val listId: String,
+        val listName: String,
+        val listType: ContentType
+    ) : ContentListsIntent()
 }

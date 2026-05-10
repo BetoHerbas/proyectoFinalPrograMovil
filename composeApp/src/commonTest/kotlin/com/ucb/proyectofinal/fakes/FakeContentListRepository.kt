@@ -2,6 +2,7 @@ package com.ucb.proyectofinal.fakes
 
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList
+import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
@@ -68,6 +69,27 @@ class FakeContentListRepository : ContentListRepository {
         val current = _items.value[listId.value] ?: emptyList()
         _items.value = _items.value + (listId.value to current + item)
         return Result.success(item)
+    }
+
+    override suspend fun searchCatalog(
+        type: ContentType,
+        query: String
+    ): Result<List<CatalogSearchItem>> {
+        if (shouldFail) return Result.failure(Exception(failureMessage))
+        val label = when (type) {
+            ContentType.MOVIE -> "Movie"
+            ContentType.SERIES -> "Series"
+            ContentType.BOOK -> "Book"
+        }
+        return Result.success(
+            listOf(
+                CatalogSearchItem(
+                    sourceId = "fake-${type.name.lowercase()}-1",
+                    title = "$label $query",
+                    subtitle = "Fake source"
+                )
+            )
+        )
     }
 
     override suspend fun toggleSeen(item: ContentItem): Result<ContentItem> {

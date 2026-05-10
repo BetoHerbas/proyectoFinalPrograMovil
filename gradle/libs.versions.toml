@@ -32,6 +32,7 @@ core = "1.5.0"
 coroutines = "1.8.1"
 turbine = "1.1.0"
 composeTest= "1.10.3"
+coil3 = "3.0.4"
 
 
 [libraries]
@@ -84,6 +85,8 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }# Optional SQLite Wrapper available in version 2.8.0 and higher
+coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil3-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil3" }
 
 
 [plugins]

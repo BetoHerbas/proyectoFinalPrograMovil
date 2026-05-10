@@ -48,7 +48,13 @@ class ContentListsViewModel(
             )
             is ContentListsIntent.DeleteList -> deleteList(intent.listId)
             is ContentListsIntent.NavigateToDetail -> viewModelScope.launch {
-                _effects.send(ContentListsEffect.NavigateToDetail(intent.listId, intent.listName))
+                _effects.send(
+                    ContentListsEffect.NavigateToDetail(
+                        listId = intent.listId,
+                        listName = intent.listName,
+                        listType = intent.listType
+                    )
+                )
             }
         }
     }

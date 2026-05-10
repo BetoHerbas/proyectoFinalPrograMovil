@@ -11,6 +11,7 @@ import com.ucb.proyectofinal.lists.domain.usecase.DeleteListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.SearchCatalogUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
 import org.koin.dsl.module
 
@@ -23,6 +24,7 @@ val useCaseModule = module {
     factory { CreateContentListUseCase(get()) }
     factory { GetListItemsUseCase(get()) }
     factory { AddItemToListUseCase(get()) }
+    factory { SearchCatalogUseCase(get()) }
     factory { ToggleItemSeenUseCase(get()) }
     factory { RateItemUseCase(get()) }
     factory { DeleteListUseCase(get()) }
