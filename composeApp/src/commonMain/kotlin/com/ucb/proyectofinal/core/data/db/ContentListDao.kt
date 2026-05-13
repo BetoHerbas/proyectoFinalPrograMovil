@@ -14,9 +14,18 @@ interface ContentListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(list: ContentListEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(lists: List<ContentListEntity>)
+
     @Update
     suspend fun update(list: ContentListEntity)
 
     @Delete
     suspend fun delete(list: ContentListEntity)
+
+    @Query("DELETE FROM content_lists WHERE id = :id")
+    suspend fun deleteById(id: String)
+
+    @Query("DELETE FROM content_lists")
+    suspend fun clearAll()
 }

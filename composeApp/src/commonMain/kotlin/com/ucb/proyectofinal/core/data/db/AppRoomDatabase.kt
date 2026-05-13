@@ -3,14 +3,15 @@ package com.ucb.proyectofinal.core.data.db
 import androidx.room.*
 
 @Database(
-    entities = [TodoEntity::class, ContentListEntity::class, ContentItemEntity::class],
-    version = 2
+    entities = [TodoEntity::class, ContentListEntity::class, ContentItemEntity::class, UserEntity::class],
+    version = 3
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getDao(): TodoDao
     abstract fun contentListDao(): ContentListDao
     abstract fun contentItemDao(): ContentItemDao
+    abstract fun userDao(): UserDao
 }
 
 // The Room KSP compiler generates the `actual` implementations for each target platform.

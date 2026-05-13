@@ -72,6 +72,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.androidx.work.runtime.ktx)
+            implementation(libs.androidx.sqlite.framework)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)

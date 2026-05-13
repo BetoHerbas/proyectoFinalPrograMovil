@@ -2,6 +2,10 @@ package com.ucb.proyectofinal.lists.data.repository
 
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
 import com.ucb.proyectofinal.core.config.AppSecrets
+import com.ucb.proyectofinal.core.data.db.ContentItemDao
+import com.ucb.proyectofinal.core.data.db.ContentItemEntity
+import com.ucb.proyectofinal.core.data.db.ContentListDao
+import com.ucb.proyectofinal.core.data.db.ContentListEntity
 import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList
@@ -19,7 +23,11 @@ import io.ktor.client.request.header
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.encodeURLQueryComponent
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -34,7 +42,9 @@ import kotlin.uuid.Uuid
 class ContentListRepositoryImpl(
     private val authRepository: AuthRepository,
     private val realtimeListsDataSource: FirebaseRealtimeListsDataSource,
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val contentListDao: ContentListDao,
+    private val contentItemDao: ContentItemDao
 ) : ContentListRepository {
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -47,7 +57,19 @@ class ContentListRepositoryImpl(
 
     override fun getLists(): Flow<List<ContentList>> =
         currentUserIdOrNull()?.let { userId ->
-            realtimeListsDataSource.observeLists(userId)
+            channelFlow {
+                launch {
+                    realtimeListsDataSource.observeLists(userId).collect { lists ->
+                        contentListDao.clearAll()
+                        if (lists.isNotEmpty()) {
+                            contentListDao.insertAll(lists.map { it.toEntity() })
+                        }
+                    }
+                }
+                contentListDao.getAllLists()
+                    .map { entities -> entities.map { it.toDomain() } }
+                    .collect { send(it) }
+            }
         } ?: flowOf(emptyList())
 
     @OptIn(ExperimentalUuidApi::class)
@@ -70,12 +92,25 @@ class ContentListRepositoryImpl(
                 isPublic = isPublic
             )
             realtimeListsDataSource.createList(userId, list)
+            contentListDao.insert(list.toEntity())
             list
         }
 
     override fun getListItems(listId: ListId): Flow<List<ContentItem>> =
         currentUserIdOrNull()?.let { userId ->
-            realtimeListsDataSource.observeItems(userId, listId.value)
+            channelFlow {
+                launch {
+                    realtimeListsDataSource.observeItems(userId, listId.value).collect { items ->
+                        contentItemDao.deleteByListId(listId.value)
+                        if (items.isNotEmpty()) {
+                            contentItemDao.insertAll(items.map { it.toEntity() })
+                        }
+                    }
+                }
+                contentItemDao.getItemsByList(listId.value)
+                    .map { entities -> entities.map { it.toDomain() } }
+                    .collect { send(it) }
+            }
         } ?: flowOf(emptyList())
 
     @OptIn(ExperimentalUuidApi::class)
@@ -94,6 +129,7 @@ class ContentListRepositoryImpl(
             rating = null
         )
         realtimeListsDataSource.addItem(userId, item)
+        contentItemDao.insert(item.toEntity())
         item
     }
 
@@ -116,6 +152,7 @@ class ContentListRepositoryImpl(
         val userId = requireCurrentUserId()
         val updated = item.copy(seen = !item.seen)
         realtimeListsDataSource.updateItem(userId, updated)
+        contentItemDao.insert(updated.toEntity())
         updated
     }
 
@@ -124,23 +161,68 @@ class ContentListRepositoryImpl(
             val userId = requireCurrentUserId()
             val updated = item.copy(rating = rating)
             realtimeListsDataSource.updateItem(userId, updated)
+            contentItemDao.insert(updated.toEntity())
             updated
         }
 
     override suspend fun deleteList(listId: ListId): Result<Unit> = runCatching {
         val userId = requireCurrentUserId()
         realtimeListsDataSource.deleteList(userId, listId.value)
+        contentListDao.deleteById(listId.value)
+        contentItemDao.deleteByListId(listId.value)
     }
 
     override suspend fun deleteItem(item: ContentItem): Result<Unit> = runCatching {
         val userId = requireCurrentUserId()
         realtimeListsDataSource.deleteItem(userId, item.listId.value, item.id.value)
+        contentItemDao.deleteById(item.id.value)
     }
 
     private fun currentUserIdOrNull(): String? = authRepository.getCurrentUser()?.id?.value
 
     private fun requireCurrentUserId(): String =
         currentUserIdOrNull() ?: error("No hay sesión activa")
+
+    private fun ContentList.toEntity(): ContentListEntity = ContentListEntity(
+        id = id.value,
+        name = name.value,
+        type = type.name,
+        itemCount = itemCount,
+        description = description,
+        coverImageUrl = coverImageUrl,
+        isPublic = isPublic
+    )
+
+    private fun ContentListEntity.toDomain(): ContentList = ContentList(
+        id = ListId(id),
+        name = ListName(name),
+        type = type.toContentTypeOrDefault(),
+        itemCount = itemCount,
+        description = description,
+        coverImageUrl = coverImageUrl,
+        isPublic = isPublic
+    )
+
+    private fun ContentItem.toEntity(): ContentItemEntity = ContentItemEntity(
+        id = id.value,
+        listId = listId.value,
+        title = title.value,
+        type = type.name,
+        seen = seen,
+        rating = rating?.value
+    )
+
+    private fun ContentItemEntity.toDomain(): ContentItem = ContentItem(
+        id = ItemId(id),
+        listId = ListId(listId),
+        title = ItemTitle(title),
+        type = type.toContentTypeOrDefault(),
+        seen = seen,
+        rating = rating?.let { Rating(it) }
+    )
+
+    private fun String.toContentTypeOrDefault(): ContentType =
+        runCatching { ContentType.valueOf(this) }.getOrDefault(ContentType.MOVIE)
 
     private suspend fun searchMovies(query: String): List<CatalogSearchItem> {
         return runCatching {

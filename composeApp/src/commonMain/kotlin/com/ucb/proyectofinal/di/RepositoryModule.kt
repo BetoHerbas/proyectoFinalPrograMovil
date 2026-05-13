@@ -11,6 +11,6 @@ import org.koin.dsl.module
 val repositoryModule = module {
     single { FirebaseAuthDataSource() }
     single { FirebaseRealtimeListsDataSource() }
-    single<AuthRepository> { AuthRepositoryImpl(get()) }
-    single<ContentListRepository> { ContentListRepositoryImpl(get(), get(), get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
+    single<ContentListRepository> { ContentListRepositoryImpl(get(), get(), get(), get(), get()) }
 }

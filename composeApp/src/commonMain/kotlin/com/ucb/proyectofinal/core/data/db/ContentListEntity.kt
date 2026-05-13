@@ -8,5 +8,8 @@ data class ContentListEntity(
     @PrimaryKey val id: String,
     val name: String,
     val type: String,
-    val itemCount: Int = 0
+    val itemCount: Int = 0,
+    val description: String = "",
+    val coverImageUrl: String? = null,
+    val isPublic: Boolean = true
 )

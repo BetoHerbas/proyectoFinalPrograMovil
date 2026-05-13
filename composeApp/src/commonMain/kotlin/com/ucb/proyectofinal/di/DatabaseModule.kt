@@ -7,4 +7,5 @@ val databaseModule = module {
     single { get<DatabaseFactory>().createDatabase() }
     single { get<com.ucb.proyectofinal.core.data.db.AppDatabase>().contentListDao() }
     single { get<com.ucb.proyectofinal.core.data.db.AppDatabase>().contentItemDao() }
+    single { get<com.ucb.proyectofinal.core.data.db.AppDatabase>().userDao() }
 }

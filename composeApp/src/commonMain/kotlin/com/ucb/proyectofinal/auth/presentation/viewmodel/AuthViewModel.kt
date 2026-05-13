@@ -33,6 +33,10 @@ class AuthViewModel(
     private val _effects = Channel<AuthEffect>(Channel.BUFFERED)
     val effects: Flow<AuthEffect> = _effects.receiveAsFlow()
 
+    init {
+        restoreSessionIfAvailable()
+    }
+
     fun onIntent(intent: AuthIntent) {
         when (intent) {
             is AuthIntent.UpdateEmail ->
@@ -46,6 +50,14 @@ class AuthViewModel(
             is AuthIntent.Logout -> logout()
             is AuthIntent.ClearErrors -> _state.update {
                 it.copy(emailError = null, passwordError = null, nameError = null, generalError = null)
+            }
+        }
+    }
+
+    private fun restoreSessionIfAvailable() {
+        viewModelScope.launch {
+            if (getCurrentUserUseCase() != null) {
+                _effects.send(AuthEffect.NavigateToHome)
             }
         }
     }
