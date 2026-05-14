@@ -145,6 +145,7 @@ class ContentListRepositoryImpl(
             ContentType.MOVIE -> searchMovies(normalized)
             ContentType.SERIES -> searchSeries(normalized)
             ContentType.BOOK -> searchBooks(normalized)
+            ContentType.VIDEOGAME -> emptyList()
         }
     }
 
@@ -310,6 +311,7 @@ class ContentListRepositoryImpl(
         ContentType.MOVIE -> topTenMovies()
         ContentType.SERIES -> topTenSeries()
         ContentType.BOOK -> topTenBooks()
+        ContentType.VIDEOGAME -> emptyList()
     }
 
     private suspend fun topTmdb(path: String): List<CatalogSearchItem> {

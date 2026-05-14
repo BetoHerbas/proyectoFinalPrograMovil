@@ -66,6 +66,8 @@ import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.lists.presentation.effect.ContentListsEffect
 import com.ucb.proyectofinal.lists.presentation.intent.ContentListsIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
+import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -80,6 +82,8 @@ fun ContentListsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf<ContentType?>(null) }
+    val remoteConfig = koinInject<RemoteConfigRepository>()
+    val videogameEnabled by remoteConfig.observeVideogameCategoryEnabled().collectAsStateWithLifecycle(false)
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
@@ -92,7 +96,16 @@ fun ContentListsScreen(
         }
     }
 
-    val filteredLists = remember(state.lists, searchQuery, selectedFilter) {
+    val supportedTypes = remember(videogameEnabled) {
+        buildList {
+            add(ContentType.MOVIE)
+            add(ContentType.SERIES)
+            add(ContentType.BOOK)
+            if (videogameEnabled) add(ContentType.VIDEOGAME)
+        }
+    }
+
+    val filteredLists = remember(state.lists, searchQuery, selectedFilter, videogameEnabled) {
         state.lists.filter { list ->
             val supportedType = list.type in supportedTypes
             val matchesQuery = list.name.value.contains(searchQuery, ignoreCase = true)
@@ -317,11 +330,7 @@ fun ContentListsScreen(
     }
 }
 
-private val supportedTypes = listOf(
-    ContentType.MOVIE,
-    ContentType.SERIES,
-    ContentType.BOOK
-)
+
 
 @Composable
 private fun BottomAction(
@@ -399,22 +408,26 @@ private fun typeBrush(type: ContentType): Brush = when (type) {
     ContentType.MOVIE -> Brush.linearGradient(listOf(Color(0xFF071B26), Color(0xFF113D5E)))
     ContentType.SERIES -> Brush.linearGradient(listOf(Color(0xFF26273A), Color(0xFF4B5C90)))
     ContentType.BOOK -> Brush.linearGradient(listOf(Color(0xFF1F2D34), Color(0xFF496678)))
+    ContentType.VIDEOGAME -> Brush.linearGradient(listOf(Color(0xFF1C2B1C), Color(0xFF2E5C35)))
 }
 
 private fun typeIcon(type: ContentType): String = when (type) {
     ContentType.MOVIE -> "🎬"
     ContentType.SERIES -> "📺"
     ContentType.BOOK -> "📚"
+    ContentType.VIDEOGAME -> "🎮"
 }
 
 private fun typeChipLabel(type: ContentType): String = when (type) {
     ContentType.MOVIE -> "Películas"
     ContentType.SERIES -> "Series"
     ContentType.BOOK -> "Libros"
+    ContentType.VIDEOGAME -> "Videojuegos"
 }
 
 private fun subtitleByType(type: ContentType): String = when (type) {
     ContentType.MOVIE -> "Sesión de cine"
     ContentType.SERIES -> "Para maratón"
     ContentType.BOOK -> "Próximas lecturas"
+    ContentType.VIDEOGAME -> "Para completar"
 }

@@ -28,6 +28,8 @@ class MainApplication : Application() {
         
         // Inicializa y agenda la subida de logs
         com.ucb.proyectofinal.worker.LogScheduler(this).schedulePeriodicaUpload()
+        // Agenda el worker de A/B testing (usa el ultimo intervalo guardado)
+        com.ucb.proyectofinal.worker.ABTestingScheduler(this).schedule()
     }
 
     private fun ensureFirebaseInitialized() {

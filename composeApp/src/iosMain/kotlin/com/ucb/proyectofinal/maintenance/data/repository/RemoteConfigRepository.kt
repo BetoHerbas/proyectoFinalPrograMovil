@@ -9,5 +9,6 @@ import kotlinx.coroutines.flow.flowOf
  */
 actual class RemoteConfigRepository actual constructor() {
     actual fun observeMaintenance(): Flow<Boolean> = flowOf(false)
+    actual fun observeVideogameCategoryEnabled(): Flow<Boolean> = flowOf(false)
 }
 

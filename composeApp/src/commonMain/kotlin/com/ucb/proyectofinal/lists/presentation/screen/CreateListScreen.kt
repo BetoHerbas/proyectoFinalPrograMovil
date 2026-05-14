@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.LiveTv
 import androidx.compose.material.icons.outlined.LocalMovies
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,10 +20,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.lists.presentation.effect.ContentListsEffect
 import com.ucb.proyectofinal.lists.presentation.intent.ContentListsIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
+import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -34,6 +38,8 @@ fun CreateListScreen(
     var description by remember { mutableStateOf("") }
     var isPrivate by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf(ContentType.MOVIE) }
+    val remoteConfig = koinInject<RemoteConfigRepository>()
+    val videogameEnabled by remoteConfig.observeVideogameCategoryEnabled().collectAsStateWithLifecycle(false)
 
     LaunchedEffect(Unit) {
         viewModel.effects.collect { effect ->
@@ -118,6 +124,7 @@ fun CreateListScreen(
                                 ContentType.BOOK -> Icons.Outlined.MenuBook
                                 ContentType.MOVIE -> Icons.Outlined.LocalMovies
                                 ContentType.SERIES -> Icons.Outlined.LiveTv
+                                ContentType.VIDEOGAME -> Icons.Outlined.SportsEsports
                             },
                             contentDescription = null,
                             tint = Color(0xFF88A9B1)
@@ -189,11 +196,12 @@ fun CreateListScreen(
             Text("Categoría", color = Color.White, style = MaterialTheme.typography.titleSmall)
             Spacer(modifier = Modifier.height(10.dp))
 
-            val categoryCards = listOf(
-                Triple(ContentType.BOOK, "Libros", Icons.Outlined.MenuBook),
-                Triple(ContentType.MOVIE, "Películas", Icons.Outlined.LocalMovies),
-                Triple(ContentType.SERIES, "Series", Icons.Outlined.LiveTv)
-            )
+            val categoryCards = buildList {
+                add(Triple(ContentType.BOOK, "Libros", Icons.Outlined.MenuBook))
+                add(Triple(ContentType.MOVIE, "Películas", Icons.Outlined.LocalMovies))
+                add(Triple(ContentType.SERIES, "Series", Icons.Outlined.LiveTv))
+                if (videogameEnabled) add(Triple(ContentType.VIDEOGAME, "Videojuegos", Icons.Outlined.SportsEsports))
+            }
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 categoryCards.chunked(2).forEach { row ->
@@ -285,4 +293,5 @@ private fun defaultCoverLabel(type: ContentType): String = when (type) {
     ContentType.BOOK -> "Libros"
     ContentType.MOVIE -> "Películas"
     ContentType.SERIES -> "Series"
+    ContentType.VIDEOGAME -> "Videojuegos"
 }

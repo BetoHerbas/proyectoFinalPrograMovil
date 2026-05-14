@@ -13,5 +13,11 @@ expect class RemoteConfigRepository() {
      * Firebase Remote Config detecta un cambio publicado desde la consola.
      */
     fun observeMaintenance(): Flow<Boolean>
+
+    /**
+     * Emite true si videogame_category_enabled = true Y el usuario actual
+     * pertenece al grupo videogame_target_group. De lo contrario emite false.
+     */
+    fun observeVideogameCategoryEnabled(): Flow<Boolean>
 }
 

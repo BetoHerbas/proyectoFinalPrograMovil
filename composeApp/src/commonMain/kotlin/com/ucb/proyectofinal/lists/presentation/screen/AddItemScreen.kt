@@ -242,4 +242,5 @@ private fun labelForType(type: ContentType): String = when (type) {
     ContentType.MOVIE -> "Películas"
     ContentType.SERIES -> "Series"
     ContentType.BOOK -> "Libros"
+    ContentType.VIDEOGAME -> "Videojuegos"
 }
