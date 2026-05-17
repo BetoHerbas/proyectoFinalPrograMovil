@@ -9,6 +9,7 @@ import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.model.vo.Rating
 import com.ucb.proyectofinal.lists.domain.usecase.AddItemToListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.DeleteItemUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
@@ -31,7 +32,8 @@ class ListDetailViewModel(
     private val addItemToListUseCase: AddItemToListUseCase,
     private val toggleItemSeenUseCase: ToggleItemSeenUseCase,
     private val rateItemUseCase: RateItemUseCase,
-    private val deleteItemUseCase: DeleteItemUseCase
+    private val deleteItemUseCase: DeleteItemUseCase,
+    private val getContentListsUseCase: GetContentListsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ListDetailUiState())
@@ -53,6 +55,7 @@ class ListDetailViewModel(
                         listType = intent.listType
                     )
                 }
+                loadListMetadata(intent.listId)
                 loadItems(intent.listId)
             }
             is ListDetailIntent.AddItem -> addItem(intent.title, intent.type)
@@ -65,6 +68,26 @@ class ListDetailViewModel(
                 _state.update { it.copy(showAddDialog = false) }
             is ListDetailIntent.ChangeFilter ->
                 _state.update { it.copy(selectedFilter = intent.filter) }
+        }
+    }
+
+    private fun loadListMetadata(listId: String) {
+        viewModelScope.launch {
+            getContentListsUseCase()
+                .catch { /* Silently ignore errors here, UI state will keep initial intent data */ }
+                .collect { lists ->
+                    val list = lists.find { it.id.value == listId }
+                    if (list != null) {
+                        _state.update {
+                            it.copy(
+                                listName = list.name.value,
+                                description = list.description,
+                                coverImageUrl = list.coverImageUrl,
+                                isPublic = list.isPublic
+                            )
+                        }
+                    }
+                }
         }
     }
 

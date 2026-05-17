@@ -9,6 +9,7 @@ import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.usecase.AddItemToListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.DeleteItemUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
@@ -43,7 +44,8 @@ class ListDetailViewModelTest {
             addItemToListUseCase = AddItemToListUseCase(fakeRepo),
             toggleItemSeenUseCase = ToggleItemSeenUseCase(fakeRepo),
             rateItemUseCase = RateItemUseCase(fakeRepo),
-            deleteItemUseCase = DeleteItemUseCase(fakeRepo)
+            deleteItemUseCase = DeleteItemUseCase(fakeRepo),
+            getContentListsUseCase = GetContentListsUseCase(fakeRepo)
         )
     }
 

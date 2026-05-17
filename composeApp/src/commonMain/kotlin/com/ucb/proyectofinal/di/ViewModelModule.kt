@@ -15,7 +15,7 @@ val viewModelModule = module {
     viewModel { AuthViewModel(get(), get(), get(), get()) }
     viewModel { ContentListsViewModel(get(), get(), get()) }
     viewModel { AddItemViewModel(get(), get()) }
-    viewModel { ListDetailViewModel(get(), get(), get(), get(), get()) }
+    viewModel { ListDetailViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { EditListViewModel(get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel() }
