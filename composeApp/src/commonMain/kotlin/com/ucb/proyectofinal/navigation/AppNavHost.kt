@@ -11,6 +11,7 @@ import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.lists.presentation.screen.AddItemScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ContentListsScreen
 import com.ucb.proyectofinal.lists.presentation.screen.CreateListScreen
+import com.ucb.proyectofinal.lists.presentation.screen.EditListScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ListDetailScreen
 import com.ucb.proyectofinal.profile.presentation.screen.ProfileScreen
 import com.ucb.proyectofinal.settings.presentation.screen.SettingsScreen
@@ -81,12 +82,37 @@ fun AppNavHost() {
                             listType = route.listType
                         )
                     )
+                },
+                onNavigateToEdit = {
+                    navController.navigate(
+                        NavRoute.EditList(
+                            listId = route.listId,
+                            listName = route.listName,
+                            description = route.description,
+                            coverImageUrl = route.coverImageUrl,
+                            isPublic = route.isPublic,
+                            listType = route.listType
+                        )
+                    )
                 }
             )
         }
 
         composable<NavRoute.CreateList> {
             CreateListScreen(onNavigateBack = { navController.popBackStack() })
+        }
+
+        composable<NavRoute.EditList> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.EditList>()
+            EditListScreen(
+                listId = route.listId,
+                listName = route.listName,
+                description = route.description,
+                coverImageUrl = route.coverImageUrl,
+                isPublic = route.isPublic,
+                listType = route.listType,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
 
         composable<NavRoute.AddItem> { backStackEntry ->

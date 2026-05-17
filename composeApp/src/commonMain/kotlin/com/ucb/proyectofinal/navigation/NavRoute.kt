@@ -39,4 +39,14 @@ sealed class NavRoute {
         val listName: String = "",
         val listType: String = "MOVIE"
     ) : NavRoute()
+
+    @Serializable
+    data class EditList(
+        val listId: String,
+        val listName: String = "",
+        val description: String = "",
+        val coverImageUrl: String? = null,
+        val isPublic: Boolean = true,
+        val listType: String = "MOVIE"
+    ) : NavRoute()
 }

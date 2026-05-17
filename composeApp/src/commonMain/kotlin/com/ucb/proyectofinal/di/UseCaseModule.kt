@@ -13,6 +13,7 @@ import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.SearchCatalogUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.UpdateListUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -29,4 +30,5 @@ val useCaseModule = module {
     factory { RateItemUseCase(get()) }
     factory { DeleteListUseCase(get()) }
     factory { DeleteItemUseCase(get()) }
+    factory { UpdateListUseCase(get()) }
 }

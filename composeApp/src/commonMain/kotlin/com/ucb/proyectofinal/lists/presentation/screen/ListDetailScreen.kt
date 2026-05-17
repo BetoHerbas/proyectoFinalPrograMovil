@@ -60,6 +60,7 @@ fun ListDetailScreen(
     isPublic: Boolean = true,
     onNavigateBack: () -> Unit,
     onNavigateToAddItem: () -> Unit,
+    onNavigateToEdit: () -> Unit,
     viewModel: ListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -156,7 +157,7 @@ fun ListDetailScreen(
                                 tint = TextPrimary
                             )
                         }
-                        IconButton(onClick = { /* Placeholder: Editar */ }) {
+                        IconButton(onClick = onNavigateToEdit) {
                             Icon(
                                 Icons.Default.Edit,
                                 contentDescription = "Editar",

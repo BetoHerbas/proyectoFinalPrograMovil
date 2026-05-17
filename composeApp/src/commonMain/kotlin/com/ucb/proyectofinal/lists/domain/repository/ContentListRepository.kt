@@ -19,6 +19,13 @@ interface ContentListRepository {
         coverImageUrl: String?,
         isPublic: Boolean
     ): Result<ContentList>
+    suspend fun updateList(
+        listId: ListId,
+        name: ListName,
+        description: String,
+        coverImageUrl: String?,
+        isPublic: Boolean
+    ): Result<ContentList>
     fun getListItems(listId: ListId): Flow<List<ContentItem>>
     suspend fun addItem(listId: ListId, title: ItemTitle, type: ContentType): Result<ContentItem>
     suspend fun searchCatalog(type: ContentType, query: String): Result<List<CatalogSearchItem>>

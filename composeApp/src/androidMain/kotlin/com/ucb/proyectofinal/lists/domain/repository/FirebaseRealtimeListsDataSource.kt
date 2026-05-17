@@ -99,6 +99,18 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
         listRef.child("itemCount").setValue(count).await()
     }
 
+    actual suspend fun updateList(userId: String, list: ContentList) {
+        root.child("users").child(userId).child("lists").child(list.id.value).updateChildren(
+            mapOf(
+                "name" to list.name.value,
+                "description" to list.description,
+                "coverImageUrl" to list.coverImageUrl,
+                "isPublic" to list.isPublic,
+                "updatedAt" to System.currentTimeMillis()
+            )
+        ).await()
+    }
+
     actual suspend fun updateItem(userId: String, item: ContentItem) {
         root.child("users").child(userId)
             .child("lists")
