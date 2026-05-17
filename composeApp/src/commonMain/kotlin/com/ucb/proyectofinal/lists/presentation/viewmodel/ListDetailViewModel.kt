@@ -14,6 +14,7 @@ import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
 import com.ucb.proyectofinal.lists.presentation.effect.ListDetailEffect
 import com.ucb.proyectofinal.lists.presentation.intent.ListDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ItemFilter
 import com.ucb.proyectofinal.lists.presentation.state.ListDetailUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +43,16 @@ class ListDetailViewModel(
     fun onIntent(intent: ListDetailIntent) {
         when (intent) {
             is ListDetailIntent.LoadDetail -> {
-                _state.update { it.copy(listId = intent.listId, listName = intent.listName) }
+                _state.update {
+                    it.copy(
+                        listId = intent.listId,
+                        listName = intent.listName,
+                        description = intent.description,
+                        coverImageUrl = intent.coverImageUrl,
+                        isPublic = intent.isPublic,
+                        listType = intent.listType
+                    )
+                }
                 loadItems(intent.listId)
             }
             is ListDetailIntent.AddItem -> addItem(intent.title, intent.type)
@@ -53,6 +63,8 @@ class ListDetailViewModel(
                 _state.update { it.copy(showAddDialog = true) }
             is ListDetailIntent.HideAddDialog ->
                 _state.update { it.copy(showAddDialog = false) }
+            is ListDetailIntent.ChangeFilter ->
+                _state.update { it.copy(selectedFilter = intent.filter) }
         }
     }
 

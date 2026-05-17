@@ -52,7 +52,10 @@ class ContentListsViewModel(
                     ContentListsEffect.NavigateToDetail(
                         listId = intent.listId,
                         listName = intent.listName,
-                        listType = intent.listType
+                        listType = intent.listType,
+                        description = intent.description,
+                        coverImageUrl = intent.coverImageUrl,
+                        isPublic = intent.isPublic
                     )
                 )
             }

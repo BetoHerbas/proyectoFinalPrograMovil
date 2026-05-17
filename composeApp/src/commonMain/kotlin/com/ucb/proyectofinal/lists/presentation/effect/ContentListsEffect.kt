@@ -6,7 +6,10 @@ sealed class ContentListsEffect {
     data class NavigateToDetail(
         val listId: String,
         val listName: String,
-        val listType: ContentType
+        val listType: ContentType,
+        val description: String = "",
+        val coverImageUrl: String? = null,
+        val isPublic: Boolean = true
     ) : ContentListsEffect()
     data class ShowError(val message: String) : ContentListsEffect()
     data class ShowSuccess(val message: String) : ContentListsEffect()

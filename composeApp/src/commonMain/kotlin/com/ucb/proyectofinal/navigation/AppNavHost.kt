@@ -45,12 +45,15 @@ fun AppNavHost() {
 
         composable<NavRoute.ContentLists> {
             ContentListsScreen(
-                onNavigateToDetail = { listId, listName, listType ->
+                onNavigateToDetail = { listId, listName, listType, description, coverImageUrl, isPublic ->
                     navController.navigate(
                         NavRoute.ListDetail(
                             listId = listId,
                             listName = listName,
-                            listType = listType.name
+                            listType = listType.name,
+                            description = description,
+                            coverImageUrl = coverImageUrl,
+                            isPublic = isPublic
                         )
                     )
                 },
@@ -66,6 +69,9 @@ fun AppNavHost() {
                 listId = route.listId,
                 listName = route.listName,
                 listType = route.listType,
+                description = route.description,
+                coverImageUrl = route.coverImageUrl,
+                isPublic = route.isPublic,
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToAddItem = {
                     navController.navigate(

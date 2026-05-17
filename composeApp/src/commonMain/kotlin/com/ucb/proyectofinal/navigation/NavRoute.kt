@@ -24,7 +24,10 @@ sealed class NavRoute {
     data class ListDetail(
         val listId: String,
         val listName: String = "",
-        val listType: String = "MOVIE"
+        val listType: String = "MOVIE",
+        val description: String = "",
+        val coverImageUrl: String? = null,
+        val isPublic: Boolean = true
     ) : NavRoute()
 
     @Serializable

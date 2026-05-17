@@ -72,7 +72,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ContentListsScreen(
-    onNavigateToDetail: (listId: String, listName: String, listType: ContentType) -> Unit,
+    onNavigateToDetail: (listId: String, listName: String, listType: ContentType, description: String, coverImageUrl: String?, isPublic: Boolean) -> Unit,
     onNavigateToCreate: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToSettings: () -> Unit,
@@ -89,7 +89,7 @@ fun ContentListsScreen(
         viewModel.effects.collect { effect ->
             when (effect) {
                 is ContentListsEffect.NavigateToDetail ->
-                    onNavigateToDetail(effect.listId, effect.listName, effect.listType)
+                    onNavigateToDetail(effect.listId, effect.listName, effect.listType, effect.description, effect.coverImageUrl, effect.isPublic)
                 is ContentListsEffect.ShowError -> snackbarHostState.showSnackbar(effect.message)
                 is ContentListsEffect.ShowSuccess -> snackbarHostState.showSnackbar(effect.message)
             }
@@ -315,9 +315,12 @@ fun ContentListsScreen(
                                 onClick = {
                                     viewModel.onIntent(
                                         ContentListsIntent.NavigateToDetail(
-                                            list.id.value,
-                                            list.name.value,
-                                            list.type
+                                            listId = list.id.value,
+                                            listName = list.name.value,
+                                            listType = list.type,
+                                            description = list.description,
+                                            coverImageUrl = list.coverImageUrl,
+                                            isPublic = list.isPublic
                                         )
                                     )
                                 }

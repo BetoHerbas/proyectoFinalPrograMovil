@@ -15,6 +15,9 @@ sealed class ContentListsIntent {
     data class NavigateToDetail(
         val listId: String,
         val listName: String,
-        val listType: ContentType
+        val listType: ContentType,
+        val description: String = "",
+        val coverImageUrl: String? = null,
+        val isPublic: Boolean = true
     ) : ContentListsIntent()
 }
