@@ -9,11 +9,13 @@ import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.model.vo.Rating
 import com.ucb.proyectofinal.lists.domain.usecase.AddItemToListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.DeleteItemUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
 import com.ucb.proyectofinal.lists.presentation.effect.ListDetailEffect
 import com.ucb.proyectofinal.lists.presentation.intent.ListDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ItemFilter
 import com.ucb.proyectofinal.lists.presentation.state.ListDetailUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +32,8 @@ class ListDetailViewModel(
     private val addItemToListUseCase: AddItemToListUseCase,
     private val toggleItemSeenUseCase: ToggleItemSeenUseCase,
     private val rateItemUseCase: RateItemUseCase,
-    private val deleteItemUseCase: DeleteItemUseCase
+    private val deleteItemUseCase: DeleteItemUseCase,
+    private val getContentListsUseCase: GetContentListsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ListDetailUiState())
@@ -42,7 +45,17 @@ class ListDetailViewModel(
     fun onIntent(intent: ListDetailIntent) {
         when (intent) {
             is ListDetailIntent.LoadDetail -> {
-                _state.update { it.copy(listId = intent.listId, listName = intent.listName) }
+                _state.update {
+                    it.copy(
+                        listId = intent.listId,
+                        listName = intent.listName,
+                        description = intent.description,
+                        coverImageUrl = intent.coverImageUrl,
+                        isPublic = intent.isPublic,
+                        listType = intent.listType
+                    )
+                }
+                loadListMetadata(intent.listId)
                 loadItems(intent.listId)
             }
             is ListDetailIntent.AddItem -> addItem(intent.title, intent.type)
@@ -53,6 +66,28 @@ class ListDetailViewModel(
                 _state.update { it.copy(showAddDialog = true) }
             is ListDetailIntent.HideAddDialog ->
                 _state.update { it.copy(showAddDialog = false) }
+            is ListDetailIntent.ChangeFilter ->
+                _state.update { it.copy(selectedFilter = intent.filter) }
+        }
+    }
+
+    private fun loadListMetadata(listId: String) {
+        viewModelScope.launch {
+            getContentListsUseCase()
+                .catch { /* Silently ignore errors here, UI state will keep initial intent data */ }
+                .collect { lists ->
+                    val list = lists.find { it.id.value == listId }
+                    if (list != null) {
+                        _state.update {
+                            it.copy(
+                                listName = list.name.value,
+                                description = list.description,
+                                coverImageUrl = list.coverImageUrl,
+                                isPublic = list.isPublic
+                            )
+                        }
+                    }
+                }
         }
     }
 

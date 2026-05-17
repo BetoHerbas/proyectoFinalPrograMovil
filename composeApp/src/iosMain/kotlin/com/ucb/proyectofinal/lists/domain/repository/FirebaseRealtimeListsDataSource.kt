@@ -24,6 +24,14 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
         listsByUser.value = listsByUser.value + (userId to (listOf(list) + current))
     }
 
+    actual suspend fun updateList(userId: String, list: ContentList) {
+        val current = listsByUser.value[userId].orEmpty()
+        val updated = current.map {
+            if (it.id == list.id) list else it
+        }
+        listsByUser.value = listsByUser.value + (userId to updated)
+    }
+
     actual suspend fun addItem(userId: String, item: ContentItem) {
         val key = "$userId:${item.listId.value}"
         val current = itemsByUserList.value[key].orEmpty()

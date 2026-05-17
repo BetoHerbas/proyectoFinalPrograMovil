@@ -96,6 +96,28 @@ class ContentListRepositoryImpl(
             list
         }
 
+    override suspend fun updateList(
+        listId: ListId,
+        name: ListName,
+        description: String,
+        coverImageUrl: String?,
+        isPublic: Boolean
+    ): Result<ContentList> =
+        runCatching {
+            val userId = requireCurrentUserId()
+            val existing = contentListDao.getById(listId.value)
+                ?: error("Lista no encontrada")
+            val updated = existing.toDomain().copy(
+                name = name,
+                description = description.trim(),
+                coverImageUrl = coverImageUrl?.trim()?.ifBlank { null },
+                isPublic = isPublic
+            )
+            realtimeListsDataSource.updateList(userId, updated)
+            contentListDao.insert(updated.toEntity())
+            updated
+        }
+
     override fun getListItems(listId: ListId): Flow<List<ContentItem>> =
         currentUserIdOrNull()?.let { userId ->
             channelFlow {
