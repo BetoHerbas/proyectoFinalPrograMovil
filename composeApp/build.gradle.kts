@@ -38,6 +38,7 @@ plugins {
 
     id("io.sentry.android.gradle") version "6.1.0"
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.firebase.appdistribution)
 }
 
 // Sentry Android Gradle plugin injects its Android-only artifacts into ALL Gradle
@@ -166,6 +167,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+firebaseAppDistribution {
+    appId = System.getenv("FIREBASE_APP_ID")
+    serviceCredentialsFile = System.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    groups = "qa-team"
 }
 
 dependencies {
