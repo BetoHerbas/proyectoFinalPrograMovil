@@ -22,11 +22,11 @@ jobs:
 
       - name: Create App Distribution credentials file
         run: |
-          printf '%s' "${{ secrets.CREDENTIAL_FILE_CONTENT }}" > firebase-credentials.json
+          echo "${{ secrets.CREDENTIAL_FILE_CONTENT }}" | base64 -d > firebase-credentials.json
 
       - name: Create google-services.json
         run: |
-          printf '%s' "${{ secrets.GOOGLE_SERVICES_JSON }}" > composeApp/google-services.json
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > composeApp/google-services.json
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
