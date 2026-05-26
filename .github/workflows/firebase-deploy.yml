@@ -42,4 +42,7 @@ jobs:
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           GOOGLE_APPLICATION_CREDENTIALS: firebase-credentials.json
-        run: ./gradlew :composeApp:assembleRelease :composeApp:appDistributionUploadRelease
+        run: >
+          ./gradlew :composeApp:assembleRelease :composeApp:appDistributionUploadRelease
+          -x :composeApp:sentryUploadSourceBundleRelease
+          -x :composeApp:generateSentryBundleIdRelease
