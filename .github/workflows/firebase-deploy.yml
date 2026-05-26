@@ -20,9 +20,13 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Create credentials file
+      - name: Create App Distribution credentials file
         run: |
-          echo "${{ secrets.CREDENTIAL_FILE_CONTENT }}" > google-services.json
+          echo "${{ secrets.CREDENTIAL_FILE_CONTENT }}" > firebase-credentials.json
+
+      - name: Create google-services.json
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > composeApp/google-services.json
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -30,5 +34,5 @@ jobs:
       - name: Build and Upload to Firebase App Distribution
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          GOOGLE_APPLICATION_CREDENTIALS: google-services.json
+          GOOGLE_APPLICATION_CREDENTIALS: firebase-credentials.json
         run: ./gradlew :composeApp:assembleRelease :composeApp:appDistributionUploadRelease
