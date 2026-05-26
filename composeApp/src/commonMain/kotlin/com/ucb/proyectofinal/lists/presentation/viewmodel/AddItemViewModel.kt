@@ -7,6 +7,7 @@ import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.usecase.AddItemToListUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.SearchCatalogUseCase
 import com.ucb.proyectofinal.lists.presentation.effect.AddItemEffect
 import com.ucb.proyectofinal.lists.presentation.intent.AddItemIntent
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 
 class AddItemViewModel(
     private val searchCatalogUseCase: SearchCatalogUseCase,
-    private val addItemToListUseCase: AddItemToListUseCase
+    private val addItemToListUseCase: AddItemToListUseCase,
+    private val getListItemsUseCase: GetListItemsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AddItemUiState())
@@ -50,6 +52,14 @@ class AddItemViewModel(
                 query = ""
             )
         }
+        
+        viewModelScope.launch {
+            getListItemsUseCase(ListId(listId)).collect { items ->
+                val titles = items.map { it.title.value.lowercase() }.toSet()
+                _state.update { it.copy(existingItemTitles = titles) }
+            }
+        }
+        
         search()
     }
 
@@ -76,6 +86,20 @@ class AddItemViewModel(
         if (title.isFailure) {
             viewModelScope.launch {
                 _effects.send(AddItemEffect.ShowError("Título inválido"))
+            }
+            return
+        }
+
+        val titleValue = item.title
+        if (current.existingItemTitles.contains(titleValue.lowercase())) {
+            val typeName = when (current.listType) {
+                ContentType.MOVIE -> "película"
+                ContentType.SERIES -> "serie"
+                ContentType.BOOK -> "libro"
+                ContentType.VIDEOGAME -> "videojuego"
+            }
+            viewModelScope.launch {
+                _effects.send(AddItemEffect.ShowError("Este $typeName ya se encuentra en tu lista '${current.listName}'"))
             }
             return
         }

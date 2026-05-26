@@ -10,5 +10,6 @@ data class AddItemUiState(
     val query: String = "",
     val isLoading: Boolean = false,
     val addingItemId: String? = null,
-    val items: List<CatalogSearchItem> = emptyList()
+    val items: List<CatalogSearchItem> = emptyList(),
+    val existingItemTitles: Set<String> = emptySet()
 )
