@@ -24,13 +24,16 @@ jobs:
         env:
           CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         run: |
-          echo "$CREDENTIAL_FILE_CONTENT" > firebase-credentials.json
+          python3 -c "import os; open('firebase-credentials.json','w').write(os.environ['CREDENTIAL_FILE_CONTENT'])"
 
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          echo "$GOOGLE_SERVICES_JSON" > composeApp/google-services.json
+          python3 -c "import os; open('composeApp/google-services.json','w').write(os.environ['GOOGLE_SERVICES_JSON'])"
+
+      - name: Validate google-services.json
+        run: python3 -c "import json; json.load(open('composeApp/google-services.json')); print('google-services.json is valid')"
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
