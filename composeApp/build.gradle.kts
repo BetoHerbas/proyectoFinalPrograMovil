@@ -1,6 +1,7 @@
 import java.util.Properties
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 fun Project.readPropertiesFile(path: String): Properties {
     val props = Properties()
@@ -161,18 +162,17 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            firebaseAppDistribution {
+                appId = System.getenv("FIREBASE_APP_ID")
+                serviceCredentialsFile = System.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+                groups = "qa-team"
+            }
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-firebaseAppDistribution {
-    appId = System.getenv("FIREBASE_APP_ID")
-    serviceCredentialsFile = System.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    groups = "qa-team"
 }
 
 dependencies {
