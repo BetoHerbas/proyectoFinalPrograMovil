@@ -9,6 +9,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import com.ucb.proyectofinal.designsystem.theme.DsTheme
 import com.ucb.proyectofinal.designsystem.theme.ThemeMode
 import com.ucb.proyectofinal.navigation.AppNavHost
@@ -19,6 +21,7 @@ import com.ucb.proyectofinal.maintenance.presentation.composable.MaintenanceGate
 fun App() {
     val snackbarHostState = remember { SnackbarHostState() }
     val isDark = isSystemInDarkTheme()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         try {
@@ -32,7 +35,13 @@ fun App() {
     DsTheme(
         mode = if (isDark) ThemeMode.DARK else ThemeMode.LIGHT
     ) {
-        MaintenanceGate {
+        MaintenanceGate(
+            onMaintenanceFinished = {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("¡Mantenimiento terminado! Los servicios se han restablecido correctamente")
+                }
+            }
+        ) {
             Scaffold(
                 contentWindowInsets = WindowInsets.safeDrawing,
                 snackbarHost = { SnackbarHost(snackbarHostState) }
