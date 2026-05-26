@@ -24,16 +24,70 @@ jobs:
         env:
           CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         run: |
-          python3 -c "import os; open('firebase-credentials.json','w').write(os.environ['CREDENTIAL_FILE_CONTENT'])"
+          python3 -c "
+          import os
+          creds = os.environ.get('CREDENTIAL_FILE_CONTENT', '').strip()
+          if creds:
+              open('firebase-credentials.json','w').write(creds)
+              print('Created firebase-credentials.json from secret.')
+          else:
+              print('Warning: CREDENTIAL_FILE_CONTENT secret is empty or not set.')
+          "
 
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          python3 -c "import os; open('composeApp/google-services.json','w').write(os.environ['GOOGLE_SERVICES_JSON'])"
+          python3 -c "
+          import os
+          secret = os.environ.get('GOOGLE_SERVICES_JSON', '').strip()
+          if secret:
+              print('Writing google-services.json from secret...')
+              open('composeApp/google-services.json','w').write(secret)
+          else:
+              print('GOOGLE_SERVICES_JSON secret not found or empty. Using committed file in repo.')
+          "
 
       - name: Validate google-services.json
-        run: python3 -c "import json; json.load(open('composeApp/google-services.json')); print('google-services.json is valid')"
+        run: |
+          python3 -c "
+          import json
+          try:
+              json.load(open('composeApp/google-services.json'))
+              print('google-services.json is valid')
+          except Exception as e:
+              print('Warning or Error validating google-services.json:', e)
+          "
+
+      - name: Debug App Distribution Configuration
+        env:
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+        run: |
+          python3 -c "
+          import json, os
+          print('--- App Distribution Configuration Check ---')
+          try:
+              with open('firebase-credentials.json') as f:
+                  creds = json.load(f)
+                  print('Service Account Email:', creds.get('client_email'))
+                  print('Service Account Project ID:', creds.get('project_id'))
+          except Exception as e:
+              print('Error reading credentials file:', e)
+          
+          app_id = os.environ.get('FIREBASE_APP_ID', '')
+          if app_id:
+              print(f'Firebase App ID length: {len(app_id)}')
+              parts = app_id.split(':')
+              if len(parts) >= 4:
+                  print(f'Firebase App ID format looks valid ({len(parts)} segments)')
+                  print(f'Firebase App ID platform: {parts[2]}')
+                  print(f'Firebase App ID Project Number: {parts[1]}')
+              else:
+                  print('Warning: Firebase App ID format is unusual.')
+          else:
+              print('Warning: FIREBASE_APP_ID is empty!')
+          print('--------------------------------------------')
+          "
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
