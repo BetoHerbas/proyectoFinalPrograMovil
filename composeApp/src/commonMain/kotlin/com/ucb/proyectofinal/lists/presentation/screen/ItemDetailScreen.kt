@@ -41,6 +41,16 @@ import com.ucb.proyectofinal.lists.presentation.intent.ItemDetailIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ItemDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
+// ─── Estilos locales específicos para ItemDetailScreen ───
+private val BgDark = Color(0xFF0B1D29)
+private val BgTeal = Color(0xFF0A3736)
+private val BgDeep = Color(0xFF0D1B2D)
+private val Accent = Color(0xFF00E5B6)
+private val AccentBright = Color(0xFF22F2D4)
+private val CardBg = Color(0xFF1A2421)
+private val TextPrimary = Color(0xFFE8FAFF)
+private val TextSecondary = Color(0xFF8FB3BC)
+
 @Composable
 fun ItemDetailScreen(
     itemId: String,
@@ -56,12 +66,16 @@ fun ItemDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppTheme.colors.background)
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(BgDark, BgTeal, BgDeep)
+                )
+            )
     ) {
         if (state.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center),
-                color = AppTheme.colors.primary
+                color = Accent
             )
         } else {
             state.item?.let { item ->
@@ -83,40 +97,35 @@ private fun ItemDetailContent(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = AppTheme.spacing.extraLarge)
+        contentPadding = PaddingValues(bottom = 32.dp)
     ) {
-        item {
-            HeroHeader(item, onBack)
-        }
+        item { HeroHeader(item, onBack) }
 
         item {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = AppTheme.spacing.medium)
+                    .padding(horizontal = 20.dp)
             ) {
                 DetailHeader(item)
-                Spacer(modifier = Modifier.height(AppTheme.spacing.medium))
+                Spacer(modifier = Modifier.height(20.dp))
                 RatingCard(item)
-                Spacer(modifier = Modifier.height(AppTheme.spacing.medium))
+                Spacer(modifier = Modifier.height(24.dp))
                 SynopsisSection(item.description)
-                Spacer(modifier = Modifier.height(AppTheme.spacing.medium))
+                Spacer(modifier = Modifier.height(24.dp))
                 item.parentsGuide?.let {
                     ParentsGuideCard(it)
-                    Spacer(modifier = Modifier.height(AppTheme.spacing.medium))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
-                ActionButtonsRow(
-                    onWatchTrailer = { onIntent(ItemDetailIntent.WatchTrailer) },
-                    onAddToWatchlist = { onIntent(ItemDetailIntent.AddToWatchlist) }
-                )
-                Spacer(modifier = Modifier.height(AppTheme.spacing.large))
+                ActionButtonsRow(onIntent = onIntent)
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
 
         item {
             SectionTitleRow(title = "Cast & Crew", onSeeAll = {})
             CastLazyRow(item.cast)
-            Spacer(modifier = Modifier.height(AppTheme.spacing.large))
+            Spacer(modifier = Modifier.height(32.dp))
         }
 
         item {
@@ -131,7 +140,7 @@ private fun HeroHeader(item: ItemDetail, onBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(350.dp)
+            .height(380.dp)
     ) {
         AsyncImage(
             model = item.imageUrl,
@@ -147,8 +156,8 @@ private fun HeroHeader(item: ItemDetail, onBack: () -> Unit) {
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color.Transparent,
-                            AppTheme.colors.background
+                            BgDark.copy(alpha = 0.5f),
+                            BgDark
                         )
                     )
                 )
@@ -158,7 +167,7 @@ private fun HeroHeader(item: ItemDetail, onBack: () -> Unit) {
             onClick = onBack,
             modifier = Modifier
                 .statusBarsPadding()
-                .padding(AppTheme.spacing.small)
+                .padding(16.dp)
                 .align(Alignment.TopStart)
                 .background(Color.Black.copy(alpha = 0.3f), CircleShape)
         ) {
@@ -177,37 +186,34 @@ private fun DetailHeader(item: ItemDetail) {
         Text(
             text = item.title.value,
             style = AppTheme.typography.headlineLarge,
-            color = AppTheme.colors.textPrimary
+            color = TextPrimary
         )
 
-        Spacer(modifier = Modifier.height(AppTheme.spacing.extraSmall))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.extraSmall)
+            verticalAlignment = Alignment.CenterVertically
         ) {
             val metadata = when (item) {
-                is ItemDetail.Movie -> listOf(item.year, item.duration, item.director)
-                is ItemDetail.Series -> listOf(item.year, "${item.seasons} Seasons", item.creator)
-                is ItemDetail.Book -> listOf(item.author, "${item.pages} Pages", item.publisher)
+                is ItemDetail.Movie -> "${item.year}  •  ${item.duration}  •  "
+                is ItemDetail.Series -> "${item.year}  •  ${item.seasons} Seasons  •  "
+                is ItemDetail.Book -> "${item.author}  •  "
             }
-
-            metadata.forEachIndexed { index, text ->
-                val isDirectorOrCreator = (item is ItemDetail.Movie && index == 2) || 
-                                          (item is ItemDetail.Series && index == 2)
-                Text(
-                    text = text,
-                    style = AppTheme.typography.bodySmall,
-                    color = if (isDirectorOrCreator) AppTheme.colors.primary else AppTheme.colors.textSecondary
-                )
-                if (index < metadata.size - 1) {
-                    Text(
-                        text = "•",
-                        style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.textSecondary
-                    )
-                }
+            Text(
+                text = metadata,
+                style = AppTheme.typography.bodySmall,
+                color = TextSecondary
+            )
+            val director = when (item) {
+                is ItemDetail.Movie -> item.director
+                is ItemDetail.Series -> item.creator
+                is ItemDetail.Book -> item.publisher
             }
+            Text(
+                text = director,
+                style = AppTheme.typography.bodySmall,
+                color = Accent
+            )
         }
     }
 }
@@ -216,11 +222,11 @@ private fun DetailHeader(item: ItemDetail) {
 private fun RatingCard(item: ItemDetail) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
-        shape = RoundedCornerShape(12.dp)
+        colors = CardDefaults.cardColors(containerColor = CardBg),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(AppTheme.spacing.medium)
+            modifier = Modifier.padding(16.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -231,53 +237,56 @@ private fun RatingCard(item: ItemDetail) {
                     tint = Color(0xFFFFAD00),
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(AppTheme.spacing.extraSmall))
                 Text(
-                    text = item.rating.toString(),
-                    style = AppTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    color = AppTheme.colors.textPrimary
+                    text = " ${item.rating}",
+                    style = AppTheme.typography.headlineSmall,
+                    color = TextPrimary,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = " /10",
                     style = AppTheme.typography.bodySmall,
-                    color = AppTheme.colors.textSecondary
+                    color = TextSecondary
                 )
                 
                 Spacer(modifier = Modifier.weight(1f))
                 
-                Row(horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.small)) {
-                    Badge(containerColor = Color(0xFFF5C518), contentColor = Color.Black) { Text("IMDb") }
-                    Badge(containerColor = Color(0xFFFA320A), contentColor = Color.White) { Text("🍅 89%") }
+                Surface(color = Color(0xFFF5C518), shape = RoundedCornerShape(4.dp)) {
+                    Text(
+                        text = "IMDb",
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        color = Color.Black,
+                        style = AppTheme.typography.labelMedium
+                    )
                 }
             }
 
-            Text(
-                text = "(${item.totalReviews / 1000000.0}M Reviews)",
-                style = AppTheme.typography.labelMedium,
-                color = AppTheme.colors.textSecondary
-            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(AppTheme.spacing.medium))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.small)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 item.tags.forEach { tag ->
-                    AssistChip(
-                        onClick = {},
-                        label = { Text(tag, style = AppTheme.typography.labelMedium) },
-                        leadingIcon = {
+                    Surface(
+                        color = BgDark.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.border(0.5.dp, Accent.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Icon(
                                 Icons.Outlined.EmojiEvents,
                                 contentDescription = null,
-                                modifier = Modifier.size(16.dp),
+                                modifier = Modifier.size(14.dp),
                                 tint = Color(0xFFFFAD00)
                             )
-                        },
-                        colors = AssistChipDefaults.assistChipColors(
-                            labelColor = AppTheme.colors.textPrimary,
-                            containerColor = AppTheme.colors.background.copy(alpha = 0.5f)
-                        ),
-                        border = null
-                    )
+                            Text(
+                                text = " $tag",
+                                style = AppTheme.typography.labelMedium,
+                                color = TextPrimary
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -290,14 +299,14 @@ private fun SynopsisSection(description: String) {
         Text(
             text = "Synopsis",
             style = AppTheme.typography.headlineSmall,
-            color = AppTheme.colors.textPrimary
+            color = TextPrimary
         )
-        Spacer(modifier = Modifier.height(AppTheme.spacing.small))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = description,
             style = AppTheme.typography.bodyMedium,
-            color = AppTheme.colors.textSecondary,
-            lineHeight = 22.sp
+            color = TextSecondary,
+            lineHeight = 24.sp
         )
     }
 }
@@ -306,55 +315,51 @@ private fun SynopsisSection(description: String) {
 private fun ParentsGuideCard(guide: com.ucb.proyectofinal.lists.domain.model.ParentsGuide) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(containerColor = CardBg.copy(alpha = 0.6f)),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier.padding(AppTheme.spacing.medium)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Parents Guide",
-                style = AppTheme.typography.labelLarge.copy(color = AppTheme.colors.primary)
+                style = AppTheme.typography.labelLarge,
+                color = AccentBright
             )
-            Spacer(modifier = Modifier.height(AppTheme.spacing.small))
+            Spacer(modifier = Modifier.height(8.dp))
             Surface(
-                color = AppTheme.colors.background,
-                shape = RoundedCornerShape(4.dp),
-                modifier = Modifier.border(1.dp, AppTheme.colors.textSecondary.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+                color = BgTeal,
+                shape = RoundedCornerShape(4.dp)
             ) {
                 Text(
                     text = guide.classification,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                    style = AppTheme.typography.labelMedium,
-                    color = AppTheme.colors.textPrimary
+                    color = TextPrimary,
+                    style = AppTheme.typography.labelMedium
                 )
             }
-            Spacer(modifier = Modifier.height(AppTheme.spacing.small))
+            Spacer(modifier = Modifier.height(8.dp))
             guide.details.forEach { detail ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("•", color = AppTheme.colors.textSecondary)
-                    Spacer(modifier = Modifier.width(AppTheme.spacing.small))
-                    Text(
-                        text = detail,
-                        style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.textSecondary
-                    )
-                }
+                Text(
+                    text = "• $detail",
+                    style = AppTheme.typography.bodySmall,
+                    color = TextSecondary
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ActionButtonsRow(onWatchTrailer: () -> Unit, onAddToWatchlist: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.small)) {
+private fun ActionButtonsRow(onIntent: (ItemDetailIntent) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         PrimaryButton(
             text = "Watch Trailer",
-            onClick = onWatchTrailer,
-            modifier = Modifier.fillMaxWidth()
+            onClick = { onIntent(ItemDetailIntent.WatchTrailer) },
+            modifier = Modifier.fillMaxWidth().height(56.dp)
         )
         SecondaryButton(
             text = "Add to Watchlist",
-            onClick = onAddToWatchlist,
-            modifier = Modifier.fillMaxWidth()
+            onClick = { onIntent(ItemDetailIntent.AddToWatchlist) },
+            modifier = Modifier.fillMaxWidth().height(56.dp)
         )
         
         Row(
@@ -362,10 +367,10 @@ private fun ActionButtonsRow(onWatchTrailer: () -> Unit, onAddToWatchlist: () ->
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             IconButton(onClick = {}) {
-                Icon(Icons.Outlined.IosShare, contentDescription = "Share", tint = AppTheme.colors.textPrimary)
+                Icon(Icons.Outlined.IosShare, contentDescription = null, tint = Accent)
             }
             IconButton(onClick = {}) {
-                Icon(Icons.Outlined.StarBorder, contentDescription = "Rate", tint = AppTheme.colors.textPrimary)
+                Icon(Icons.Outlined.StarBorder, contentDescription = null, tint = Accent)
             }
         }
     }
@@ -376,20 +381,20 @@ private fun SectionTitleRow(title: String, onSeeAll: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = AppTheme.spacing.medium),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
             style = AppTheme.typography.headlineSmall,
-            color = AppTheme.colors.textPrimary
+            color = TextPrimary
         )
         TextButton(onClick = onSeeAll) {
             Text(
                 text = "See All",
-                style = AppTheme.typography.labelLarge,
-                color = AppTheme.colors.primary
+                color = Accent,
+                style = AppTheme.typography.labelLarge
             )
         }
     }
@@ -398,8 +403,8 @@ private fun SectionTitleRow(title: String, onSeeAll: () -> Unit) {
 @Composable
 private fun CastLazyRow(cast: List<CastMember>) {
     LazyRow(
-        contentPadding = PaddingValues(horizontal = AppTheme.spacing.medium),
-        horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.medium)
+        contentPadding = PaddingValues(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(cast) { member ->
             Column(
@@ -408,9 +413,9 @@ private fun CastLazyRow(cast: List<CastMember>) {
             ) {
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(70.dp)
                         .clip(CircleShape)
-                        .background(AppTheme.colors.surface)
+                        .background(CardBg)
                 ) {
                     AsyncImage(
                         model = member.imageUrl,
@@ -419,19 +424,19 @@ private fun CastLazyRow(cast: List<CastMember>) {
                         contentScale = ContentScale.Crop
                     )
                 }
-                Spacer(modifier = Modifier.height(AppTheme.spacing.extraSmall))
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = member.name,
-                    style = AppTheme.typography.labelLarge,
-                    color = AppTheme.colors.textPrimary,
+                    style = AppTheme.typography.labelMedium,
+                    color = TextPrimary,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = member.role,
-                    style = AppTheme.typography.labelMedium,
-                    color = AppTheme.colors.textSecondary,
+                    style = AppTheme.typography.bodySmall,
+                    color = TextSecondary,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -444,57 +449,40 @@ private fun CastLazyRow(cast: List<CastMember>) {
 @Composable
 private fun ReviewsLazyRow(reviews: List<Review>) {
     LazyRow(
-        contentPadding = PaddingValues(horizontal = AppTheme.spacing.medium),
-        horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.medium)
+        contentPadding = PaddingValues(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(reviews) { review ->
             Card(
-                modifier = Modifier.width(300.dp),
-                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.surface),
-                shape = RoundedCornerShape(12.dp)
+                modifier = Modifier.width(280.dp),
+                colors = CardDefaults.cardColors(containerColor = CardBg),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Column(modifier = Modifier.padding(AppTheme.spacing.medium)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        repeat(5) { index ->
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row {
+                        repeat(5) {
                             Icon(
-                                if (index < review.rating / 2) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                                Icons.Filled.Star,
                                 contentDescription = null,
                                 tint = Color(0xFFFFAD00),
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(14.dp)
                             )
                         }
-                        Spacer(modifier = Modifier.width(AppTheme.spacing.extraSmall))
-                        Text(
-                            text = "${review.rating}/10",
-                            style = AppTheme.typography.labelMedium,
-                            color = AppTheme.colors.textPrimary
-                        )
                     }
-                    Spacer(modifier = Modifier.height(AppTheme.spacing.small))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = review.content,
                         style = AppTheme.typography.bodySmall,
-                        color = AppTheme.colors.textSecondary,
+                        color = TextSecondary,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.height(AppTheme.spacing.medium))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(modifier = Modifier.size(24.dp).clip(CircleShape).background(AppTheme.colors.primary)) {
-                            Text(
-                                review.author.take(1),
-                                modifier = Modifier.align(Alignment.Center),
-                                style = AppTheme.typography.labelMedium,
-                                color = AppTheme.colors.onPrimary
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(AppTheme.spacing.small))
-                        Text(
-                            text = "${review.author} • ${review.date}",
-                            style = AppTheme.typography.labelMedium,
-                            color = AppTheme.colors.textSecondary
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "${review.author} • ${review.date}",
+                        style = AppTheme.typography.labelMedium,
+                        color = Accent
+                    )
                 }
             }
         }
