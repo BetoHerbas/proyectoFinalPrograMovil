@@ -31,6 +31,37 @@ actual class RemoteConfigRepository actual constructor() {
 
     companion object {
         private const val POLL_INTERVAL_MS = 10_000L
+
+        private val DEFAULT_ONBOARDING_JSON = """
+        {
+          "onboarding_config": [
+            {
+              "id": 1,
+              "title": { "es": "¡Organiza tu entretenimiento!", "en": "Organize your entertainment!", "fr": "Organisez votre divertissement !" },
+              "description": { "es": "Gestiona tus películas, series, libros y videojuegos favoritos en un solo lugar y de forma sencilla.", "en": "Manage your favorite movies, series, books, and video games in one place easily.", "fr": "Gérez facilement vos films, séries, livres et jeux vidéo préférés en un seul endroit." },
+              "image_url": { "es": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&h=600&fit=crop", "en": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&h=600&fit=crop", "fr": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&h=600&fit=crop" }
+            },
+            {
+              "id": 2,
+              "title": { "es": "Crea listas personalizadas", "en": "Create custom lists", "fr": "Créez des listes personnalisées" },
+              "description": { "es": "Clasifica tus colecciones, agrégales portadas atractivas y decide si quieres mantenerlas privadas o compartirlas.", "en": "Categorize your collections, add attractive covers, and decide whether to keep them private or share them.", "fr": "Classez vos collections, ajoutez des couvertures attrayantes et décidez de les garder privées ou de les partager." },
+              "image_url": { "es": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&h=600&fit=crop", "en": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&h=600&fit=crop", "fr": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&h=600&fit=crop" }
+            },
+            {
+              "id": 3,
+              "title": { "es": "Explora y mide tu progreso", "en": "Explore and track progress", "fr": "Explorez et suivez vos progrès" },
+              "description": { "es": "Busca en catálogos globales integrados, añade elementos y registra tu avance al ver, leer o jugar.", "en": "Search integrated global catalogs, add items, and record your progress as you watch, read, or play.", "fr": "Recherchez dans des catalogues mondiaux intégrés, ajoutez des éléments et suivez vos progrès au fur et à mesure." },
+              "image_url": { "es": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop", "en": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop", "fr": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=600&fit=crop" }
+            },
+            {
+              "id": 4,
+              "title": { "es": "¡Todo listo para empezar!", "en": "All ready to start!", "fr": "Tout est prêt !" },
+              "description": { "es": "Únete hoy y transforma la manera en la que llevas el registro de tus pasatiempos favoritos.", "en": "Join today and transform the way you keep track of your favorite hobbies.", "fr": "Inscrivez-vous aujourd'hui et transformez votre façon de suivre vos passe-temps favoris." },
+              "image_url": { "es": "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&h=600&fit=crop", "en": "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&h=600&fit=crop", "fr": "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&h=600&fit=crop" }
+            }
+          ]
+        }
+        """.trimIndent()
     }
 
     private val remoteConfig: FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
@@ -44,7 +75,8 @@ actual class RemoteConfigRepository actual constructor() {
         remoteConfig.setDefaultsAsync(mapOf(
             "mantainence" to false,
             "videogame_category_enabled" to false,
-            "videogame_target_group" to "B"
+            "videogame_target_group" to "B",
+            "onboarding_config" to DEFAULT_ONBOARDING_JSON
         ))
     }
 
@@ -195,5 +227,12 @@ actual class RemoteConfigRepository actual constructor() {
             registration.remove()
             pollingJob.cancel()
         }
+    }
+
+    // ── Onboarding config ───────────────────────────────────────────────────────
+
+    actual suspend fun fetchOnboardingConfig(): String {
+        try { remoteConfig.fetchAndActivate().await() } catch (_: Exception) {}
+        return remoteConfig.getString("onboarding_config")
     }
 }

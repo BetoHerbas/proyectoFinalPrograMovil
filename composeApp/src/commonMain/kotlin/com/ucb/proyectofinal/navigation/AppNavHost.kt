@@ -1,6 +1,7 @@
 package com.ucb.proyectofinal.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,14 +14,31 @@ import com.ucb.proyectofinal.lists.presentation.screen.ContentListsScreen
 import com.ucb.proyectofinal.lists.presentation.screen.CreateListScreen
 import com.ucb.proyectofinal.lists.presentation.screen.EditListScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ListDetailScreen
+import com.ucb.proyectofinal.onboarding.data.local.OnboardingPreferences
+import com.ucb.proyectofinal.onboarding.presentation.screen.OnboardingScreen
 import com.ucb.proyectofinal.profile.presentation.screen.ProfileScreen
 import com.ucb.proyectofinal.settings.presentation.screen.SettingsScreen
+import org.koin.compose.koinInject
 
 @Composable
 fun AppNavHost() {
+    val onboardingPreferences: OnboardingPreferences = koinInject()
+    val startDestination: NavRoute = remember {
+        if (onboardingPreferences.isOnboardingCompleted()) NavRoute.Login else NavRoute.Onboarding
+    }
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = NavRoute.Login) {
+    NavHost(navController = navController, startDestination = startDestination) {
+
+        composable<NavRoute.Onboarding> {
+            OnboardingScreen(
+                onNavigateToLogin = {
+                    navController.navigate(NavRoute.Login) {
+                        popUpTo<NavRoute.Onboarding> { inclusive = true }
+                    }
+                }
+            )
+        }
 
         composable<NavRoute.Login> {
             LoginScreen(

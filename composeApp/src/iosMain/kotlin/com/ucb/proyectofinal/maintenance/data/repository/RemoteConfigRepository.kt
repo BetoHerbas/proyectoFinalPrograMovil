@@ -10,5 +10,6 @@ import kotlinx.coroutines.flow.flowOf
 actual class RemoteConfigRepository actual constructor() {
     actual fun observeMaintenance(): Flow<Boolean> = flowOf(false)
     actual fun observeVideogameCategoryEnabled(): Flow<Boolean> = flowOf(false)
+    actual suspend fun fetchOnboardingConfig(): String = "{\"onboarding_config\":[]}"
 }
 

@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 sealed class NavRoute {
 
     @Serializable
+    data object Onboarding : NavRoute()
+
+    @Serializable
     data object Register : NavRoute()
 
     @Serializable

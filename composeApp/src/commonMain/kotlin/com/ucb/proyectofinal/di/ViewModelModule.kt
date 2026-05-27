@@ -6,6 +6,7 @@ import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
 import com.ucb.proyectofinal.lists.presentation.viewmodel.EditListViewModel
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ListDetailViewModel
 import com.ucb.proyectofinal.maintenance.presentation.viewmodel.MaintenanceViewModel
+import com.ucb.proyectofinal.onboarding.presentation.viewmodel.OnboardingViewModel
 import com.ucb.proyectofinal.profile.presentation.viewmodel.ProfileViewModel
 import com.ucb.proyectofinal.settings.presentation.viewmodel.SettingsViewModel
 import org.koin.compose.viewmodel.dsl.viewModel
@@ -20,4 +21,5 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { MaintenanceViewModel(get()) }
+    viewModel { OnboardingViewModel(get(), get()) }
 }
