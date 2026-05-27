@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Projet Final</string>
+    <string name="hello_world">Bonjour le Monde!</string>
+    <string name="welcome_message">Bienvenue dans l\'application de test</string>
+
+    <!-- Screen Titles -->
+    <string name="login_screen_title">Écran de Connexion</string>
+    <string name="register_screen_title">Écran d\'Inscription</string>
+    <string name="add_item_screen_title">Ajouter un Élément</string>
+    <string name="content_lists_screen_title">Listes de Contenu</string>
+    <string name="create_list_screen_title">Créer une Liste</string>
+    <string name="list_detail_screen_title">Détail de la Liste</string>
+    <string name="profile_screen_title">Profil</string>
+    <string name="settings_screen_title">Paramètres</string>
+
+    <!-- Onboarding Buttons -->
+    <string name="onboarding_next">Suivant</string>
+    <string name="onboarding_previous">Précédent</string>
+    <string name="onboarding_skip">Passer</string>
+    <string name="onboarding_start">Commencer</string>
+    <string name="onboarding_loading">Chargement…</string>
+</resources>

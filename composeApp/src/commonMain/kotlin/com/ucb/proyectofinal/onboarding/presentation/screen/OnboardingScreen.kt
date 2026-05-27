@@ -49,6 +49,13 @@ import com.ucb.proyectofinal.onboarding.presentation.state.OnboardingEffect
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import com.ucb.proyectofinal.onboarding.presentation.viewmodel.OnboardingViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.onboarding_next
+import proyectofinalprogramovil.composeapp.generated.resources.onboarding_previous
+import proyectofinalprogramovil.composeapp.generated.resources.onboarding_skip
+import proyectofinalprogramovil.composeapp.generated.resources.onboarding_start
+import proyectofinalprogramovil.composeapp.generated.resources.onboarding_loading
 
 // ── Color palette ───────────────────────────────────────────────────────────────
 private val BgDark1 = Color(0xFF0F0F1A)
@@ -102,7 +109,7 @@ fun OnboardingScreen(
                     ) {
                         TextButton(onClick = { viewModel.skipOnboarding() }) {
                             Text(
-                                text = "Omitir",
+                                text = stringResource(Res.string.onboarding_skip),
                                 color = TextSecondary,
                                 fontSize = 15.sp
                             )
@@ -216,11 +223,11 @@ fun OnboardingScreen(
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Anterior",
+                                    contentDescription = stringResource(Res.string.onboarding_previous),
                                     modifier = Modifier.size(18.dp)
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text("Anterior", fontSize = 15.sp)
+                                Text(stringResource(Res.string.onboarding_previous), fontSize = 15.sp)
                             }
                         } else {
                             Spacer(modifier = Modifier.width(1.dp))
@@ -238,7 +245,7 @@ fun OnboardingScreen(
                                 modifier = Modifier.height(50.dp)
                             ) {
                                 Text(
-                                    "Iniciar",
+                                    stringResource(Res.string.onboarding_start),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp
                                 )
@@ -257,11 +264,11 @@ fun OnboardingScreen(
                                 shape = RoundedCornerShape(14.dp),
                                 modifier = Modifier.height(50.dp)
                             ) {
-                                Text("Siguiente", fontSize = 15.sp)
+                                Text(stringResource(Res.string.onboarding_next), fontSize = 15.sp)
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowForward,
-                                    contentDescription = "Siguiente",
+                                    contentDescription = stringResource(Res.string.onboarding_next),
                                     modifier = Modifier.size(18.dp)
                                 )
                             }
@@ -280,7 +287,7 @@ private fun LoadingContent() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator(color = AccentPurple, strokeWidth = 3.dp)
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Cargando…", color = TextSecondary, fontSize = 14.sp)
+            Text(stringResource(Res.string.onboarding_loading), color = TextSecondary, fontSize = 14.sp)
         }
     }
 }

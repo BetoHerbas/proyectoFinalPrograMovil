@@ -12,4 +12,11 @@
     <string name="list_detail_screen_title">List Detail Screen</string>
     <string name="profile_screen_title">Profile Screen</string>
     <string name="settings_screen_title">Settings Screen</string>
+
+    <!-- Onboarding Buttons -->
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_previous">Previous</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_start">Start</string>
+    <string name="onboarding_loading">Loading…</string>
 </resources>

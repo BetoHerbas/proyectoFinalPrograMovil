@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Proyecto Final</string>
-    <string name="hello_world">Hola Mundo!</string>
+    <string name="hello_world">¡Hola Mundo!</string>
     <string name="welcome_message">Bienvenido a la aplicación de prueba</string>
 
     <!-- Screen Titles -->
@@ -12,4 +12,11 @@
     <string name="list_detail_screen_title">Pantalla de Detalle de Lista</string>
     <string name="profile_screen_title">Pantalla de Perfil</string>
     <string name="settings_screen_title">Pantalla de Ajustes</string>
+
+    <!-- Onboarding Buttons -->
+    <string name="onboarding_next">Siguiente</string>
+    <string name="onboarding_previous">Anterior</string>
+    <string name="onboarding_skip">Omitir</string>
+    <string name="onboarding_start">Iniciar</string>
+    <string name="onboarding_loading">Cargando…</string>
 </resources>
