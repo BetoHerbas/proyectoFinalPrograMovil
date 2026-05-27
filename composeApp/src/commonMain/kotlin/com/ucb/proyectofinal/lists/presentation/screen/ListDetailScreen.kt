@@ -3,6 +3,7 @@ package com.ucb.proyectofinal.lists.presentation.screen
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,7 +37,7 @@ import com.ucb.proyectofinal.lists.presentation.state.ItemFilter
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ListDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-// ─── Color palette (consistent with the rest of the app) ───
+// ─── Color palette ───
 private val BgDark = Color(0xFF0B1D29)
 private val BgTeal = Color(0xFF0A3736)
 private val BgDeep = Color(0xFF0D1B2D)
@@ -61,6 +62,7 @@ fun ListDetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAddItem: () -> Unit,
     onNavigateToEdit: () -> Unit,
+    onNavigateToItemDetail: (String) -> Unit,
     viewModel: ListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -89,7 +91,6 @@ fun ListDetailScreen(
         }
     }
 
-    // Derived values
     val displayName = state.listName.ifEmpty { listName }
     val displayDescription = state.description.ifEmpty { description }
     val contentType = runCatching { ContentType.valueOf(state.listType.ifEmpty { listType }) }
@@ -132,7 +133,6 @@ fun ListDetailScreen(
                 .padding(padding),
             contentPadding = PaddingValues(bottom = 92.dp)
         ) {
-            // ─── Top bar ───
             item {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 Row(
@@ -150,25 +150,16 @@ fun ListDetailScreen(
                         )
                     }
                     Row {
-                        IconButton(onClick = { /* Placeholder: Compartir */ }) {
-                            Icon(
-                                Icons.Default.Share,
-                                contentDescription = "Compartir",
-                                tint = TextPrimary
-                            )
+                        IconButton(onClick = { }) {
+                            Icon(Icons.Default.Share, contentDescription = "Compartir", tint = TextPrimary)
                         }
                         IconButton(onClick = onNavigateToEdit) {
-                            Icon(
-                                Icons.Default.Edit,
-                                contentDescription = "Editar",
-                                tint = AccentBright
-                            )
+                            Icon(Icons.Default.Edit, contentDescription = "Editar", tint = AccentBright)
                         }
                     }
                 }
             }
 
-            // ─── Cover image area with title overlay ───
             item {
                 Box(
                     modifier = Modifier
@@ -178,14 +169,12 @@ fun ListDetailScreen(
                         .clip(RoundedCornerShape(18.dp))
                         .background(coverGradient(contentType))
                 ) {
-                    // Category emoji large in center
                     Text(
                         text = typeEmoji(contentType),
                         fontSize = 56.sp,
                         modifier = Modifier.align(Alignment.Center)
                     )
 
-                    // Dark overlay at the bottom for text readability
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -193,26 +182,20 @@ fun ListDetailScreen(
                             .height(120.dp)
                             .background(
                                 Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        Color(0xCC0B1D29)
-                                    )
+                                    colors = listOf(Color.Transparent, Color(0xCC0B1D29))
                                 )
                             )
                     )
 
-                    // Badges + title overlay
                     Column(
                         modifier = Modifier
                             .align(Alignment.BottomStart)
                             .padding(16.dp)
                     ) {
-                        // Badges row
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // Public/Private badge
                             Surface(
                                 shape = RoundedCornerShape(6.dp),
                                 color = Accent.copy(alpha = 0.2f)
@@ -225,23 +208,10 @@ fun ListDetailScreen(
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                                 )
                             }
-                            // Category badge
-                            Surface(
-                                shape = RoundedCornerShape(6.dp),
-                                color = Color.White.copy(alpha = 0.1f)
-                            ) {
-                                Text(
-                                    text = "•${categoryLabel(contentType)}",
-                                    color = TextSecondary,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                                )
-                            }
                         }
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Title
                         Text(
                             text = displayName,
                             color = TextPrimary,
@@ -254,7 +224,6 @@ fun ListDetailScreen(
                 }
             }
 
-            // ─── Description ───
             if (displayDescription.isNotBlank()) {
                 item {
                     Text(
@@ -267,13 +236,11 @@ fun ListDetailScreen(
                 }
             }
 
-            // ─── Progress bar ───
             item {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .padding(top = if (displayDescription.isBlank()) 12.dp else 0.dp)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -305,7 +272,6 @@ fun ListDetailScreen(
                 }
             }
 
-            // ─── Filter chips ───
             item {
                 Row(
                     modifier = Modifier
@@ -331,34 +297,15 @@ fun ListDetailScreen(
                 }
             }
 
-            // ─── Content ───
             when {
                 state.isLoading -> item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    Box(modifier = Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = Accent)
                     }
                 }
                 filteredItems.isEmpty() -> item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = when (state.selectedFilter) {
-                                ItemFilter.ALL -> "No hay ítems. ¡Agrega uno!"
-                                ItemFilter.COMPLETED -> "No hay ítems completados"
-                                ItemFilter.PENDING -> "¡Todos los ítems completados! 🎉"
-                            },
-                            color = TextMuted,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                    Box(modifier = Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
+                        Text(text = "No hay ítems", color = TextMuted, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 else -> items(filteredItems, key = { it.id.value }) { item ->
@@ -366,7 +313,8 @@ fun ListDetailScreen(
                         item = item,
                         onToggleSeen = { viewModel.onIntent(ListDetailIntent.ToggleSeen(item)) },
                         onRate = { rating -> viewModel.onIntent(ListDetailIntent.RateItem(item, rating)) },
-                        onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) }
+                        onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) },
+                        onClick = { onNavigateToItemDetail(item.id.value) }
                     )
                 }
             }
@@ -374,21 +322,10 @@ fun ListDetailScreen(
     }
 }
 
-// ─── Filter chip component ───
 @Composable
-private fun FilterChipItem(
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    val backgroundColor by animateColorAsState(
-        targetValue = if (selected) ChipSelectedBg else ChipBg,
-        animationSpec = tween(250)
-    )
-    val textColor by animateColorAsState(
-        targetValue = if (selected) ChipSelectedText else TextSecondary,
-        animationSpec = tween(250)
-    )
+private fun FilterChipItem(label: String, selected: Boolean, onClick: () -> Unit) {
+    val backgroundColor by animateColorAsState(if (selected) ChipSelectedBg else ChipBg)
+    val textColor by animateColorAsState(if (selected) ChipSelectedText else TextSecondary)
 
     Surface(
         onClick = onClick,
@@ -399,24 +336,24 @@ private fun FilterChipItem(
             text = label,
             color = textColor,
             style = MaterialTheme.typography.labelLarge,
-            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }
 }
 
-// ─── Item card component ───
 @Composable
 private fun ContentItemCard(
     item: ContentItem,
     onToggleSeen: () -> Unit,
     onRate: (Int) -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 5.dp),
+            .padding(horizontal = 16.dp, vertical = 5.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = CardBg)
     ) {
@@ -424,22 +361,16 @@ private fun ContentItemCard(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Circular checkbox
-            IconButton(
-                onClick = onToggleSeen,
-                modifier = Modifier.size(36.dp)
-            ) {
+            IconButton(onClick = onToggleSeen, modifier = Modifier.size(36.dp)) {
                 Icon(
                     imageVector = if (item.seen) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
-                    contentDescription = if (item.seen) "Marcar como pendiente" else "Marcar como visto",
-                    tint = if (item.seen) Accent else TextMuted,
-                    modifier = Modifier.size(24.dp)
+                    contentDescription = null,
+                    tint = if (item.seen) Accent else TextMuted
                 )
             }
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Title + type
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = item.title.value,
@@ -450,117 +381,29 @@ private fun ContentItemCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = typeSublabel(item.type),
+                    text = categoryLabel(item.type),
                     color = TextMuted,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
 
-            Spacer(modifier = Modifier.width(6.dp))
-
-            // Category tag chip
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = categoryChipColor(item.type).copy(alpha = 0.15f)
-            ) {
-                Text(
-                    text = categoryLabel(item.type),
-                    color = categoryChipColor(item.type),
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                )
-            }
-
-            // Rating display (if rated)
-            if (item.rating != null && item.rating.value > 0) {
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "★${item.rating.value}.0",
-                    color = Accent,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            // Delete button
-            IconButton(
-                onClick = onDelete,
-                modifier = Modifier.size(32.dp)
-            ) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Eliminar",
-                    tint = TextMuted,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-        }
-
-        // Star rating row
-        Row(
-            modifier = Modifier
-                .padding(start = 56.dp, end = 12.dp, bottom = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(0.dp)
-        ) {
-            (1..5).forEach { star ->
-                TextButton(
-                    onClick = { onRate(star) },
-                    contentPadding = PaddingValues(2.dp),
-                    modifier = Modifier.size(28.dp)
-                ) {
-                    Text(
-                        if ((item.rating?.value ?: 0) >= star) "★" else "☆",
-                        color = if ((item.rating?.value ?: 0) >= star) Accent else TextMuted,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+            IconButton(onClick = onDelete, modifier = Modifier.size(32.dp)) {
+                Icon(Icons.Default.Delete, contentDescription = null, tint = TextMuted, modifier = Modifier.size(18.dp))
             }
         }
     }
 }
 
-// ─── Helper functions ───
-
-private fun coverGradient(type: ContentType): Brush = when (type) {
-    ContentType.MOVIE -> Brush.linearGradient(
-        listOf(Color(0xFF071B26), Color(0xFF1A3D5E), Color(0xFF0D2840))
-    )
-    ContentType.SERIES -> Brush.linearGradient(
-        listOf(Color(0xFF1A1B2E), Color(0xFF3B4C7A), Color(0xFF26273A))
-    )
-    ContentType.BOOK -> Brush.linearGradient(
-        listOf(Color(0xFF14232B), Color(0xFF2D5468), Color(0xFF1F3844))
-    )
-    ContentType.VIDEOGAME -> Brush.linearGradient(
-        listOf(Color(0xFF142214), Color(0xFF2E5C35), Color(0xFF1C2B1C))
-    )
-}
-
+private fun coverGradient(type: ContentType): Brush = Brush.linearGradient(listOf(Color(0xFF071B26), Color(0xFF1A3D5E)))
 private fun typeEmoji(type: ContentType): String = when (type) {
     ContentType.MOVIE -> "🎬"
     ContentType.SERIES -> "📺"
     ContentType.BOOK -> "📚"
     ContentType.VIDEOGAME -> "🎮"
 }
-
 private fun categoryLabel(type: ContentType): String = when (type) {
     ContentType.MOVIE -> "Película"
     ContentType.SERIES -> "Serie"
     ContentType.BOOK -> "Libro"
     ContentType.VIDEOGAME -> "Videojuego"
-}
-
-private fun typeSublabel(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Película"
-    ContentType.SERIES -> "Serie de TV"
-    ContentType.BOOK -> "Libro"
-    ContentType.VIDEOGAME -> "Videojuego"
-}
-
-private fun categoryChipColor(type: ContentType): Color = when (type) {
-    ContentType.MOVIE -> Color(0xFF64B5F6)
-    ContentType.SERIES -> Color(0xFFBA68C8)
-    ContentType.BOOK -> Color(0xFF81C784)
-    ContentType.VIDEOGAME -> Color(0xFFFFB74D)
 }

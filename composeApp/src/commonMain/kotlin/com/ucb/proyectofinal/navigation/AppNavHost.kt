@@ -12,6 +12,7 @@ import com.ucb.proyectofinal.lists.presentation.screen.AddItemScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ContentListsScreen
 import com.ucb.proyectofinal.lists.presentation.screen.CreateListScreen
 import com.ucb.proyectofinal.lists.presentation.screen.EditListScreen
+import com.ucb.proyectofinal.lists.presentation.screen.ItemDetailScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ListDetailScreen
 import com.ucb.proyectofinal.profile.presentation.screen.ProfileScreen
 import com.ucb.proyectofinal.settings.presentation.screen.SettingsScreen
@@ -94,7 +95,23 @@ fun AppNavHost() {
                             listType = route.listType
                         )
                     )
+                },
+                onNavigateToItemDetail = { itemId ->
+                    navController.navigate(
+                        NavRoute.ItemDetail(
+                            listId = route.listId,
+                            itemId = itemId
+                        )
+                    )
                 }
+            )
+        }
+
+        composable<NavRoute.ItemDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavRoute.ItemDetail>()
+            ItemDetailScreen(
+                itemId = route.itemId,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
