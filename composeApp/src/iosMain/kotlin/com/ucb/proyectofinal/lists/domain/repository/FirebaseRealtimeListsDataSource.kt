@@ -19,6 +19,9 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
     actual fun observeItems(userId: String, listId: String): Flow<List<ContentItem>> =
         itemsByUserList.map { it["$userId:$listId"].orEmpty() }
 
+    actual fun observePublicLists(): Flow<List<ContentList>> =
+        listsByUser.map { map -> map.values.flatten().filter { it.isPublic } }
+
     actual suspend fun createList(userId: String, list: ContentList) {
         val current = listsByUser.value[userId].orEmpty()
         listsByUser.value = listsByUser.value + (userId to (listOf(list) + current))
@@ -67,5 +70,22 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
             if (it.id.value == listId) it.copy(itemCount = items.size) else it
         }
         listsByUser.value = listsByUser.value + (userId to updatedLists)
+    }
+
+    private val favoritesByUser = MutableStateFlow<Map<String, List<ContentList>>>(emptyMap())
+
+    actual fun observeFavorites(userId: String): Flow<List<ContentList>> =
+        favoritesByUser.map { it[userId].orEmpty() }
+
+    actual suspend fun addFavorite(userId: String, list: ContentList) {
+        val current = favoritesByUser.value[userId].orEmpty()
+        if (current.none { it.id == list.id }) {
+            favoritesByUser.value = favoritesByUser.value + (userId to (current + list))
+        }
+    }
+
+    actual suspend fun removeFavorite(userId: String, listId: String) {
+        val current = favoritesByUser.value[userId].orEmpty()
+        favoritesByUser.value = favoritesByUser.value + (userId to current.filterNot { it.id.value == listId })
     }
 }

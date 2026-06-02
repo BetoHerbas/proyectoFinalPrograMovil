@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ucb.proyectofinal.navigation.AppBottomBar
+import com.ucb.proyectofinal.navigation.BottomTab
 import com.ucb.proyectofinal.settings.presentation.intent.SettingsIntent
 import com.ucb.proyectofinal.settings.presentation.viewmodel.SettingsViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -19,56 +21,75 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToExplore: () -> Unit = {},
+    onNavigateToCreate: () -> Unit = {},
+    onNavigateToFavorites: () -> Unit = {},
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF101715))
-            .padding(24.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onNavigateBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.White)
-            }
-            Text("Ajustes", color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
-        }
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Dark mode toggle
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Modo oscuro", color = Color.White)
-            Switch(
-                checked = state.isDarkMode,
-                onCheckedChange = { viewModel.onIntent(SettingsIntent.ToggleDarkMode(it)) },
-                colors = SwitchDefaults.colors(checkedThumbColor = Color(0xFF101715), checkedTrackColor = Color(0xFF00E5B6))
+    Scaffold(
+        containerColor = Color(0xFF101715),
+        bottomBar = {
+            AppBottomBar(
+                currentTab = BottomTab.SETTINGS,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToExplore = onNavigateToExplore,
+                onNavigateToCreate = onNavigateToCreate,
+                onNavigateToFavorites = onNavigateToFavorites,
+                onNavigateToSettings = {}
             )
         }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF101715))
+                .padding(padding)
+                .padding(horizontal = 24.dp, vertical = 12.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.White)
+                }
+                Text("Ajustes", color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
+            }
+            Spacer(modifier = Modifier.height(32.dp))
 
-        HorizontalDivider(color = Color.Gray.copy(alpha = 0.2f), modifier = Modifier.padding(vertical = 16.dp))
-
-        // Language selection
-        Text("Idioma", color = Color.White, fontWeight = FontWeight.SemiBold)
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            listOf("es" to "Español", "en" to "English").forEach { (code, label) ->
-                FilterChip(
-                    selected = state.language == code,
-                    onClick = { viewModel.onIntent(SettingsIntent.ChangeLanguage(code)) },
-                    label = { Text(label) },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color(0xFF00E5B6),
-                        selectedLabelColor = Color(0xFF101715),
-                        containerColor = Color(0xFF1A2421),
-                        labelColor = Color.White
-                    )
+            // Dark mode toggle
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Modo oscuro", color = Color.White)
+                Switch(
+                    checked = state.isDarkMode,
+                    onCheckedChange = { viewModel.onIntent(SettingsIntent.ToggleDarkMode(it)) },
+                    colors = SwitchDefaults.colors(checkedThumbColor = Color(0xFF101715), checkedTrackColor = Color(0xFF00E5B6))
                 )
+            }
+
+            HorizontalDivider(color = Color.Gray.copy(alpha = 0.2f), modifier = Modifier.padding(vertical = 16.dp))
+
+            // Language selection
+            Text("Idioma", color = Color.White, fontWeight = FontWeight.SemiBold)
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                listOf("es" to "Español", "en" to "English", "fr" to "Français").forEach { (code, label) ->
+                    FilterChip(
+                        selected = state.language == code,
+                        onClick = { viewModel.onIntent(SettingsIntent.ChangeLanguage(code)) },
+                        label = { Text(label) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = Color(0xFF00E5B6),
+                            selectedLabelColor = Color(0xFF101715),
+                            containerColor = Color(0xFF1A2421),
+                            labelColor = Color.White
+                        )
+                    )
+                }
             }
         }
     }

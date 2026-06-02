@@ -33,4 +33,8 @@ interface ContentListRepository {
     suspend fun rateItem(item: ContentItem, rating: Rating): Result<ContentItem>
     suspend fun deleteList(listId: ListId): Result<Unit>
     suspend fun deleteItem(item: ContentItem): Result<Unit>
+    fun getPublicLists(): Flow<List<ContentList>>
+    fun getFavorites(): Flow<List<ContentList>>
+    suspend fun addFavorite(list: ContentList): Result<Unit>
+    suspend fun removeFavorite(listId: ListId): Result<Unit>
 }

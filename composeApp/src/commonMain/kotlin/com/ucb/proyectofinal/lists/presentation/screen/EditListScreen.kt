@@ -142,42 +142,6 @@ fun EditListScreen(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                // ─── Cover image placeholder ───
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(210.dp)
-                        .border(
-                            border = BorderStroke(1.dp, CoverBorderColor),
-                            shape = RoundedCornerShape(14.dp)
-                        )
-                        .background(CoverBgColor, RoundedCornerShape(14.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(
-                            modifier = Modifier
-                                .size(58.dp)
-                                .background(IconBgColor, RoundedCornerShape(999.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.PhotoCamera,
-                                contentDescription = null,
-                                tint = IconTintColor
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = "Añadir Portada",
-                            color = IconTintColor,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(18.dp))
-
                 // ─── Name field ───
                 Text(
                     "NOMBRE DE LA LISTA",

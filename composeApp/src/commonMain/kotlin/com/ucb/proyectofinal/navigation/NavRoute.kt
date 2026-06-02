@@ -52,4 +52,10 @@ sealed class NavRoute {
         val isPublic: Boolean = true,
         val listType: String = "MOVIE"
     ) : NavRoute()
+
+    @Serializable
+    data object Explore : NavRoute()
+
+    @Serializable
+    data object Favorites : NavRoute()
 }

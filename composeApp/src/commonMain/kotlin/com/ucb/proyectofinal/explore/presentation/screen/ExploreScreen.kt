@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.presentation.screen
+package com.ucb.proyectofinal.explore.presentation.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -23,32 +22,24 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import com.ucb.proyectofinal.navigation.AppBottomBar
-import com.ucb.proyectofinal.navigation.BottomTab
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,58 +52,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ucb.proyectofinal.explore.presentation.viewmodel.ExploreViewModel
 import com.ucb.proyectofinal.lists.domain.model.ContentList
 import com.ucb.proyectofinal.lists.domain.model.ContentType
-import com.ucb.proyectofinal.lists.presentation.effect.ContentListsEffect
-import com.ucb.proyectofinal.lists.presentation.intent.ContentListsIntent
-import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
-import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
-import org.koin.compose.koinInject
+import com.ucb.proyectofinal.navigation.AppBottomBar
+import com.ucb.proyectofinal.navigation.BottomTab
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun ContentListsScreen(
+fun ExploreScreen(
     onNavigateToDetail: (listId: String, listName: String, listType: ContentType, description: String, coverImageUrl: String?, isPublic: Boolean) -> Unit,
+    onNavigateToHome: () -> Unit,
     onNavigateToCreate: () -> Unit,
-    onNavigateToProfile: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToExplore: () -> Unit,
     onNavigateToFavorites: () -> Unit,
-    viewModel: ContentListsViewModel = koinViewModel()
+    onNavigateToSettings: () -> Unit,
+    viewModel: ExploreViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf<ContentType?>(null) }
-    val remoteConfig = koinInject<RemoteConfigRepository>()
-    val videogameEnabled by remoteConfig.observeVideogameCategoryEnabled().collectAsStateWithLifecycle(false)
 
-    LaunchedEffect(Unit) {
-        viewModel.effects.collect { effect ->
-            when (effect) {
-                is ContentListsEffect.NavigateToDetail ->
-                    onNavigateToDetail(effect.listId, effect.listName, effect.listType, effect.description, effect.coverImageUrl, effect.isPublic)
-                is ContentListsEffect.ShowError -> snackbarHostState.showSnackbar(effect.message)
-                is ContentListsEffect.ShowSuccess -> snackbarHostState.showSnackbar(effect.message)
-            }
-        }
-    }
-
-    val supportedTypes = remember(videogameEnabled) {
-        buildList {
-            add(ContentType.MOVIE)
-            add(ContentType.SERIES)
-            add(ContentType.BOOK)
-            if (videogameEnabled) add(ContentType.VIDEOGAME)
-        }
-    }
-
-    val filteredLists = remember(state.lists, searchQuery, selectedFilter, videogameEnabled) {
+    val filteredLists = remember(state.lists, searchQuery, selectedFilter) {
         state.lists.filter { list ->
-            val supportedType = list.type in supportedTypes
             val matchesQuery = list.name.value.contains(searchQuery, ignoreCase = true)
             val matchesType = selectedFilter == null || list.type == selectedFilter
-            supportedType && matchesQuery && matchesType
+            matchesQuery && matchesType
         }
     }
 
@@ -121,9 +86,9 @@ fun ContentListsScreen(
         containerColor = Color.Transparent,
         bottomBar = {
             AppBottomBar(
-                currentTab = BottomTab.HOME,
-                onNavigateToHome = {},
-                onNavigateToExplore = onNavigateToExplore,
+                currentTab = BottomTab.EXPLORE,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToExplore = {},
                 onNavigateToCreate = onNavigateToCreate,
                 onNavigateToFavorites = onNavigateToFavorites,
                 onNavigateToSettings = onNavigateToSettings
@@ -143,51 +108,17 @@ fun ContentListsScreen(
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
-            ) {
-                Column {
-                    Text(
-                        text = "Mis Listas",
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = Color(0xFFE8FAFF),
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    Text(
-                        text = "Organiza tu mundo",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFFA8C8D1)
-                    )
-                }
-
-                IconButton(onClick = onNavigateToProfile) {
-                    Surface(
-                        shape = RoundedCornerShape(999.dp),
-                        color = Color(0xFF2B4B56),
-                        border = BorderStroke(1.dp, Color(0x5538E3D1))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(38.dp)
-                                .background(
-                                    Brush.linearGradient(
-                                        listOf(Color(0xFF2D5565), Color(0xFF1C313A))
-                                    )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.Person,
-                                contentDescription = "Perfil",
-                                tint = Color(0xFFD9F6FF),
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
-                }
-            }
+            Text(
+                text = "Explorar",
+                style = MaterialTheme.typography.headlineLarge,
+                color = Color(0xFFE8FAFF),
+                fontWeight = FontWeight.ExtraBold
+            )
+            Text(
+                text = "Descubre listas públicas",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFFA8C8D1)
+            )
 
             Spacer(modifier = Modifier.height(14.dp))
             OutlinedTextField(
@@ -196,7 +127,7 @@ fun ContentListsScreen(
                 leadingIcon = {
                     Icon(Icons.Outlined.Search, contentDescription = null, tint = Color(0xFF8AAAB5))
                 },
-                placeholder = { Text("Buscar en mis listas...", color = Color(0xFF6F94A2)) },
+                placeholder = { Text("Buscar listas públicas...", color = Color(0xFF6F94A2)) },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -229,11 +160,11 @@ fun ContentListsScreen(
                         labelColor = Color(0xFFD1E8EF)
                     )
                 )
-                supportedTypes.forEach { type ->
+                ContentType.entries.forEach { type ->
                     FilterChip(
                         selected = selectedFilter == type,
                         onClick = { selectedFilter = type },
-                        label = { Text(typeChipLabel(type)) },
+                        label = { Text(exploreTypeLabel(type)) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = Color(0xFF22F2D4),
                             selectedLabelColor = Color(0xFF043F40),
@@ -245,25 +176,6 @@ fun ContentListsScreen(
             }
 
             Spacer(modifier = Modifier.height(18.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Recientes",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color(0xFFF0FBFF),
-                    fontWeight = FontWeight.Bold
-                )
-                TextButton(onClick = onNavigateToSettings) {
-                    Text(
-                        text = "VER TODO",
-                        color = Color(0xFF23E8D3),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                }
-            }
 
             when {
                 state.isLoading -> {
@@ -271,13 +183,16 @@ fun ContentListsScreen(
                         CircularProgressIndicator(color = Color(0xFF22F2D4))
                     }
                 }
-
-                filteredLists.isEmpty() -> {
+                state.error != null -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No se encontraron listas", color = Color(0xFF8AAAB5))
+                        Text(state.error!!, color = Color(0xFF8AAAB5))
                     }
                 }
-
+                filteredLists.isEmpty() -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("No hay listas públicas disponibles", color = Color(0xFF8AAAB5))
+                    }
+                }
                 else -> {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
@@ -287,20 +202,20 @@ fun ContentListsScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(filteredLists, key = { it.id.value }) { list ->
-                            ContentListCard(
+                            ExploreListCard(
                                 list = list,
+                                isFavorite = state.favoriteIds.contains(list.id.value),
                                 onClick = {
-                                    viewModel.onIntent(
-                                        ContentListsIntent.NavigateToDetail(
-                                            listId = list.id.value,
-                                            listName = list.name.value,
-                                            listType = list.type,
-                                            description = list.description,
-                                            coverImageUrl = list.coverImageUrl,
-                                            isPublic = list.isPublic
-                                        )
+                                    onNavigateToDetail(
+                                        list.id.value,
+                                        list.name.value,
+                                        list.type,
+                                        list.description,
+                                        list.coverImageUrl,
+                                        list.isPublic
                                     )
-                                }
+                                },
+                                onToggleFavorite = { viewModel.toggleFavorite(list) }
                             )
                         }
                     }
@@ -310,12 +225,12 @@ fun ContentListsScreen(
     }
 }
 
-
-
 @Composable
-private fun ContentListCard(
+private fun ExploreListCard(
     list: ContentList,
-    onClick: () -> Unit
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+    onToggleFavorite: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -330,11 +245,11 @@ private fun ContentListCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(112.dp)
-                    .background(typeBrush(list.type), RoundedCornerShape(12.dp)),
+                    .background(exploreTypeBrush(list.type), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.BottomStart
             ) {
                 Text(
-                    text = typeIcon(list.type),
+                    text = exploreTypeIcon(list.type),
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(8.dp)
                 )
@@ -349,47 +264,63 @@ private fun ContentListCard(
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                text = subtitleByType(list.type),
+                text = exploreSubtitleByType(list.type),
                 color = Color(0xFF8DB2BD),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodySmall
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "${list.itemCount} ítems",
-                color = Color(0xFF2BE2CF),
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Medium
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${list.itemCount} elementos",
+                    color = Color(0xFF5E8A96),
+                    style = MaterialTheme.typography.labelSmall
+                )
+                IconButton(
+                    onClick = onToggleFavorite,
+                    modifier = Modifier.size(28.dp)
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Quitar de favoritos" else "Añadir a favoritos",
+                        tint = if (isFavorite) Color(0xFFFF4F6D) else Color(0xFF8AAAB5),
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
         }
     }
 }
 
-private fun typeBrush(type: ContentType): Brush = when (type) {
-    ContentType.MOVIE -> Brush.linearGradient(listOf(Color(0xFF071B26), Color(0xFF113D5E)))
-    ContentType.SERIES -> Brush.linearGradient(listOf(Color(0xFF26273A), Color(0xFF4B5C90)))
-    ContentType.BOOK -> Brush.linearGradient(listOf(Color(0xFF1F2D34), Color(0xFF496678)))
-    ContentType.VIDEOGAME -> Brush.linearGradient(listOf(Color(0xFF1C2B1C), Color(0xFF2E5C35)))
-}
-
-private fun typeIcon(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "🎬"
-    ContentType.SERIES -> "📺"
-    ContentType.BOOK -> "📚"
-    ContentType.VIDEOGAME -> "🎮"
-}
-
-private fun typeChipLabel(type: ContentType): String = when (type) {
+private fun exploreTypeLabel(type: ContentType) = when (type) {
     ContentType.MOVIE -> "Películas"
     ContentType.SERIES -> "Series"
     ContentType.BOOK -> "Libros"
     ContentType.VIDEOGAME -> "Videojuegos"
 }
 
-private fun subtitleByType(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Sesión de cine"
-    ContentType.SERIES -> "Para maratón"
-    ContentType.BOOK -> "Próximas lecturas"
-    ContentType.VIDEOGAME -> "Para completar"
+private fun exploreTypeIcon(type: ContentType) = when (type) {
+    ContentType.MOVIE -> "🎬"
+    ContentType.SERIES -> "📺"
+    ContentType.BOOK -> "📚"
+    ContentType.VIDEOGAME -> "🎮"
+}
+
+private fun exploreSubtitleByType(type: ContentType) = when (type) {
+    ContentType.MOVIE -> "Lista de películas"
+    ContentType.SERIES -> "Lista de series"
+    ContentType.BOOK -> "Lista de libros"
+    ContentType.VIDEOGAME -> "Lista de videojuegos"
+}
+
+private fun exploreTypeBrush(type: ContentType) = when (type) {
+    ContentType.MOVIE -> Brush.linearGradient(listOf(Color(0xFF1A3A5C), Color(0xFF0D2236)))
+    ContentType.SERIES -> Brush.linearGradient(listOf(Color(0xFF1A4A3A), Color(0xFF0D2E22)))
+    ContentType.BOOK -> Brush.linearGradient(listOf(Color(0xFF3A2A1A), Color(0xFF221A0D)))
+    ContentType.VIDEOGAME -> Brush.linearGradient(listOf(Color(0xFF2A1A3A), Color(0xFF1A0D22)))
 }
