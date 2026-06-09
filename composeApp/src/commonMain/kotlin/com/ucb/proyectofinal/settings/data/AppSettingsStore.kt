@@ -18,4 +18,9 @@ object AppSettingsStore {
 
     fun setDarkMode(enabled: Boolean) { _isDarkMode.value = enabled }
     fun setLanguage(code: String) { _language.value = code }
+
+    private val _isUnderMaintenance = MutableStateFlow(false)
+    val isUnderMaintenance: StateFlow<Boolean> = _isUnderMaintenance.asStateFlow()
+
+    fun setUnderMaintenance(enabled: Boolean) { _isUnderMaintenance.value = enabled }
 }
