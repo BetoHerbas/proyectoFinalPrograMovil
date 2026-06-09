@@ -1,4 +1,14 @@
-<resources>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Loco xml export: Android strings
+ Project: PrograMovil
+ Locale: en-US, English (USA)
+ Exported by: nicole herbas
+ Exported at: Mon, 08 Jun 2026 20:09:36 -0400
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="hello"></string>
+    <string name="Final_Project_Hello_World_Welcome_to_the_test_appl"><resources>
     <string name="app_name">Final Project</string>
     <string name="hello_world">Hello World!</string>
     <string name="welcome_message">Welcome to the test application</string>
@@ -171,4 +181,6 @@
     <string name="maintenance_message">We are improving the application.\nCome back in a moment. 🚀</string>
     <string name="maintenance_auto_recover">The app will recover automatically\nwhen maintenance is finished ✨</string>
     <string name="maintenance_finished">Maintenance finished! Services have been restored successfully</string>
+</resources>
+</string>
 </resources>

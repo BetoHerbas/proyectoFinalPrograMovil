@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Loco xml export: Android strings
+ Project: PrograMovil
+ Locale: fr-FR, French (France)
+ Exported by: nicole herbas
+ Exported at: Mon, 08 Jun 2026 20:09:36 -0400
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="hello"></string>
+    <string name="Final_Project_Hello_World_Welcome_to_the_test_appl"><resources>
+    <string name="app_name">Projet Final</string>
+    <string name="hello_world">Bonjour le Monde !</string>
+    <string name="welcome_message">Bienvenue dans l\'application de test</string>
+
+    <!-- Screen Titles -->
+    <string name="login_screen_title">Écran de Connexion</string>
+    <string name="register_screen_title">Écran d\'Inscription</string>
+    <string name="add_item_screen_title">Écran d\'Ajout d\'Élément</string>
+    <string name="content_lists_screen_title">Écran des Listes de Contenu</string>
+    <string name="create_list_screen_title">Écran de Création de Liste</string>
+    <string name="list_detail_screen_title">Détail de la Liste</string>
+    <string name="profile_screen_title">Écran de Profil</string>
+    <string name="settings_screen_title">Écran de Paramètres</string>
+
+    <!-- Onboarding Buttons -->
+    <string name="onboarding_next">Suivant</string>
+    <string name="onboarding_previous">Précédent</string>
+    <string name="onboarding_skip">Passer</string>
+    <string name="onboarding_start">Démarrer</string>
+    <string name="onboarding_loading">Chargement…</string>
+
+    <!-- Navigation / Bottom Bar -->
+    <string name="nav_home">Accueil</string>
+    <string name="nav_explore">Explorer</string>
+    <string name="nav_add_list">Créer liste</string>
+    <string name="nav_favorites">Favoris</string>
+    <string name="nav_settings">Paramètres</string>
+
+    <!-- Auth: Login -->
+    <string name="login_header">Se connecter</string>
+    <string name="login_welcome">Bon retour</string>
+    <string name="login_subtitle">Connectez-vous à tous vos contenus préférés.</string>
+    <string name="login_email_label">E-mail</string>
+    <string name="login_email_placeholder">bonjour@exemple.com</string>
+    <string name="login_password_label">Mot de passe</string>
+    <string name="login_forgot_password">Mot de passe oublié ?</string>
+    <string name="login_button">Se connecter</string>
+    <string name="login_or_continue">Ou continuer avec</string>
+    <string name="login_no_account">Vous n\'avez pas de compte ?</string>
+    <string name="login_register">S\'inscrire</string>
+
+    <!-- Auth: Register -->
+    <string name="register_header">S\'inscrire</string>
+    <string name="register_title">Rejoignez le club</string>
+    <string name="register_subtitle">Organisez vos livres, films et séries\nau même endroit.</string>
+    <string name="register_name_label">NOM COMPLET</string>
+    <string name="register_name_placeholder">ex. Ana Garcia</string>
+    <string name="register_email_label">E-MAIL</string>
+    <string name="register_email_placeholder">bonjour@exemple.com</string>
+    <string name="register_password_label">MOT DE PASSE</string>
+    <string name="register_password_placeholder">Minimum 6 caractères</string>
+    <string name="register_button">Créer un compte</string>
+    <string name="register_or_continue">Ou s\'inscrire avec</string>
+    <string name="register_has_account">Vous avez déjà un compte ?</string>
+    <string name="register_login">Se connecter</string>
+
+    <!-- Content Lists -->
+    <string name="lists_title">Mes Listes</string>
+    <string name="lists_subtitle">Organisez votre monde</string>
+    <string name="lists_search_placeholder">Rechercher dans mes listes...</string>
+    <string name="lists_filter_all">Tout</string>
+    <string name="lists_recent">Récents</string>
+    <string name="lists_see_all">VOIR TOUT</string>
+    <string name="lists_empty">Aucune liste trouvée</string>
+    <string name="lists_items_count">%1$d éléments</string>
+
+    <!-- List Detail -->
+    <string name="detail_public_list">LISTE PUBLIQUE</string>
+    <string name="detail_private_list">LISTE PRIVÉE</string>
+    <string name="detail_completed_count">%1$d sur %2$d Terminés</string>
+    <string name="detail_filter_all">Tout</string>
+    <string name="detail_filter_pending">En cours</string>
+    <string name="detail_filter_completed">Terminés</string>
+    <string name="detail_empty_all">Aucun élément. Ajoutez-en un !</string>
+    <string name="detail_empty_completed">Aucun élément terminé</string>
+    <string name="detail_empty_pending">Tous les éléments sont terminés ! 🎉</string>
+    <string name="detail_status_completed">Terminé</string>
+    <string name="detail_status_pending">En cours</string>
+    <string name="detail_no_rating">Non noté</string>
+    <string name="detail_rating_format">%1$d/5</string>
+    <string name="detail_add_item">Ajouter un élément</string>
+
+    <!-- Add Item -->
+    <string name="add_item_title">AJOUTER À %1$s</string>
+    <string name="add_item_search_button">Rechercher</string>
+    <string name="add_item_search_placeholder">Rechercher dans l\'univers...</string>
+    <string name="add_item_top_10">Top 10 de %1$s</string>
+    <string name="add_item_results">Résultats pour %1$s</string>
+    <string name="add_item_no_results">Aucun résultat trouvé pour %1$s</string>
+    <string name="add_item_cover">Couverture de %1$s</string>
+
+    <!-- Create/Edit List -->
+    <string name="create_list_cancel">Annuler</string>
+    <string name="create_list_title">Nouvelle Liste</string>
+    <string name="create_list_save">Enregistrer</string>
+    <string name="create_list_name_label">NOM DE LA LISTE</string>
+    <string name="create_list_name_placeholder">ex. Mes livres préférés 2024</string>
+    <string name="create_list_desc_label">DESCRIPTION</string>
+    <string name="create_list_desc_placeholder">De quoi parle cette liste ? Ajoutez des détails...</string>
+    <string name="create_list_category">Catégorie</string>
+    <string name="create_list_default_cover">Couverture par défaut : %1$s</string>
+    <string name="create_list_private">Liste Privée</string>
+    <string name="create_list_private_desc">Vous seul pouvez voir cette liste</string>
+    <string name="edit_list_button">Modifier</string>
+
+    <!-- Explore -->
+    <string name="explore_title">Explorer</string>
+    <string name="explore_subtitle">Découvrir des listes publiques</string>
+    <string name="explore_search_placeholder">Rechercher des listes publiques...</string>
+    <string name="explore_empty">Aucune liste publique disponible</string>
+    <string name="explore_elements_count">%1$d éléments</string>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favoris</string>
+    <string name="favorites_subtitle">Vos listes enregistrées</string>
+    <string name="favorites_empty_title">Aucun favori pour l\'instant</string>
+    <string name="favorites_empty_subtitle">Explorez les listes publiques et enregistrez-les\nici pour un accès facile</string>
+    <string name="favorites_remove">Retirer des favoris</string>
+    <string name="favorites_add">Ajouter aux favoris</string>
+    <string name="favorites_elements_info">%1$d éléments · %2$s</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profil</string>
+    <string name="profile_default_name">Utilisateur</string>
+    <string name="profile_logout">Se déconnecter</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_dark_mode">Mode sombre</string>
+    <string name="settings_language">Langue</string>
+
+    <!-- Content Types - Singular -->
+    <string name="type_movie">Film</string>
+    <string name="type_series">Série</string>
+    <string name="type_book">Livre</string>
+    <string name="type_videogame">Jeu vidéo</string>
+
+    <!-- Content Types - Plural -->
+    <string name="type_movie_plural">Films</string>
+    <string name="type_series_plural">Séries</string>
+    <string name="type_book_plural">Livres</string>
+    <string name="type_videogame_plural">Jeux vidéo</string>
+
+    <!-- Content Types - Subtitles (ContentListsScreen cards) -->
+    <string name="type_movie_subtitle">Soirée film</string>
+    <string name="type_series_subtitle">Marathon</string>
+    <string name="type_book_subtitle">Prochaines lectures</string>
+    <string name="type_videogame_subtitle">À compléter</string>
+
+    <!-- Content Types - TV sublabel (ListDetailScreen) -->
+    <string name="type_series_tv">Série TV</string>
+
+    <!-- Explore subtitles -->
+    <string name="explore_movie_subtitle">Liste de films</string>
+    <string name="explore_book_subtitle">Liste de livres</string>
+    <string name="explore_videogame_subtitle">Liste de jeux vidéo</string>
+    <string name="explore_series_subtitle">Liste de séries</string>
+
+    <!-- Common -->
+    <string name="common_back">Retour</string>
+    <string name="common_add">Ajouter</string>
+    <string name="common_delete">Supprimer</string>
+    <string name="common_edit">Modifier</string>
+    <string name="common_mark_seen">Marquer comme vu</string>
+    <string name="common_mark_pending">Marquer comme en cours</string>
+
+    <!-- Maintenance -->
+    <string name="maintenance_loading">Démarrage de l\'application…</string>
+    <string name="maintenance_title">En Maintenance</string>
+    <string name="maintenance_message">Nous améliorons l\'application.\nRevenez dans un instant. 🚀</string>
+    <string name="maintenance_auto_recover">L\'application se rétablira automatiquement\nlorsque la maintenance sera terminée ✨</string>
+    <string name="maintenance_finished">Maintenance terminée ! Les services ont été rétablis avec succès</string>
+</resources>
+</string>
+</resources>
