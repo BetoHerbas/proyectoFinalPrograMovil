@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Loco xml export: Android strings
- Project: PrograMovil
- Locale: en-US, English (USA)
- Exported by: nicole herbas
- Exported at: Mon, 08 Jun 2026 20:09:36 -0400
--->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="hello"></string>
-    <string name="Final_Project_Hello_World_Welcome_to_the_test_appl"><resources>
     <string name="app_name">Final Project</string>
     <string name="hello_world">Hello World!</string>
     <string name="welcome_message">Welcome to the test application</string>
@@ -140,25 +131,19 @@
     <string name="settings_dark_mode">Dark mode</string>
     <string name="settings_language">Language</string>
 
-    <!-- Content Types - Singular -->
+    <!-- Content Types -->
     <string name="type_movie">Movie</string>
     <string name="type_series">Series</string>
     <string name="type_book">Book</string>
     <string name="type_videogame">Videogame</string>
-
-    <!-- Content Types - Plural -->
     <string name="type_movie_plural">Movies</string>
     <string name="type_series_plural">Series</string>
     <string name="type_book_plural">Books</string>
     <string name="type_videogame_plural">Videogames</string>
-
-    <!-- Content Types - Subtitles (ContentListsScreen cards) -->
     <string name="type_movie_subtitle">Movie night</string>
     <string name="type_series_subtitle">Binge time</string>
     <string name="type_book_subtitle">Next reads</string>
     <string name="type_videogame_subtitle">To complete</string>
-
-    <!-- Content Types - TV sublabel (ListDetailScreen) -->
     <string name="type_series_tv">TV Series</string>
 
     <!-- Explore subtitles -->
@@ -181,6 +166,4 @@
     <string name="maintenance_message">We are improving the application.\nCome back in a moment. 🚀</string>
     <string name="maintenance_auto_recover">The app will recover automatically\nwhen maintenance is finished ✨</string>
     <string name="maintenance_finished">Maintenance finished! Services have been restored successfully</string>
-</resources>
-</string>
 </resources>

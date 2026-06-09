@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- Loco xml export: Android strings
- Project: PrograMovil
- Locale: es-BO, Spanish (Bolivia)
- Exported by: nicole herbas
- Exported at: Mon, 08 Jun 2026 20:09:36 -0400
--->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="hello">Hello</string>
-    <string name="Final_Project_Hello_World_Welcome_to_the_test_appl"><resources>
     <string name="app_name">Proyecto Final</string>
     <string name="hello_world">¡Hola Mundo!</string>
     <string name="welcome_message">Bienvenido a la aplicación de prueba</string>
@@ -181,6 +172,4 @@
     <string name="maintenance_message">Estamos mejorando la aplicación.\nVuelve en unos momentos. 🚀</string>
     <string name="maintenance_auto_recover">La app se recuperará automáticamente\ncuando el mantenimiento termine ✨</string>
     <string name="maintenance_finished">¡Mantenimiento terminado! Los servicios se han restablecido correctamente</string>
-</resources>
-</string>
 </resources>
