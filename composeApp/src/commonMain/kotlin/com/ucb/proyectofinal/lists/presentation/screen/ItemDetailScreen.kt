@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BrokenImage
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.IosShare
@@ -405,14 +406,24 @@ private fun CastLazyRow(cast: List<CastMember>) {
                     modifier = Modifier
                         .size(70.dp)
                         .clip(CircleShape)
-                        .background(CardBg)
+                        .background(CardBg),
+                    contentAlignment = Alignment.Center
                 ) {
-                    AsyncImage(
-                        model = member.imageUrl ?: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200",
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
+                    if (member.imageUrl != null) {
+                        AsyncImage(
+                            model = member.imageUrl,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = null,
+                            tint = TextMuted,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
