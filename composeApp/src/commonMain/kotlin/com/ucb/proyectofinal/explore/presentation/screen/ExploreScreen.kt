@@ -58,6 +58,24 @@ import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.navigation.AppBottomBar
 import com.ucb.proyectofinal.navigation.BottomTab
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.explore_title
+import proyectofinalprogramovil.composeapp.generated.resources.explore_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.explore_search_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.lists_filter_all
+import proyectofinalprogramovil.composeapp.generated.resources.explore_empty
+import proyectofinalprogramovil.composeapp.generated.resources.explore_elements_count
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_remove
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_add
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_book_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame_plural
+import proyectofinalprogramovil.composeapp.generated.resources.explore_movie_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.explore_series_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.explore_book_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.explore_videogame_subtitle
 
 @Composable
 fun ExploreScreen(
@@ -109,13 +127,13 @@ fun ExploreScreen(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Explorar",
+                text = stringResource(Res.string.explore_title),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Color(0xFFE8FAFF),
                 fontWeight = FontWeight.ExtraBold
             )
             Text(
-                text = "Descubre listas públicas",
+                text = stringResource(Res.string.explore_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xFFA8C8D1)
             )
@@ -127,7 +145,7 @@ fun ExploreScreen(
                 leadingIcon = {
                     Icon(Icons.Outlined.Search, contentDescription = null, tint = Color(0xFF8AAAB5))
                 },
-                placeholder = { Text("Buscar listas públicas...", color = Color(0xFF6F94A2)) },
+                placeholder = { Text(stringResource(Res.string.explore_search_placeholder), color = Color(0xFF6F94A2)) },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -152,7 +170,7 @@ fun ExploreScreen(
                 FilterChip(
                     selected = selectedFilter == null,
                     onClick = { selectedFilter = null },
-                    label = { Text("Todo") },
+                    label = { Text(stringResource(Res.string.lists_filter_all)) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = Color(0xFF22F2D4),
                         selectedLabelColor = Color(0xFF043F40),
@@ -190,7 +208,7 @@ fun ExploreScreen(
                 }
                 filteredLists.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No hay listas públicas disponibles", color = Color(0xFF8AAAB5))
+                        Text(stringResource(Res.string.explore_empty), color = Color(0xFF8AAAB5))
                     }
                 }
                 else -> {
@@ -277,7 +295,7 @@ private fun ExploreListCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${list.itemCount} elementos",
+                    text = stringResource(Res.string.explore_elements_count, list.itemCount),
                     color = Color(0xFF5E8A96),
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -287,7 +305,7 @@ private fun ExploreListCard(
                 ) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (isFavorite) "Quitar de favoritos" else "Añadir a favoritos",
+                        contentDescription = if (isFavorite) stringResource(Res.string.favorites_remove) else stringResource(Res.string.favorites_add),
                         tint = if (isFavorite) Color(0xFFFF4F6D) else Color(0xFF8AAAB5),
                         modifier = Modifier.size(18.dp)
                     )
@@ -297,11 +315,12 @@ private fun ExploreListCard(
     }
 }
 
+@Composable
 private fun exploreTypeLabel(type: ContentType) = when (type) {
-    ContentType.MOVIE -> "Películas"
-    ContentType.SERIES -> "Series"
-    ContentType.BOOK -> "Libros"
-    ContentType.VIDEOGAME -> "Videojuegos"
+    ContentType.MOVIE -> stringResource(Res.string.type_movie_plural)
+    ContentType.SERIES -> stringResource(Res.string.type_series_plural)
+    ContentType.BOOK -> stringResource(Res.string.type_book_plural)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame_plural)
 }
 
 private fun exploreTypeIcon(type: ContentType) = when (type) {
@@ -311,11 +330,12 @@ private fun exploreTypeIcon(type: ContentType) = when (type) {
     ContentType.VIDEOGAME -> "🎮"
 }
 
+@Composable
 private fun exploreSubtitleByType(type: ContentType) = when (type) {
-    ContentType.MOVIE -> "Lista de películas"
-    ContentType.SERIES -> "Lista de series"
-    ContentType.BOOK -> "Lista de libros"
-    ContentType.VIDEOGAME -> "Lista de videojuegos"
+    ContentType.MOVIE -> stringResource(Res.string.explore_movie_subtitle)
+    ContentType.SERIES -> stringResource(Res.string.explore_series_subtitle)
+    ContentType.BOOK -> stringResource(Res.string.explore_book_subtitle)
+    ContentType.VIDEOGAME -> stringResource(Res.string.explore_videogame_subtitle)
 }
 
 private fun exploreTypeBrush(type: ContentType) = when (type) {

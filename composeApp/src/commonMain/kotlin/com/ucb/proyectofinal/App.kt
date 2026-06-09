@@ -17,6 +17,9 @@ import com.ucb.proyectofinal.designsystem.theme.ThemeMode
 import com.ucb.proyectofinal.navigation.AppNavHost
 import com.ucb.proyectofinal.notification.getToken
 import com.ucb.proyectofinal.maintenance.presentation.composable.MaintenanceGate
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.maintenance_finished
 import com.ucb.proyectofinal.settings.data.AppSettingsStore
 
 @Composable
@@ -34,13 +37,15 @@ fun App() {
         }
     }
 
+    val maintenanceFinishedMessage = stringResource(Res.string.maintenance_finished)
+
     DsTheme(
         mode = if (isDarkMode) ThemeMode.DARK else ThemeMode.LIGHT
     ) {
         MaintenanceGate(
             onMaintenanceFinished = {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar("¡Mantenimiento terminado! Los servicios se han restablecido correctamente")
+                    snackbarHostState.showSnackbar(maintenanceFinishedMessage)
                 }
             }
         ) {
