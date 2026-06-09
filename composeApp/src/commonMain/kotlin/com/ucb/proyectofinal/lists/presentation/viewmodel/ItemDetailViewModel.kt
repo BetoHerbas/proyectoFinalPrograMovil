@@ -36,7 +36,12 @@ class ItemDetailViewModel(
             description = "Ryland Grace es el único superviviente en una misión desesperada. Deberá usar la ciencia y un aliado inesperado para salvar a la humanidad.",
             rating = 9.2,
             tags = listOf("Sci-Fi", "Space", "NASA"),
-            cast = listOf(CastMember("Ryan Gosling", "Ryland Grace", null))
+            cast = listOf(
+                CastMember("Ryan Gosling", "Ryland Grace", null),
+                CastMember("Emma Stone", "Grace's Friend", null),
+                CastMember("Oscar Isaac", "Commander", null),
+                CastMember("Cate Blanchett", "Scientist", null)
+            )
         ),
         "the super mario galaxy movie" to MovieMockData(
             title = "The Super Mario Galaxy Movie",
@@ -47,7 +52,12 @@ class ItemDetailViewModel(
             description = "Mario se embarca en una aventura intergaláctica a través de mundos asombrosos para salvar el cosmos.",
             rating = 8.5,
             tags = listOf("Animation", "Adventure", "Nintendo"),
-            cast = listOf(CastMember("Chris Pratt", "Mario", null))
+            cast = listOf(
+                CastMember("Chris Pratt", "Mario", null),
+                CastMember("Anya Taylor-Joy", "Peach", null),
+                CastMember("Jack Black", "Bowser", null),
+                CastMember("Keegan-Michael Key", "Toad", null)
+            )
         ),
         "hoppers" to MovieMockData(
             title = "Hoppers",
@@ -58,7 +68,12 @@ class ItemDetailViewModel(
             description = "Una joven transfiere su mente al cuerpo de un castor robótico para una misión secreta.",
             rating = 7.8,
             tags = listOf("Pixar", "Comedy", "Sci-Fi"),
-            cast = listOf(CastMember("Jon Hamm", "Mayor Bob", null))
+            cast = listOf(
+                CastMember("Jon Hamm", "Mayor Bob", null),
+                CastMember("Awkwafina", "Agent", null),
+                CastMember("Pedro Pascal", "Scientist", null),
+                CastMember("Florence Pugh", "Protagonist", null)
+            )
         ),
         "over your dead body" to MovieMockData(
             title = "Over Your Dead Body",
@@ -69,7 +84,12 @@ class ItemDetailViewModel(
             description = "Un thriller sobrenatural donde los límites de la realidad se vuelven sangrientos.",
             rating = 7.4,
             tags = listOf("Horror", "Thriller", "Japan"),
-            cast = listOf(CastMember("Ebizo Ichikawa", "Kosuke", null))
+            cast = listOf(
+                CastMember("Ebizo Ichikawa", "Kosuke", null),
+                CastMember("Ko Shibasaki", "Miyuki", null),
+                CastMember("Tadanobu Asano", "Detective", null),
+                CastMember("Rinko Kikuchi", "Medium", null)
+            )
         ),
         "lee cronins the mummy" to MovieMockData(
             title = "Lee Cronins the Mummy",
@@ -80,7 +100,12 @@ class ItemDetailViewModel(
             description = "Una nueva visión del terror clásico, enfocada en una maldición antigua y visceral.",
             rating = 7.1,
             tags = listOf("Horror", "Action", "Supernatural"),
-            cast = listOf(CastMember("Lee Cronin", "Director", null))
+            cast = listOf(
+                CastMember("Lee Cronin", "Director", null),
+                CastMember("Ana de Armas", "Archaeologist", null),
+                CastMember("Tom Hiddleston", "Curator", null),
+                CastMember("Lupita Nyongo", "Priestess", null)
+            )
         ),
         "fuze" to MovieMockData(
             title = "Fuze",
@@ -91,7 +116,12 @@ class ItemDetailViewModel(
             description = "Un atraco se complica cuando una bomba de la Segunda Guerra Mundial es descubierta.",
             rating = 8.0,
             tags = listOf("Action", "Crime", "Thriller"),
-            cast = listOf(CastMember("Aaron Taylor-Johnson", "Lead", null))
+            cast = listOf(
+                CastMember("Aaron Taylor-Johnson", "Lead", null),
+                CastMember("Margot Robbie", "Partner", null),
+                CastMember("Idris Elba", "Commander", null),
+                CastMember("John Boyega", "Tech Expert", null)
+            )
         ),
         "avatar: fire and ash" to MovieMockData(
             title = "Avatar: Fire and Ash",
@@ -102,7 +132,12 @@ class ItemDetailViewModel(
             description = "Jake Sully y su familia encuentran una nueva amenaza en la tribu de las cenizas.",
             rating = 9.5,
             tags = listOf("Sci-Fi", "Epic", "Adventure"),
-            cast = listOf(CastMember("Sam Worthington", "Jake", null))
+            cast = listOf(
+                CastMember("Sam Worthington", "Jake Sully", null),
+                CastMember("Zoe Saldaña", "Neytiri", null),
+                CastMember("Sigourney Weaver", "Kiri", null),
+                CastMember("Stephen Lang", "Colonel Quaritch", null)
+            )
         ),
         "the housemaid" to MovieMockData(
             title = "The Housemaid",
@@ -113,7 +148,12 @@ class ItemDetailViewModel(
             description = "Secretos oscuros salen a la luz cuando una joven entra a trabajar en una mansión.",
             rating = 8.2,
             tags = listOf("Mystery", "Drama", "Suspense"),
-            cast = listOf(CastMember("Sydney Sweeney", "Maid", null))
+            cast = listOf(
+                CastMember("Sydney Sweeney", "Maid", null),
+                CastMember("Florence Pugh", "Mistress", null),
+                CastMember("Paul Feig", "Butler", null),
+                CastMember("Olivia Cooke", "Neighbor", null)
+            )
         ),
         "the drama" to MovieMockData(
             title = "The Drama",
@@ -124,7 +164,12 @@ class ItemDetailViewModel(
             description = "Un romance se convierte en pesadilla psicológica antes de una boda.",
             rating = 8.7,
             tags = listOf("A24", "Drama", "Psychological"),
-            cast = listOf(CastMember("Zendaya", "Bride", null))
+            cast = listOf(
+                CastMember("Zendaya", "Bride", null),
+                CastMember("Timothée Chalamet", "Groom", null),
+                CastMember("Willem Dafoe", "Priest", null),
+                CastMember("Meryl Streep", "Mother", null)
+            )
         ),
         "good luck, have fun, dont die" to MovieMockData(
             title = "Good Luck, Have Fun, Dont Die",
@@ -135,7 +180,12 @@ class ItemDetailViewModel(
             description = "Un viajero del tiempo recluta a un grupo para salvar el futuro.",
             rating = 8.4,
             tags = listOf("Sci-Fi", "Comedy", "Action"),
-            cast = listOf(CastMember("Sam Rockwell", "Recruiter", null))
+            cast = listOf(
+                CastMember("Sam Rockwell", "Recruiter", null),
+                CastMember("Rachel McAdams", "Historian", null),
+                CastMember("Chris Hemsworth", "Soldier", null),
+                CastMember("Natalie Portman", "Scientist", null)
+            )
         )
     )
 
@@ -270,24 +320,48 @@ class ItemDetailViewModel(
             searchKey.contains(key) || key.contains(searchKey)
         }
 
-        val data = entry?.value ?: movieCatalog["avatar: fire and ash"]!!
-        val mockTitle = if (entry != null) data.title else title
+        val data = entry?.value
+        val displayTitle = foundItem?.title?.value ?: title
+        val itemTitle = ItemTitle.of(displayTitle).getOrThrow()
+
+        if (data != null) {
+            return ItemDetail.Movie(
+                id = ItemId(foundItem?.id?.value ?: itemId),
+                title = itemTitle,
+                description = data.description,
+                imageUrl = imageUrl ?: data.imageUrl,
+                rating = data.rating,
+                totalReviews = (100..999).random() * 100,
+                tags = data.tags,
+                parentsGuide = ParentsGuide("PG-13", listOf("Acción", "Temas maduros")),
+                cast = data.cast,
+                reviews = listOf(Review("User", "Increíble película.", 9, "Hoy")),
+                director = data.director,
+                duration = data.duration,
+                genres = data.tags,
+                year = data.year
+            )
+        }
 
         return ItemDetail.Movie(
             id = ItemId(foundItem?.id?.value ?: itemId),
-            title = ItemTitle.of(foundItem?.title?.value ?: mockTitle).getOrThrow(),
-            description = data.description,
-            imageUrl = imageUrl ?: data.imageUrl,
-            rating = data.rating,
-            totalReviews = (100..999).random() * 100,
-            tags = data.tags,
+            title = itemTitle,
+            description = "Sinopsis no disponible",
+            imageUrl = imageUrl,
+            rating = 0.0,
+            totalReviews = 0,
+            tags = emptyList(),
             parentsGuide = ParentsGuide("PG-13", listOf("Acción", "Temas maduros")),
-            cast = data.cast,
-            reviews = listOf(Review("User", "Increíble película.", 9, "Hoy")),
-            director = data.director,
-            duration = data.duration,
-            genres = data.tags,
-            year = data.year
+            cast = listOf(
+                CastMember("Actor Principal", "Protagonista", null),
+                CastMember("Actor de Reparto", "Secundario", null),
+                CastMember("Actor Invitado", "Invitado", null)
+            ),
+            reviews = emptyList(),
+            director = "Desconocido",
+            duration = "N/A",
+            genres = emptyList(),
+            year = ""
         )
     }
 }
