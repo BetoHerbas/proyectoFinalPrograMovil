@@ -420,7 +420,7 @@ private fun CastLazyRow(cast: List<CastMember>) {
                         Icon(
                             Icons.Default.Person,
                             contentDescription = null,
-                            tint = TextMuted,
+                            tint = TextSecondary,
                             modifier = Modifier.size(36.dp)
                         )
                     }
