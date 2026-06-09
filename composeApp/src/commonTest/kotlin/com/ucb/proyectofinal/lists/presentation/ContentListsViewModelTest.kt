@@ -88,7 +88,13 @@ class ContentListsViewModelTest {
         viewModel = buildViewModel()
 
         viewModel.effects.test {
-            viewModel.onIntent(ContentListsIntent.NavigateToDetail("list-1", "My List"))
+            viewModel.onIntent(
+                ContentListsIntent.NavigateToDetail(
+                    listId = "list-1",
+                    listName = "My List",
+                    listType = ContentType.MOVIE
+                )
+            )
             val effect = awaitItem()
             assertTrue(effect is ContentListsEffect.NavigateToDetail)
             assertEquals("list-1", (effect as ContentListsEffect.NavigateToDetail).listId)

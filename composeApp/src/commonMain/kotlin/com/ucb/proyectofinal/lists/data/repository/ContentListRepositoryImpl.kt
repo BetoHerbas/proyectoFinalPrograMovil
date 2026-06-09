@@ -201,6 +201,9 @@ class ContentListRepositoryImpl(
         contentItemDao.deleteById(item.id.value)
     }
 
+    override fun getPublicLists(): Flow<List<ContentList>> =
+        realtimeListsDataSource.observePublicLists()
+
     private fun currentUserIdOrNull(): String? = authRepository.getCurrentUser()?.id?.value
 
     private fun requireCurrentUserId(): String =
@@ -494,5 +497,20 @@ class ContentListRepositoryImpl(
             .replace("http://", "https://")
             .replace("&edge=curl", "")
             .replace("zoom=1", "zoom=2")
+    }
+
+    override fun getFavorites(): Flow<List<ContentList>> {
+        val userId = currentUserIdOrNull() ?: return flowOf(emptyList())
+        return realtimeListsDataSource.observeFavorites(userId)
+    }
+
+    override suspend fun addFavorite(list: ContentList): Result<Unit> = runCatching {
+        val userId = requireCurrentUserId()
+        realtimeListsDataSource.addFavorite(userId, list)
+    }
+
+    override suspend fun removeFavorite(listId: ListId): Result<Unit> = runCatching {
+        val userId = requireCurrentUserId()
+        realtimeListsDataSource.removeFavorite(userId, listId.value)
     }
 }

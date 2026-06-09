@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -35,6 +34,32 @@ import com.ucb.proyectofinal.lists.presentation.intent.ListDetailIntent
 import com.ucb.proyectofinal.lists.presentation.state.ItemFilter
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ListDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.detail_add_item
+import proyectofinalprogramovil.composeapp.generated.resources.common_back
+import proyectofinalprogramovil.composeapp.generated.resources.common_edit
+import proyectofinalprogramovil.composeapp.generated.resources.common_delete
+import proyectofinalprogramovil.composeapp.generated.resources.detail_public_list
+import proyectofinalprogramovil.composeapp.generated.resources.detail_private_list
+import proyectofinalprogramovil.composeapp.generated.resources.detail_completed_count
+import proyectofinalprogramovil.composeapp.generated.resources.detail_filter_all
+import proyectofinalprogramovil.composeapp.generated.resources.detail_filter_pending
+import proyectofinalprogramovil.composeapp.generated.resources.detail_filter_completed
+import proyectofinalprogramovil.composeapp.generated.resources.detail_empty_all
+import proyectofinalprogramovil.composeapp.generated.resources.detail_empty_completed
+import proyectofinalprogramovil.composeapp.generated.resources.detail_empty_pending
+import proyectofinalprogramovil.composeapp.generated.resources.common_mark_pending
+import proyectofinalprogramovil.composeapp.generated.resources.common_mark_seen
+import proyectofinalprogramovil.composeapp.generated.resources.detail_status_completed
+import proyectofinalprogramovil.composeapp.generated.resources.detail_status_pending
+import proyectofinalprogramovil.composeapp.generated.resources.detail_rating_format
+import proyectofinalprogramovil.composeapp.generated.resources.detail_no_rating
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie
+import proyectofinalprogramovil.composeapp.generated.resources.type_series
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_tv
+import proyectofinalprogramovil.composeapp.generated.resources.type_book
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame
 
 // ─── Color palette (consistent with the rest of the app) ───
 private val BgDark = Color(0xFF0B1D29)
@@ -65,6 +90,7 @@ fun ListDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    var selectedItem by remember { mutableStateOf<ContentItem?>(null) }
 
     LaunchedEffect(listId) {
         viewModel.onIntent(
@@ -116,7 +142,7 @@ fun ListDetailScreen(
                 contentColor = Color(0xFF043F40),
                 shape = CircleShape
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar ítem")
+                Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.detail_add_item))
             }
         },
         containerColor = Color.Transparent
@@ -145,22 +171,15 @@ fun ListDetailScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver",
+                            contentDescription = stringResource(Res.string.common_back),
                             tint = TextPrimary
                         )
                     }
                     Row {
-                        IconButton(onClick = { /* Placeholder: Compartir */ }) {
-                            Icon(
-                                Icons.Default.Share,
-                                contentDescription = "Compartir",
-                                tint = TextPrimary
-                            )
-                        }
                         IconButton(onClick = onNavigateToEdit) {
                             Icon(
                                 Icons.Default.Edit,
-                                contentDescription = "Editar",
+                                contentDescription = stringResource(Res.string.common_edit),
                                 tint = AccentBright
                             )
                         }
@@ -218,7 +237,7 @@ fun ListDetailScreen(
                                 color = Accent.copy(alpha = 0.2f)
                             ) {
                                 Text(
-                                    text = if (state.isPublic) "LISTA PÚBLICA" else "LISTA PRIVADA",
+                                    text = if (state.isPublic) stringResource(Res.string.detail_public_list) else stringResource(Res.string.detail_private_list),
                                     color = Accent,
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
@@ -281,7 +300,7 @@ fun ListDetailScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "$completedItems de $totalItems Completados",
+                            text = stringResource(Res.string.detail_completed_count, completedItems, totalItems),
                             color = TextSecondary,
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium
@@ -314,17 +333,17 @@ fun ListDetailScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     FilterChipItem(
-                        label = "Todos",
+                        label = stringResource(Res.string.detail_filter_all),
                         selected = state.selectedFilter == ItemFilter.ALL,
                         onClick = { viewModel.onIntent(ListDetailIntent.ChangeFilter(ItemFilter.ALL)) }
                     )
                     FilterChipItem(
-                        label = "Pendientes",
+                        label = stringResource(Res.string.detail_filter_pending),
                         selected = state.selectedFilter == ItemFilter.PENDING,
                         onClick = { viewModel.onIntent(ListDetailIntent.ChangeFilter(ItemFilter.PENDING)) }
                     )
                     FilterChipItem(
-                        label = "Completados",
+                        label = stringResource(Res.string.detail_filter_completed),
                         selected = state.selectedFilter == ItemFilter.COMPLETED,
                         onClick = { viewModel.onIntent(ListDetailIntent.ChangeFilter(ItemFilter.COMPLETED)) }
                     )
@@ -352,9 +371,9 @@ fun ListDetailScreen(
                     ) {
                         Text(
                             text = when (state.selectedFilter) {
-                                ItemFilter.ALL -> "No hay ítems. ¡Agrega uno!"
-                                ItemFilter.COMPLETED -> "No hay ítems completados"
-                                ItemFilter.PENDING -> "¡Todos los ítems completados! 🎉"
+                                ItemFilter.ALL -> stringResource(Res.string.detail_empty_all)
+                                ItemFilter.COMPLETED -> stringResource(Res.string.detail_empty_completed)
+                                ItemFilter.PENDING -> stringResource(Res.string.detail_empty_pending)
                             },
                             color = TextMuted,
                             style = MaterialTheme.typography.bodyMedium
@@ -366,11 +385,17 @@ fun ListDetailScreen(
                         item = item,
                         onToggleSeen = { viewModel.onIntent(ListDetailIntent.ToggleSeen(item)) },
                         onRate = { rating -> viewModel.onIntent(ListDetailIntent.RateItem(item, rating)) },
-                        onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) }
+                        onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) },
+                        onClick = { selectedItem = item }
                     )
                 }
             }
         }
+    }
+
+    // ─── Item detail bottom sheet ───
+    selectedItem?.let { item ->
+        ItemDetailSheet(item = item, onDismiss = { selectedItem = null })
     }
 }
 
@@ -411,14 +436,16 @@ private fun ContentItemCard(
     item: ContentItem,
     onToggleSeen: () -> Unit,
     onRate: (Int) -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 5.dp),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = CardBg)
+        colors = CardDefaults.cardColors(containerColor = CardBg),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -431,7 +458,7 @@ private fun ContentItemCard(
             ) {
                 Icon(
                     imageVector = if (item.seen) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
-                    contentDescription = if (item.seen) "Marcar como pendiente" else "Marcar como visto",
+                    contentDescription = if (item.seen) stringResource(Res.string.common_mark_pending) else stringResource(Res.string.common_mark_seen),
                     tint = if (item.seen) Accent else TextMuted,
                     modifier = Modifier.size(24.dp)
                 )
@@ -490,7 +517,7 @@ private fun ContentItemCard(
             ) {
                 Icon(
                     Icons.Default.Delete,
-                    contentDescription = "Eliminar",
+                    contentDescription = stringResource(Res.string.common_delete),
                     tint = TextMuted,
                     modifier = Modifier.size(18.dp)
                 )
@@ -544,18 +571,20 @@ private fun typeEmoji(type: ContentType): String = when (type) {
     ContentType.VIDEOGAME -> "🎮"
 }
 
+@Composable
 private fun categoryLabel(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Película"
-    ContentType.SERIES -> "Serie"
-    ContentType.BOOK -> "Libro"
-    ContentType.VIDEOGAME -> "Videojuego"
+    ContentType.MOVIE -> stringResource(Res.string.type_movie)
+    ContentType.SERIES -> stringResource(Res.string.type_series)
+    ContentType.BOOK -> stringResource(Res.string.type_book)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame)
 }
 
+@Composable
 private fun typeSublabel(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Película"
-    ContentType.SERIES -> "Serie de TV"
-    ContentType.BOOK -> "Libro"
-    ContentType.VIDEOGAME -> "Videojuego"
+    ContentType.MOVIE -> stringResource(Res.string.type_movie)
+    ContentType.SERIES -> stringResource(Res.string.type_series_tv)
+    ContentType.BOOK -> stringResource(Res.string.type_book)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame)
 }
 
 private fun categoryChipColor(type: ContentType): Color = when (type) {
@@ -563,4 +592,84 @@ private fun categoryChipColor(type: ContentType): Color = when (type) {
     ContentType.SERIES -> Color(0xFFBA68C8)
     ContentType.BOOK -> Color(0xFF81C784)
     ContentType.VIDEOGAME -> Color(0xFFFFB74D)
+}
+
+// ─── Item detail bottom sheet ───
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF1A2E3A),
+        contentColor = TextPrimary
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = typeEmoji(item.type),
+                fontSize = 56.sp
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = item.title.value,
+                color = TextPrimary,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Surface(
+                shape = RoundedCornerShape(20.dp),
+                color = categoryChipColor(item.type).copy(alpha = 0.2f)
+            ) {
+                Text(
+                    text = categoryLabel(item.type),
+                    color = categoryChipColor(item.type),
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = if (item.seen) "✅" else "⏳",
+                        fontSize = 28.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = if (item.seen) stringResource(Res.string.detail_status_completed) else stringResource(Res.string.detail_status_pending),
+                        color = if (item.seen) Accent else TextMuted,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Row {
+                        (1..5).forEach { star ->
+                            Text(
+                                text = if ((item.rating?.value ?: 0) >= star) "★" else "☆",
+                                color = if ((item.rating?.value ?: 0) >= star) Accent else TextMuted,
+                                fontSize = 22.sp
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = item.rating?.let { stringResource(Res.string.detail_rating_format, it.value) } ?: stringResource(Res.string.detail_no_rating),
+                        color = TextMuted,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+    }
 }

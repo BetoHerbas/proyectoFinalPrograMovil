@@ -56,6 +56,31 @@ class FakeContentListRepository : ContentListRepository {
         return Result.success(list)
     }
 
+    override suspend fun updateList(
+        listId: ListId,
+        name: ListName,
+        description: String,
+        coverImageUrl: String?,
+        isPublic: Boolean
+    ): Result<ContentList> {
+        if (shouldFail) return Result.failure(Exception(failureMessage))
+        val currentList = _lists.value.find { it.id == listId }
+            ?: return Result.failure(Exception("List not found"))
+
+        val updatedList = currentList.copy(
+            name = name,
+            description = description,
+            coverImageUrl = coverImageUrl,
+            isPublic = isPublic
+        )
+
+        _lists.value = _lists.value.map {
+            if (it.id == listId) updatedList else it
+        }
+
+        return Result.success(updatedList)
+    }
+
     override fun getListItems(listId: ListId): Flow<List<ContentItem>> =
         _items.map { it[listId.value] ?: emptyList() }
 
@@ -80,6 +105,7 @@ class FakeContentListRepository : ContentListRepository {
             ContentType.MOVIE -> "Movie"
             ContentType.SERIES -> "Series"
             ContentType.BOOK -> "Book"
+            ContentType.VIDEOGAME -> "Videogame"
         }
         return Result.success(
             listOf(

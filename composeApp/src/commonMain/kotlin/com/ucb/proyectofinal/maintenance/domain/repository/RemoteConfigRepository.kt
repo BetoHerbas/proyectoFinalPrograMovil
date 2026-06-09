@@ -19,5 +19,11 @@ expect class RemoteConfigRepository() {
      * pertenece al grupo videogame_target_group. De lo contrario emite false.
      */
     fun observeVideogameCategoryEnabled(): Flow<Boolean>
+
+    /**
+     * Obtiene el JSON de configuración del onboarding desde Remote Config.
+     * Realiza fetch + activate y retorna el string del parámetro "onboarding_config".
+     */
+    suspend fun fetchOnboardingConfig(): String
 }
 

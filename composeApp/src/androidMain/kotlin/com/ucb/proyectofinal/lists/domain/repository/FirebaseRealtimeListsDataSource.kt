@@ -57,6 +57,40 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
         awaitClose { ref.removeEventListener(listener) }
     }
 
+    actual fun observePublicLists(): Flow<List<ContentList>> = callbackFlow {
+        val ref = root.child("public_lists")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val lists = snapshot.children.mapNotNull { listSnapshot ->
+                    val id = listSnapshot.key ?: return@mapNotNull null
+                    val name = listSnapshot.child("name").getValue(String::class.java) ?: return@mapNotNull null
+                    val type = listSnapshot.child("type").getValue(String::class.java) ?: return@mapNotNull null
+                    val description = listSnapshot.child("description").getValue(String::class.java).orEmpty()
+                    val coverImageUrl = listSnapshot.child("coverImageUrl").getValue(String::class.java)
+                    val isPublic = listSnapshot.child("isPublic").getValue(Boolean::class.java) ?: true
+                    val itemCount = listSnapshot.child("itemCount").getValue(Int::class.java) ?: 0
+                    val contentType = runCatching { ContentType.valueOf(type) }.getOrNull() ?: return@mapNotNull null
+                    ContentList(
+                        id = ListId(id),
+                        name = ListName(name),
+                        type = contentType,
+                        itemCount = itemCount,
+                        description = description,
+                        coverImageUrl = coverImageUrl,
+                        isPublic = isPublic
+                    )
+                }
+                trySend(lists.sortedByDescending { it.id.value })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        ref.addValueEventListener(listener)
+        awaitClose { ref.removeEventListener(listener) }
+    }
+
     actual fun observeItems(userId: String, listId: String): Flow<List<ContentItem>> = callbackFlow {
         val ref = root.child("users").child(userId).child("lists").child(listId).child("items")
         val listener = object : ValueEventListener {
@@ -77,19 +111,21 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
     }
 
     actual suspend fun createList(userId: String, list: ContentList) {
-        root.child("users").child(userId).child("lists").child(list.id.value).updateChildren(
-            mapOf(
-                "id" to list.id.value,
-                "name" to list.name.value,
-                "type" to list.type.name,
-                "description" to list.description,
-                "coverImageUrl" to list.coverImageUrl,
-                "isPublic" to list.isPublic,
-                "itemCount" to list.itemCount,
-                "createdAt" to System.currentTimeMillis(),
-                "updatedAt" to System.currentTimeMillis()
-            )
-        ).await()
+        val data = mapOf(
+            "id" to list.id.value,
+            "name" to list.name.value,
+            "type" to list.type.name,
+            "description" to list.description,
+            "coverImageUrl" to list.coverImageUrl,
+            "isPublic" to list.isPublic,
+            "itemCount" to list.itemCount,
+            "createdAt" to System.currentTimeMillis(),
+            "updatedAt" to System.currentTimeMillis()
+        )
+        root.child("users").child(userId).child("lists").child(list.id.value).updateChildren(data).await()
+        if (list.isPublic) {
+            root.child("public_lists").child(list.id.value).updateChildren(data).await()
+        }
     }
 
     actual suspend fun addItem(userId: String, item: ContentItem) {
@@ -100,15 +136,19 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
     }
 
     actual suspend fun updateList(userId: String, list: ContentList) {
-        root.child("users").child(userId).child("lists").child(list.id.value).updateChildren(
-            mapOf(
-                "name" to list.name.value,
-                "description" to list.description,
-                "coverImageUrl" to list.coverImageUrl,
-                "isPublic" to list.isPublic,
-                "updatedAt" to System.currentTimeMillis()
-            )
-        ).await()
+        val data = mapOf(
+            "name" to list.name.value,
+            "description" to list.description,
+            "coverImageUrl" to list.coverImageUrl,
+            "isPublic" to list.isPublic,
+            "updatedAt" to System.currentTimeMillis()
+        )
+        root.child("users").child(userId).child("lists").child(list.id.value).updateChildren(data).await()
+        if (list.isPublic) {
+            root.child("public_lists").child(list.id.value).updateChildren(data).await()
+        } else {
+            root.child("public_lists").child(list.id.value).removeValue().await()
+        }
     }
 
     actual suspend fun updateItem(userId: String, item: ContentItem) {
@@ -123,6 +163,7 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
 
     actual suspend fun deleteList(userId: String, listId: String) {
         root.child("users").child(userId).child("lists").child(listId).removeValue().await()
+        root.child("public_lists").child(listId).removeValue().await()
     }
 
     actual suspend fun deleteItem(userId: String, listId: String, itemId: String) {
@@ -130,6 +171,53 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
         listRef.child("items").child(itemId).removeValue().await()
         val count = listRef.child("items").get().await().childrenCount.toInt()
         listRef.child("itemCount").setValue(count).await()
+    }
+
+    actual fun observeFavorites(userId: String): Flow<List<ContentList>> = callbackFlow {
+        val ref = root.child("users").child(userId).child("favorites")
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val lists = snapshot.children.mapNotNull { listSnapshot ->
+                    val id = listSnapshot.key ?: return@mapNotNull null
+                    val name = listSnapshot.child("name").getValue(String::class.java) ?: return@mapNotNull null
+                    val type = listSnapshot.child("type").getValue(String::class.java) ?: return@mapNotNull null
+                    val description = listSnapshot.child("description").getValue(String::class.java).orEmpty()
+                    val coverImageUrl = listSnapshot.child("coverImageUrl").getValue(String::class.java)
+                    val isPublic = listSnapshot.child("isPublic").getValue(Boolean::class.java) ?: true
+                    val itemCount = listSnapshot.child("itemCount").getValue(Int::class.java) ?: 0
+                    val contentType = runCatching { ContentType.valueOf(type) }.getOrNull() ?: return@mapNotNull null
+                    ContentList(
+                        id = ListId(id),
+                        name = ListName(name),
+                        type = contentType,
+                        itemCount = itemCount,
+                        description = description,
+                        coverImageUrl = coverImageUrl,
+                        isPublic = isPublic
+                    )
+                }
+                trySend(lists)
+            }
+            override fun onCancelled(error: DatabaseError) { close(error.toException()) }
+        }
+        ref.addValueEventListener(listener)
+        awaitClose { ref.removeEventListener(listener) }
+    }
+
+    actual suspend fun addFavorite(userId: String, list: ContentList) {
+        val data = mapOf(
+            "name" to list.name.value,
+            "type" to list.type.name,
+            "description" to list.description,
+            "coverImageUrl" to list.coverImageUrl,
+            "isPublic" to list.isPublic,
+            "itemCount" to list.itemCount
+        )
+        root.child("users").child(userId).child("favorites").child(list.id.value).updateChildren(data).await()
+    }
+
+    actual suspend fun removeFavorite(userId: String, listId: String) {
+        root.child("users").child(userId).child("favorites").child(listId).removeValue().await()
     }
 
     private fun ContentItem.toMap(): Map<String, Any?> = mapOf(

@@ -18,8 +18,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.maintenance_loading
+import proyectofinalprogramovil.composeapp.generated.resources.maintenance_title
+import proyectofinalprogramovil.composeapp.generated.resources.maintenance_message
+import proyectofinalprogramovil.composeapp.generated.resources.maintenance_auto_recover
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -43,9 +53,21 @@ import com.ucb.proyectofinal.maintenance.presentation.viewmodel.MaintenanceViewM
 @Composable
 fun MaintenanceGate(
     viewModel: MaintenanceViewModel = koinViewModel(),
+    onMaintenanceFinished: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
+
+    var wasUnderMaintenance by remember { mutableStateOf(false) }
+
+    LaunchedEffect(state) {
+        if (state is MaintenanceState.UnderMaintenance) {
+            wasUnderMaintenance = true
+        } else if (state is MaintenanceState.Operational && wasUnderMaintenance) {
+            wasUnderMaintenance = false
+            onMaintenanceFinished()
+        }
+    }
 
     when (state) {
         is MaintenanceState.Loading -> LoadingScreen()
@@ -92,7 +114,7 @@ private fun LoadingScreen() {
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = "Iniciando aplicación…",
+                text = stringResource(Res.string.maintenance_loading),
                 color = Color.White.copy(alpha = 0.7f),
                 fontSize = 15.sp
             )
@@ -150,7 +172,7 @@ private fun MaintenanceScreen() {
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "En Mantenimiento",
+                text = stringResource(Res.string.maintenance_title),
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -159,7 +181,7 @@ private fun MaintenanceScreen() {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Estamos mejorando la aplicación.\nVuelve en unos momentos. 🚀",
+                text = stringResource(Res.string.maintenance_message),
                 fontSize = 15.sp,
                 color = Color.White.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center,
@@ -169,7 +191,7 @@ private fun MaintenanceScreen() {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "La app se recuperará automáticamente\ncuando el mantenimiento termine ✨",
+                text = stringResource(Res.string.maintenance_auto_recover),
                 fontSize = 13.sp,
                 color = Color(0xFF6C63FF).copy(alpha = 0.8f),
                 textAlign = TextAlign.Center,

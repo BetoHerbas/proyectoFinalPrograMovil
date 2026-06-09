@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 sealed class NavRoute {
 
     @Serializable
+    data object Onboarding : NavRoute()
+
+    @Serializable
     data object Register : NavRoute()
 
     @Serializable
@@ -49,4 +52,10 @@ sealed class NavRoute {
         val isPublic: Boolean = true,
         val listType: String = "MOVIE"
     ) : NavRoute()
+
+    @Serializable
+    data object Explore : NavRoute()
+
+    @Serializable
+    data object Favorites : NavRoute()
 }
