@@ -8,6 +8,7 @@ import com.ucb.proyectofinal.lists.domain.usecase.AddItemToListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.CreateContentListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.DeleteItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.DeleteListUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.FetchItemDetailUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
@@ -30,5 +31,6 @@ val useCaseModule = module {
     factory { RateItemUseCase(get()) }
     factory { DeleteListUseCase(get()) }
     factory { DeleteItemUseCase(get()) }
+    factory { FetchItemDetailUseCase(get()) }
     factory { UpdateListUseCase(get()) }
 }

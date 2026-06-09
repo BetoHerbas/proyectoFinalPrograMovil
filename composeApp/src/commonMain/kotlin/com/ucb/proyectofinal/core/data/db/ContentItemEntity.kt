@@ -10,5 +10,7 @@ data class ContentItemEntity(
     val title: String,
     val type: String,
     val seen: Boolean = false,
-    val rating: Int? = null
+    val rating: Int? = null,
+    val imageUrl: String? = null,
+    val sourceId: String? = null
 )

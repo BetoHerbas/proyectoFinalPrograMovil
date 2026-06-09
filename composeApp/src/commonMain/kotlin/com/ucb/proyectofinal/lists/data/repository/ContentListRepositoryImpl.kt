@@ -7,9 +7,12 @@ import com.ucb.proyectofinal.core.data.db.ContentItemEntity
 import com.ucb.proyectofinal.core.data.db.ContentListDao
 import com.ucb.proyectofinal.core.data.db.ContentListEntity
 import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
+import com.ucb.proyectofinal.lists.domain.model.CastMember
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList
 import com.ucb.proyectofinal.lists.domain.model.ContentType
+import com.ucb.proyectofinal.lists.domain.model.ItemDetailSourceData
+import com.ucb.proyectofinal.lists.domain.model.Review
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
@@ -139,7 +142,9 @@ class ContentListRepositoryImpl(
     override suspend fun addItem(
         listId: ListId,
         title: ItemTitle,
-        type: ContentType
+        type: ContentType,
+        imageUrl: String?,
+        sourceId: String?
     ): Result<ContentItem> = runCatching {
         val userId = requireCurrentUserId()
         val item = ContentItem(
@@ -148,7 +153,9 @@ class ContentListRepositoryImpl(
             title = title,
             type = type,
             seen = false,
-            rating = null
+            rating = null,
+            imageUrl = imageUrl?.trim()?.ifBlank { null },
+            sourceId = sourceId?.trim()?.ifBlank { null }
         )
         realtimeListsDataSource.addItem(userId, item)
         contentItemDao.insert(item.toEntity())
@@ -201,6 +208,193 @@ class ContentListRepositoryImpl(
         contentItemDao.deleteById(item.id.value)
     }
 
+    override suspend fun fetchDetail(
+        sourceId: String,
+        type: ContentType
+    ): Result<ItemDetailSourceData> = runCatching {
+        when (type) {
+            ContentType.MOVIE -> fetchTmdbMovieDetail(sourceId)
+            ContentType.SERIES -> fetchTmdbSeriesDetail(sourceId)
+            ContentType.BOOK -> fetchBookDetail(sourceId)
+            ContentType.VIDEOGAME -> error("Video games not supported yet")
+        }
+    }
+
+    private suspend fun fetchTmdbMovieDetail(movieId: String): ItemDetailSourceData {
+        val token = tmdbToken
+        if (token.isBlank()) error("TMDB token no configurado")
+
+        val detailUrl = "https://api.themoviedb.org/3/movie/$movieId?language=es-ES"
+        val detailRoot = json.parseToJsonElement(
+            httpClient.get(detailUrl) {
+                header("Authorization", "Bearer $token")
+            }.bodyAsText()
+        ).jsonObject
+
+        val creditsUrl = "https://api.themoviedb.org/3/movie/$movieId/credits?language=es-ES"
+        val creditsRoot = json.parseToJsonElement(
+            httpClient.get(creditsUrl) {
+                header("Authorization", "Bearer $token")
+            }.bodyAsText()
+        ).jsonObject
+
+        // Reviews son opcionales — si falla, usamos lista vacía
+        val reviews = runCatching {
+            val reviewsUrl = "https://api.themoviedb.org/3/movie/$movieId/reviews?language=es-ES"
+            val reviewsRoot = json.parseToJsonElement(
+                httpClient.get(reviewsUrl) {
+                    header("Authorization", "Bearer $token")
+                }.bodyAsText()
+            ).jsonObject
+            parseTmdbReviews(reviewsRoot)
+        }.getOrDefault(emptyList())
+
+        return tmdbDetailToItemData(detailRoot, creditsRoot, reviews, isMovie = true)
+    }
+
+    private suspend fun fetchTmdbSeriesDetail(seriesId: String): ItemDetailSourceData {
+        val token = tmdbToken
+        if (token.isBlank()) error("TMDB token no configurado")
+
+        val detailUrl = "https://api.themoviedb.org/3/tv/$seriesId?language=es-ES"
+        val detailRoot = json.parseToJsonElement(
+            httpClient.get(detailUrl) {
+                header("Authorization", "Bearer $token")
+            }.bodyAsText()
+        ).jsonObject
+
+        val creditsUrl = "https://api.themoviedb.org/3/tv/$seriesId/credits?language=es-ES"
+        val creditsRoot = json.parseToJsonElement(
+            httpClient.get(creditsUrl) {
+                header("Authorization", "Bearer $token")
+            }.bodyAsText()
+        ).jsonObject
+
+        val reviews = runCatching {
+            val reviewsUrl = "https://api.themoviedb.org/3/tv/$seriesId/reviews?language=es-ES"
+            val reviewsRoot = json.parseToJsonElement(
+                httpClient.get(reviewsUrl) {
+                    header("Authorization", "Bearer $token")
+                }.bodyAsText()
+            ).jsonObject
+            parseTmdbReviews(reviewsRoot)
+        }.getOrDefault(emptyList())
+
+        return tmdbDetailToItemData(detailRoot, creditsRoot, reviews, isMovie = false)
+    }
+
+    private fun tmdbDetailToItemData(
+        detail: JsonObject,
+        credits: JsonObject,
+        reviews: List<Review>,
+        isMovie: Boolean
+    ): ItemDetailSourceData {
+        val description = detail.stringValue("overview") ?: ""
+        val rating = detail.stringValue("vote_average")?.toDoubleOrNull()?.let {
+            (it * 10).toInt() / 10.0
+        } ?: 0.0
+        val rawDate = detail.stringValue("release_date") ?: detail.stringValue("first_air_date") ?: ""
+        val year = rawDate.take(4)
+
+        val genresArray = detail["genres"]?.jsonArray ?: JsonArray(emptyList())
+        val genres = genresArray.mapNotNull { it.jsonObject.stringValue("name") }
+
+        val runtime = detail.stringValue("runtime")?.toIntOrNull()
+        val duration = if (isMovie && runtime != null) {
+            "${runtime / 60}h ${runtime % 60}m"
+        } else null
+
+        val seasons = if (!isMovie) detail.stringValue("number_of_seasons")?.toIntOrNull() else null
+
+        val cast = parseTmdbCast(credits)
+
+        val director = if (isMovie) {
+            credits["crew"]?.jsonArray?.find { crew ->
+                crew.jsonObject.stringValue("job") == "Director"
+            }?.jsonObject?.stringValue("name")
+        } else null
+
+        val creator = if (!isMovie) {
+            detail["created_by"]?.jsonArray?.firstOrNull()?.jsonObject?.stringValue("name")
+        } else null
+
+        val totalReviews = detail.stringValue("vote_count")?.toIntOrNull() ?: 0
+
+        return ItemDetailSourceData(
+            description = description,
+            rating = rating,
+            tags = genres,
+            cast = cast,
+            reviews = reviews,
+            director = director,
+            creator = creator,
+            duration = duration,
+            seasons = seasons,
+            year = year,
+            genres = genres,
+            totalReviews = totalReviews
+        )
+    }
+
+    private fun parseTmdbCast(credits: JsonObject): List<CastMember> {
+        val castArray = credits["cast"]?.jsonArray ?: JsonArray(emptyList())
+        return castArray.mapNotNull { member ->
+            val obj = member.jsonObject
+            val name = obj.stringValue("name") ?: return@mapNotNull null
+            val character = obj.stringValue("character") ?: ""
+            val profilePath = obj.stringValue("profile_path")
+            CastMember(
+                name = name,
+                role = character,
+                imageUrl = profilePath?.let { "https://image.tmdb.org/t/p/w185$it" }
+            )
+        }
+    }
+
+    private fun parseTmdbReviews(root: JsonObject): List<Review> {
+        val results = root["results"]?.jsonArray ?: JsonArray(emptyList())
+        return results.mapNotNull { result ->
+            val obj = result.jsonObject
+            val author = obj.stringValue("author") ?: return@mapNotNull null
+            val content = obj.stringValue("content") ?: ""
+            val authorDetails = obj["author_details"]?.jsonObject
+            val rating = authorDetails?.stringValue("rating")?.toDoubleOrNull()?.toInt() ?: 0
+            val date = obj.stringValue("created_at")?.take(10) ?: ""
+            Review(author = author, content = content, rating = rating, date = date)
+        }
+    }
+
+    private suspend fun fetchBookDetail(volumeId: String): ItemDetailSourceData {
+        val keyParam = if (googleBooksKey.isBlank()) "" else "&key=${googleBooksKey.encodeURLQueryComponent()}"
+        val url = "https://www.googleapis.com/books/v1/volumes/$volumeId$keyParam"
+        val root = json.parseToJsonElement(httpClient.get(url).bodyAsText()).jsonObject
+        val volumeInfo = root["volumeInfo"]?.jsonObject ?: error("No volume info found")
+
+        val description = volumeInfo.stringValue("description") ?: ""
+        val author = volumeInfo["authors"]?.jsonArray?.firstOrNull()?.let {
+            if (it is JsonNull) null else it.jsonPrimitive.content
+        } ?: ""
+        val pageCount = volumeInfo.stringValue("pageCount")?.toIntOrNull()
+        val publisher = volumeInfo.stringValue("publisher") ?: ""
+        val date = volumeInfo.stringValue("publishedDate") ?: ""
+        val year = date.take(4)
+        val categories = volumeInfo["categories"]?.jsonArray?.mapNotNull {
+            if (it is JsonNull) null else it.jsonPrimitive.content
+        } ?: emptyList()
+        val rating = volumeInfo.stringValue("averageRating")?.toDoubleOrNull() ?: 0.0
+
+        return ItemDetailSourceData(
+            description = description,
+            rating = rating,
+            tags = categories,
+            year = year,
+            author = author,
+            pages = pageCount,
+            publisher = publisher,
+            genres = categories
+        )
+    }
+
     private fun currentUserIdOrNull(): String? = authRepository.getCurrentUser()?.id?.value
 
     private fun requireCurrentUserId(): String =
@@ -232,7 +426,9 @@ class ContentListRepositoryImpl(
         title = title.value,
         type = type.name,
         seen = seen,
-        rating = rating?.value
+        rating = rating?.value,
+        imageUrl = imageUrl,
+        sourceId = sourceId
     )
 
     private fun ContentItemEntity.toDomain(): ContentItem = ContentItem(
@@ -241,7 +437,9 @@ class ContentListRepositoryImpl(
         title = ItemTitle(title),
         type = type.toContentTypeOrDefault(),
         seen = seen,
-        rating = rating?.let { Rating(it) }
+        rating = rating?.let { Rating(it) },
+        imageUrl = imageUrl,
+        sourceId = sourceId
     )
 
     private fun String.toContentTypeOrDefault(): ContentType =

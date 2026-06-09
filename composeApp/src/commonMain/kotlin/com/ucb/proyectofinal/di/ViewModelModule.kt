@@ -18,7 +18,7 @@ val viewModelModule = module {
     viewModel { AddItemViewModel(get(), get()) }
     viewModel { ListDetailViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { EditListViewModel(get()) }
-    viewModel { ItemDetailViewModel() }
+    viewModel { ItemDetailViewModel(get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { MaintenanceViewModel(get()) }

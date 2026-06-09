@@ -4,6 +4,7 @@ import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList
 import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentType
+import com.ucb.proyectofinal.lists.domain.model.ItemDetailSourceData
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.model.vo.ListName
@@ -27,7 +28,8 @@ interface ContentListRepository {
         isPublic: Boolean
     ): Result<ContentList>
     fun getListItems(listId: ListId): Flow<List<ContentItem>>
-    suspend fun addItem(listId: ListId, title: ItemTitle, type: ContentType): Result<ContentItem>
+    suspend fun addItem(listId: ListId, title: ItemTitle, type: ContentType, imageUrl: String? = null, sourceId: String? = null): Result<ContentItem>
+    suspend fun fetchDetail(sourceId: String, type: ContentType): Result<ItemDetailSourceData>
     suspend fun searchCatalog(type: ContentType, query: String): Result<List<CatalogSearchItem>>
     suspend fun toggleSeen(item: ContentItem): Result<ContentItem>
     suspend fun rateItem(item: ContentItem, rating: Rating): Result<ContentItem>

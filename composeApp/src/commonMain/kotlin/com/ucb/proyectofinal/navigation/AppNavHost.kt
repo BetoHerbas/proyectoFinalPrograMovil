@@ -110,6 +110,7 @@ fun AppNavHost() {
         composable<NavRoute.ItemDetail> { backStackEntry ->
             val route = backStackEntry.toRoute<NavRoute.ItemDetail>()
             ItemDetailScreen(
+                listId = route.listId,
                 itemId = route.itemId,
                 onNavigateBack = { navController.popBackStack() }
             )

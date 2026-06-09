@@ -5,75 +5,137 @@ import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.lists.domain.model.*
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
+import com.ucb.proyectofinal.lists.domain.model.vo.ListId
+import com.ucb.proyectofinal.lists.domain.usecase.FetchItemDetailUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.presentation.intent.ItemDetailIntent
 import com.ucb.proyectofinal.lists.presentation.state.ItemDetailUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ItemDetailViewModel : ViewModel() {
+class ItemDetailViewModel(
+    private val getListItemsUseCase: GetListItemsUseCase,
+    private val fetchItemDetailUseCase: FetchItemDetailUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ItemDetailUiState())
     val state: StateFlow<ItemDetailUiState> = _state.asStateFlow()
 
     private val movieCatalog = mapOf(
-        "dune" to MovieMockData(
-            title = "Dune: Part One",
-            year = "2021",
-            duration = "2h 35m",
-            director = "Denis Villeneuve",
-            imageUrl = "https://image.tmdb.org/t/p/original/d5NXSklfzfsTMBsLY2iP4M8Iazp.jpg",
-            description = "Paul Atreides, a brilliant and gifted young man born into a great destiny, must travel to the most dangerous planet in the universe to ensure the future of his family and his people.",
-            rating = 8.9,
-            tags = listOf("Oscar Winner", "Sci-Fi"),
-            cast = listOf(CastMember("Timothée Chalamet", "Paul Atreides", null), CastMember("Zendaya", "Chani", null))
+        "project hail mary" to MovieMockData(
+            title = "Project Hail Mary",
+            year = "2026",
+            duration = "2h 45m",
+            director = "Phil Lord & Christopher Miller",
+            imageUrl = "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=1080&auto=format&fit=crop",
+            description = "Ryland Grace es el único superviviente en una misión desesperada. Deberá usar la ciencia y un aliado inesperado para salvar a la humanidad.",
+            rating = 9.2,
+            tags = listOf("Sci-Fi", "Space", "NASA"),
+            cast = listOf(CastMember("Ryan Gosling", "Ryland Grace", null))
         ),
-        "interstellar" to MovieMockData(
-            title = "Interstellar",
-            year = "2014",
-            duration = "2h 49m",
-            director = "Christopher Nolan",
-            imageUrl = "https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6vCU679yvBPu9.jpg",
-            description = "In the future, where Earth is becoming uninhabitable, a farmer and ex-NASA pilot is tasked to pilot a spacecraft to find a new planet for humans.",
-            rating = 8.7,
-            tags = listOf("Oscar Winner", "Space"),
-            cast = listOf(CastMember("Matthew McConaughey", "Cooper", null), CastMember("Anne Hathaway", "Amelia", null))
+        "the super mario galaxy movie" to MovieMockData(
+            title = "The Super Mario Galaxy Movie",
+            year = "2026",
+            duration = "1h 45m",
+            director = "Aaron Horvath",
+            imageUrl = "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?q=80&w=1080&auto=format&fit=crop",
+            description = "Mario se embarca en una aventura intergaláctica a través de mundos asombrosos para salvar el cosmos.",
+            rating = 8.5,
+            tags = listOf("Animation", "Adventure", "Nintendo"),
+            cast = listOf(CastMember("Chris Pratt", "Mario", null))
         ),
-        "drama" to MovieMockData(
+        "hoppers" to MovieMockData(
+            title = "Hoppers",
+            year = "2026",
+            duration = "1h 35m",
+            director = "Daniel Chong",
+            imageUrl = "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1080&auto=format&fit=crop",
+            description = "Una joven transfiere su mente al cuerpo de un castor robótico para una misión secreta.",
+            rating = 7.8,
+            tags = listOf("Pixar", "Comedy", "Sci-Fi"),
+            cast = listOf(CastMember("Jon Hamm", "Mayor Bob", null))
+        ),
+        "over your dead body" to MovieMockData(
+            title = "Over Your Dead Body",
+            year = "2025",
+            duration = "1h 50m",
+            director = "Takashi Miike",
+            imageUrl = "https://images.unsplash.com/photo-1509248961158-e54f6934749c?q=80&w=1080&auto=format&fit=crop",
+            description = "Un thriller sobrenatural donde los límites de la realidad se vuelven sangrientos.",
+            rating = 7.4,
+            tags = listOf("Horror", "Thriller", "Japan"),
+            cast = listOf(CastMember("Ebizo Ichikawa", "Kosuke", null))
+        ),
+        "lee cronins the mummy" to MovieMockData(
+            title = "Lee Cronins the Mummy",
+            year = "2025",
+            duration = "2h 05m",
+            director = "Lee Cronin",
+            imageUrl = "https://images.unsplash.com/photo-1605806616949-1e87b487fc2f?q=80&w=1080&auto=format&fit=crop",
+            description = "Una nueva visión del terror clásico, enfocada en una maldición antigua y visceral.",
+            rating = 7.1,
+            tags = listOf("Horror", "Action", "Supernatural"),
+            cast = listOf(CastMember("Lee Cronin", "Director", null))
+        ),
+        "fuze" to MovieMockData(
+            title = "Fuze",
+            year = "2025",
+            duration = "1h 55m",
+            director = "David Ayer",
+            imageUrl = "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1080&auto=format&fit=crop",
+            description = "Un atraco se complica cuando una bomba de la Segunda Guerra Mundial es descubierta.",
+            rating = 8.0,
+            tags = listOf("Action", "Crime", "Thriller"),
+            cast = listOf(CastMember("Aaron Taylor-Johnson", "Lead", null))
+        ),
+        "avatar: fire and ash" to MovieMockData(
+            title = "Avatar: Fire and Ash",
+            year = "2025",
+            duration = "3h 10m",
+            director = "James Cameron",
+            imageUrl = "https://images.unsplash.com/photo-1464802686167-b939a67a06d1?q=80&w=1080&auto=format&fit=crop",
+            description = "Jake Sully y su familia encuentran una nueva amenaza en la tribu de las cenizas.",
+            rating = 9.5,
+            tags = listOf("Sci-Fi", "Epic", "Adventure"),
+            cast = listOf(CastMember("Sam Worthington", "Jake", null))
+        ),
+        "the housemaid" to MovieMockData(
+            title = "The Housemaid",
+            year = "2025",
+            duration = "1h 58m",
+            director = "Paul Feig",
+            imageUrl = "https://images.unsplash.com/photo-1585647347384-2593bc35786b?q=80&w=1080&auto=format&fit=crop",
+            description = "Secretos oscuros salen a la luz cuando una joven entra a trabajar en una mansión.",
+            rating = 8.2,
+            tags = listOf("Mystery", "Drama", "Suspense"),
+            cast = listOf(CastMember("Sydney Sweeney", "Maid", null))
+        ),
+        "the drama" to MovieMockData(
             title = "The Drama",
-            year = "2024",
-            duration = "2h 10m",
-            director = "Elena G. Ruiz",
-            imageUrl = "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1000&auto=format&fit=crop",
-            description = "An intense and moving exploration of human resilience and the complex emotional ties that bind us together in times of crisis.",
-            rating = 9.4,
-            tags = listOf("Top Rated", "Emotional"),
-            cast = listOf(CastMember("Meryl Streep", "Matriarch", null), CastMember("Viola Davis", "The Friend", null))
+            year = "2025",
+            duration = "2h 15m",
+            director = "Kristoffer Borgli",
+            imageUrl = "https://images.unsplash.com/photo-1518107616385-ad30891d294e?q=80&w=1080&auto=format&fit=crop",
+            description = "Un romance se convierte en pesadilla psicológica antes de una boda.",
+            rating = 8.7,
+            tags = listOf("A24", "Drama", "Psychological"),
+            cast = listOf(CastMember("Zendaya", "Bride", null))
         ),
-        "batman" to MovieMockData(
-            title = "The Batman",
-            year = "2022",
-            duration = "2h 56m",
-            director = "Matt Reeves",
-            imageUrl = "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T6f4uC3.jpg",
-            description = "Batman ventures into Gotham City's underworld when a sadistic killer leaves behind a trail of cryptic clues.",
-            rating = 7.9,
-            tags = listOf("Action", "Detective"),
-            cast = listOf(CastMember("Robert Pattinson", "Bruce Wayne", null), CastMember("Zoë Kravitz", "Selina Kyle", null))
-        ),
-        "last" to MovieMockData(
-            title = "The Last of Us",
-            year = "2023",
-            duration = "9 Episodes",
-            director = "Craig Mazin",
-            imageUrl = "https://image.tmdb.org/t/p/original/uKvH56B29VPKn9bRjuo1HqY2Hdm.jpg",
-            description = "After a global pandemic destroys civilization, a hardened survivor takes charge of a girl who may be humanity's last hope.",
-            rating = 8.8,
-            tags = listOf("Emmy Winner", "Gaming"),
-            cast = listOf(CastMember("Pedro Pascal", "Joel", null), CastMember("Bella Ramsey", "Ellie", null))
+        "good luck, have fun, dont die" to MovieMockData(
+            title = "Good Luck, Have Fun, Dont Die",
+            year = "2025",
+            duration = "1h 48m",
+            director = "Gore Verbinski",
+            imageUrl = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1080&auto=format&fit=crop",
+            description = "Un viajero del tiempo recluta a un grupo para salvar el futuro.",
+            rating = 8.4,
+            tags = listOf("Sci-Fi", "Comedy", "Action"),
+            cast = listOf(CastMember("Sam Rockwell", "Recruiter", null))
         )
     )
 
@@ -84,46 +146,148 @@ class ItemDetailViewModel : ViewModel() {
 
     fun onIntent(intent: ItemDetailIntent) {
         when (intent) {
-            is ItemDetailIntent.LoadDetail -> loadItemDetail(intent.itemId)
+            is ItemDetailIntent.LoadDetail -> loadItemDetail(intent.itemId, intent.listId)
             else -> {}
         }
     }
 
-    private fun loadItemDetail(itemId: String) {
+    private fun loadItemDetail(itemId: String, listId: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            delay(500)
+            delay(300)
 
-            // Buscamos coincidencia en el catálogo (el itemId es el título enviado desde la lista)
-            val searchKey = itemId.lowercase().trim()
-            val entry = movieCatalog.entries.find { (key, _) -> 
-                searchKey.contains(key) || key.contains(searchKey) 
+            val items = getListItemsUseCase(ListId(listId)).first()
+            val foundItem = items.find { it.id.value == itemId }
+
+            val title = foundItem?.title?.value ?: itemId
+            val imageUrl = foundItem?.imageUrl
+            val sourceId = foundItem?.sourceId
+            val contentType = foundItem?.type ?: ContentType.MOVIE
+
+            // Intentar obtener datos reales desde la API
+            val apiData: ItemDetailSourceData? = if (sourceId != null) {
+                fetchItemDetailUseCase(sourceId, contentType)
+                    .getOrNull()
+            } else null
+
+            if (apiData != null) {
+                // Construir ItemDetail con datos reales de la API
+                val item = buildFromApiData(
+                    foundItem = foundItem,
+                    sourceData = apiData,
+                    title = title,
+                    imageUrl = imageUrl,
+                    itemId = itemId,
+                    contentType = contentType
+                )
+                _state.update { it.copy(isLoading = false, item = item) }
+            } else {
+                // Fallback: mock data
+                val fallback = buildFallbackItem(
+                    foundItem = foundItem,
+                    title = title,
+                    imageUrl = imageUrl,
+                    itemId = itemId,
+                    contentType = contentType
+                )
+                _state.update { it.copy(isLoading = false, item = fallback) }
             }
-            
-            val data = entry?.value ?: movieCatalog["dune"]!!
-            
-            // Si el itemId no es un ID técnico de Firebase, lo usamos para el título para que el nombre sea correcto
-            val isTechnicalId = itemId.startsWith("-") && itemId.length > 10
-            val finalTitle = if (entry != null) data.title else if (isTechnicalId) "Detalles de Película" else itemId
-
-            val mockItem = ItemDetail.Movie(
-                id = ItemId(itemId),
-                title = ItemTitle.of(finalTitle).getOrThrow(),
-                description = data.description,
-                imageUrl = data.imageUrl,
-                rating = data.rating,
-                totalReviews = (100..999).random() * 1000,
-                tags = data.tags,
-                parentsGuide = ParentsGuide("PG-13", listOf("Secuencias de acción", "Temas maduros")),
-                cast = data.cast,
-                reviews = listOf(Review("Cinephile", "Increíble experiencia.", 9, "2d ago")),
-                director = data.director,
-                duration = data.duration,
-                genres = listOf("Cine", "Drama"),
-                year = data.year
-            )
-
-            _state.update { it.copy(isLoading = false, item = mockItem) }
         }
+    }
+
+    private fun buildFromApiData(
+        foundItem: ContentItem?,
+        sourceData: ItemDetailSourceData,
+        title: String,
+        imageUrl: String?,
+        itemId: String,
+        contentType: ContentType
+    ): ItemDetail {
+        val id = ItemId(foundItem?.id?.value ?: itemId)
+        val itemTitle = ItemTitle.of(title).getOrThrow()
+
+        return when (contentType) {
+            ContentType.MOVIE -> ItemDetail.Movie(
+                id = id,
+                title = itemTitle,
+                description = sourceData.description,
+                imageUrl = imageUrl ?: sourceData.director?.let { null },
+                rating = sourceData.rating,
+                totalReviews = sourceData.totalReviews,
+                tags = sourceData.tags,
+                parentsGuide = ParentsGuide("PG-13", listOf("Acción", "Temas maduros")),
+                cast = sourceData.cast,
+                reviews = sourceData.reviews,
+                director = sourceData.director ?: "",
+                duration = sourceData.duration ?: "",
+                genres = sourceData.genres,
+                year = sourceData.year ?: ""
+            )
+            ContentType.SERIES -> ItemDetail.Series(
+                id = id,
+                title = itemTitle,
+                description = sourceData.description,
+                imageUrl = imageUrl,
+                rating = sourceData.rating,
+                totalReviews = sourceData.totalReviews,
+                tags = sourceData.tags,
+                parentsGuide = ParentsGuide("PG-13", listOf("Acción", "Temas maduros")),
+                cast = sourceData.cast,
+                reviews = sourceData.reviews,
+                creator = sourceData.creator ?: "",
+                episodes = 0,
+                seasons = sourceData.seasons ?: 1,
+                year = sourceData.year ?: ""
+            )
+            ContentType.BOOK -> ItemDetail.Book(
+                id = id,
+                title = itemTitle,
+                description = sourceData.description,
+                imageUrl = imageUrl,
+                rating = sourceData.rating,
+                totalReviews = sourceData.totalReviews,
+                tags = sourceData.tags,
+                parentsGuide = null,
+                cast = sourceData.cast,
+                reviews = sourceData.reviews,
+                author = sourceData.author ?: "",
+                pages = sourceData.pages ?: 0,
+                publisher = sourceData.publisher ?: ""
+            )
+            else -> buildFallbackItem(foundItem, title, imageUrl, itemId, contentType)
+        }
+    }
+
+    private fun buildFallbackItem(
+        foundItem: ContentItem?,
+        title: String,
+        imageUrl: String?,
+        itemId: String,
+        contentType: ContentType
+    ): ItemDetail {
+        val searchKey = title.lowercase().trim()
+        val entry = movieCatalog.entries.find { (key, _) ->
+            searchKey.contains(key) || key.contains(searchKey)
+        }
+
+        val data = entry?.value ?: movieCatalog["avatar: fire and ash"]!!
+        val mockTitle = if (entry != null) data.title else title
+
+        return ItemDetail.Movie(
+            id = ItemId(foundItem?.id?.value ?: itemId),
+            title = ItemTitle.of(foundItem?.title?.value ?: mockTitle).getOrThrow(),
+            description = data.description,
+            imageUrl = imageUrl ?: data.imageUrl,
+            rating = data.rating,
+            totalReviews = (100..999).random() * 100,
+            tags = data.tags,
+            parentsGuide = ParentsGuide("PG-13", listOf("Acción", "Temas maduros")),
+            cast = data.cast,
+            reviews = listOf(Review("User", "Increíble película.", 9, "Hoy")),
+            director = data.director,
+            duration = data.duration,
+            genres = data.tags,
+            year = data.year
+        )
     }
 }

@@ -10,6 +10,8 @@ class AddItemToListUseCase(private val repository: ContentListRepository) {
     suspend operator fun invoke(
         listId: ListId,
         title: ItemTitle,
-        type: ContentType
-    ): Result<ContentItem> = repository.addItem(listId, title, type)
+        type: ContentType,
+        imageUrl: String? = null,
+        sourceId: String? = null
+    ): Result<ContentItem> = repository.addItem(listId, title, type, imageUrl, sourceId)
 }

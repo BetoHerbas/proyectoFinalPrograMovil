@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.outlined.IosShare
@@ -31,8 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.ucb.proyectofinal.designsystem.components.PrimaryButton
-import com.ucb.proyectofinal.designsystem.components.SecondaryButton
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.ucb.proyectofinal.designsystem.theme.AppTheme
 import com.ucb.proyectofinal.lists.domain.model.CastMember
 import com.ucb.proyectofinal.lists.domain.model.ItemDetail
@@ -53,14 +55,15 @@ private val TextSecondary = Color(0xFF8FB3BC)
 
 @Composable
 fun ItemDetailScreen(
+    listId: String,
     itemId: String,
     onNavigateBack: () -> Unit,
     viewModel: ItemDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(itemId) {
-        viewModel.onIntent(ItemDetailIntent.LoadDetail(itemId))
+    LaunchedEffect(itemId, listId) {
+        viewModel.onIntent(ItemDetailIntent.LoadDetail(itemId, listId))
     }
 
     Box(
@@ -81,8 +84,7 @@ fun ItemDetailScreen(
             state.item?.let { item ->
                 ItemDetailContent(
                     item = item,
-                    onBack = onNavigateBack,
-                    onIntent = viewModel::onIntent
+                    onBack = onNavigateBack
                 )
             }
         }
@@ -92,8 +94,7 @@ fun ItemDetailScreen(
 @Composable
 private fun ItemDetailContent(
     item: ItemDetail,
-    onBack: () -> Unit,
-    onIntent: (ItemDetailIntent) -> Unit
+    onBack: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -117,8 +118,19 @@ private fun ItemDetailContent(
                     ParentsGuideCard(it)
                     Spacer(modifier = Modifier.height(24.dp))
                 }
-                ActionButtonsRow(onIntent = onIntent)
-                Spacer(modifier = Modifier.height(32.dp))
+                
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    IconButton(onClick = {}) {
+                        Icon(Icons.Outlined.IosShare, contentDescription = null, tint = Accent)
+                    }
+                    IconButton(onClick = {}) {
+                        Icon(Icons.Outlined.StarBorder, contentDescription = null, tint = Accent)
+                    }
+                }
+                Spacer(modifier = Modifier.height(12.dp))
             }
         }
 
@@ -140,15 +152,21 @@ private fun HeroHeader(item: ItemDetail, onBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(380.dp)
+            .height(450.dp)
+            .background(Color.Black)
     ) {
         AsyncImage(
-            model = item.imageUrl,
+            model = ImageRequest.Builder(LocalPlatformContext.current)
+                .data(item.imageUrl)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            error = Icons.Default.BrokenImage.let { null } // Placeholder logic
         )
 
+        // Capa de degradado para asegurar visibilidad de textos
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -156,7 +174,7 @@ private fun HeroHeader(item: ItemDetail, onBack: () -> Unit) {
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            BgDark.copy(alpha = 0.5f),
+                            BgDark.copy(alpha = 0.4f),
                             BgDark
                         )
                     )
@@ -169,7 +187,7 @@ private fun HeroHeader(item: ItemDetail, onBack: () -> Unit) {
                 .statusBarsPadding()
                 .padding(16.dp)
                 .align(Alignment.TopStart)
-                .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                .background(Color.Black.copy(alpha = 0.4f), CircleShape)
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
@@ -349,34 +367,6 @@ private fun ParentsGuideCard(guide: com.ucb.proyectofinal.lists.domain.model.Par
 }
 
 @Composable
-private fun ActionButtonsRow(onIntent: (ItemDetailIntent) -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        PrimaryButton(
-            text = "Watch Trailer",
-            onClick = { onIntent(ItemDetailIntent.WatchTrailer) },
-            modifier = Modifier.fillMaxWidth().height(56.dp)
-        )
-        SecondaryButton(
-            text = "Add to Watchlist",
-            onClick = { onIntent(ItemDetailIntent.AddToWatchlist) },
-            modifier = Modifier.fillMaxWidth().height(56.dp)
-        )
-        
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            IconButton(onClick = {}) {
-                Icon(Icons.Outlined.IosShare, contentDescription = null, tint = Accent)
-            }
-            IconButton(onClick = {}) {
-                Icon(Icons.Outlined.StarBorder, contentDescription = null, tint = Accent)
-            }
-        }
-    }
-}
-
-@Composable
 private fun SectionTitleRow(title: String, onSeeAll: () -> Unit) {
     Row(
         modifier = Modifier
@@ -418,7 +408,7 @@ private fun CastLazyRow(cast: List<CastMember>) {
                         .background(CardBg)
                 ) {
                     AsyncImage(
-                        model = member.imageUrl,
+                        model = member.imageUrl ?: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200",
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
