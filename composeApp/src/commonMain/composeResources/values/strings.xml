@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Proyecto Final</string>
-    <string name="hello_world">Hola Mundo!</string>
-    <string name="welcome_message">Bienvenido a la aplicación de prueba</string>
+    <string name="app_name">Final Project</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="welcome_message">Welcome to the test application</string>
 
     <!-- Screen Titles -->
     <string name="login_screen_title">Login Screen</string>
@@ -19,4 +19,156 @@
     <string name="onboarding_skip">Skip</string>
     <string name="onboarding_start">Start</string>
     <string name="onboarding_loading">Loading…</string>
+
+    <!-- Navigation / Bottom Bar -->
+    <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_add_list">Add list</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Auth: Login -->
+    <string name="login_header">Log in</string>
+    <string name="login_welcome">Welcome back</string>
+    <string name="login_subtitle">Connect with all your favorite content.</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_email_placeholder">hello@example.com</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_forgot_password">Forgot your password?</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_or_continue">Or continue with</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+    <string name="login_register">Sign Up</string>
+
+    <!-- Auth: Register -->
+    <string name="register_header">Sign Up</string>
+    <string name="register_title">Join the club</string>
+    <string name="register_subtitle">Organize your books, movies and series\nin one place.</string>
+    <string name="register_name_label">FULL NAME</string>
+    <string name="register_name_placeholder">e.g. Ana Garcia</string>
+    <string name="register_email_label">EMAIL</string>
+    <string name="register_email_placeholder">hello@example.com</string>
+    <string name="register_password_label">PASSWORD</string>
+    <string name="register_password_placeholder">Minimum 6 characters</string>
+    <string name="register_button">Create account</string>
+    <string name="register_or_continue">Or sign up with</string>
+    <string name="register_has_account">Already have an account?</string>
+    <string name="register_login">Sign in</string>
+
+    <!-- Content Lists -->
+    <string name="lists_title">My Lists</string>
+    <string name="lists_subtitle">Organize your world</string>
+    <string name="lists_search_placeholder">Search my lists...</string>
+    <string name="lists_filter_all">All</string>
+    <string name="lists_recent">Recent</string>
+    <string name="lists_see_all">SEE ALL</string>
+    <string name="lists_empty">No lists found</string>
+    <string name="lists_items_count">%1$d items</string>
+
+    <!-- List Detail -->
+    <string name="detail_public_list">PUBLIC LIST</string>
+    <string name="detail_private_list">PRIVATE LIST</string>
+    <string name="detail_completed_count">%1$d of %2$d Completed</string>
+    <string name="detail_filter_all">All</string>
+    <string name="detail_filter_pending">Pending</string>
+    <string name="detail_filter_completed">Completed</string>
+    <string name="detail_empty_all">No items. Add one!</string>
+    <string name="detail_empty_completed">No completed items</string>
+    <string name="detail_empty_pending">All items completed! 🎉</string>
+    <string name="detail_status_completed">Completed</string>
+    <string name="detail_status_pending">Pending</string>
+    <string name="detail_no_rating">Not rated</string>
+    <string name="detail_rating_format">%1$d/5</string>
+    <string name="detail_add_item">Add item</string>
+
+    <!-- Add Item -->
+    <string name="add_item_title">ADD TO %1$s</string>
+    <string name="add_item_search_button">Search</string>
+    <string name="add_item_search_placeholder">Search the universe...</string>
+    <string name="add_item_top_10">Top 10 %1$s</string>
+    <string name="add_item_results">Results %1$s</string>
+    <string name="add_item_no_results">No results found for %1$s</string>
+    <string name="add_item_cover">Cover of %1$s</string>
+
+    <!-- Create/Edit List -->
+    <string name="create_list_cancel">Cancel</string>
+    <string name="create_list_title">New List</string>
+    <string name="create_list_save">Save</string>
+    <string name="create_list_name_label">LIST NAME</string>
+    <string name="create_list_name_placeholder">e.g. My favorite books 2024</string>
+    <string name="create_list_desc_label">DESCRIPTION</string>
+    <string name="create_list_desc_placeholder">What is this list about? Add some details...</string>
+    <string name="create_list_category">Category</string>
+    <string name="create_list_default_cover">Default cover: %1$s</string>
+    <string name="create_list_private">Private List</string>
+    <string name="create_list_private_desc">Only you can see this list</string>
+    <string name="edit_list_button">Edit</string>
+
+    <!-- Explore -->
+    <string name="explore_title">Explore</string>
+    <string name="explore_subtitle">Discover public lists</string>
+    <string name="explore_search_placeholder">Search public lists...</string>
+    <string name="explore_empty">No public lists available</string>
+    <string name="explore_elements_count">%1$d elements</string>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_subtitle">Your saved lists</string>
+    <string name="favorites_empty_title">No favorites yet</string>
+    <string name="favorites_empty_subtitle">Explore public lists and save them\nhere for easy access</string>
+    <string name="favorites_remove">Remove from favorites</string>
+    <string name="favorites_add">Add to favorites</string>
+    <string name="favorites_elements_info">%1$d elements · %2$s</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_default_name">User</string>
+    <string name="profile_logout">Log out</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_language">Language</string>
+
+    <!-- Content Types - Singular -->
+    <string name="type_movie">Movie</string>
+    <string name="type_series">Series</string>
+    <string name="type_book">Book</string>
+    <string name="type_videogame">Videogame</string>
+
+    <!-- Content Types - Plural -->
+    <string name="type_movie_plural">Movies</string>
+    <string name="type_series_plural">Series</string>
+    <string name="type_book_plural">Books</string>
+    <string name="type_videogame_plural">Videogames</string>
+
+    <!-- Content Types - Subtitles (ContentListsScreen cards) -->
+    <string name="type_movie_subtitle">Movie night</string>
+    <string name="type_series_subtitle">Binge time</string>
+    <string name="type_book_subtitle">Next reads</string>
+    <string name="type_videogame_subtitle">To complete</string>
+
+    <!-- Content Types - TV sublabel (ListDetailScreen) -->
+    <string name="type_series_tv">TV Series</string>
+
+    <!-- Explore subtitles -->
+    <string name="explore_movie_subtitle">Movie list</string>
+    <string name="explore_book_subtitle">Book list</string>
+    <string name="explore_videogame_subtitle">Videogame list</string>
+    <string name="explore_series_subtitle">Series list</string>
+
+    <!-- Common -->
+    <string name="common_back">Back</string>
+    <string name="common_add">Add</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_edit">Edit</string>
+    <string name="common_mark_seen">Mark as seen</string>
+    <string name="common_mark_pending">Mark as pending</string>
+
+    <!-- Maintenance -->
+    <string name="maintenance_loading">Starting application…</string>
+    <string name="maintenance_title">Under Maintenance</string>
+    <string name="maintenance_message">We are improving the application.\nCome back in a moment. 🚀</string>
+    <string name="maintenance_auto_recover">The app will recover automatically\nwhen maintenance is finished ✨</string>
+    <string name="maintenance_finished">Maintenance finished! Services have been restored successfully</string>
 </resources>

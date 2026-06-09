@@ -19,4 +19,156 @@
     <string name="onboarding_skip">Omitir</string>
     <string name="onboarding_start">Iniciar</string>
     <string name="onboarding_loading">Cargando…</string>
+
+    <!-- Navigation / Bottom Bar -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_explore">Explorar</string>
+    <string name="nav_add_list">Crear lista</string>
+    <string name="nav_favorites">Favoritos</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Auth: Login -->
+    <string name="login_header">Iniciar Sesión</string>
+    <string name="login_welcome">Bienvenido de nuevo</string>
+    <string name="login_subtitle">Conéctate con todo tu contenido favorito.</string>
+    <string name="login_email_label">Correo</string>
+    <string name="login_email_placeholder">hola@ejemplo.com</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_or_continue">O continúa con</string>
+    <string name="login_no_account">¿No tienes cuenta?</string>
+    <string name="login_register">Registrate</string>
+
+    <!-- Auth: Register -->
+    <string name="register_header">Registrarse</string>
+    <string name="register_title">Únete al club</string>
+    <string name="register_subtitle">Organiza tus libros, películas y series\nen un solo lugar.</string>
+    <string name="register_name_label">NOMBRE COMPLETO</string>
+    <string name="register_name_placeholder">ej. Ana García</string>
+    <string name="register_email_label">CORREO ELECTRÓNICO</string>
+    <string name="register_email_placeholder">hola@ejemplo.com</string>
+    <string name="register_password_label">CONTRASEÑA</string>
+    <string name="register_password_placeholder">Mínimo 6 caracteres</string>
+    <string name="register_button">Crear cuenta</string>
+    <string name="register_or_continue">O regístrate con</string>
+    <string name="register_has_account">¿Ya tienes cuenta?</string>
+    <string name="register_login">Inicia sesión</string>
+
+    <!-- Content Lists -->
+    <string name="lists_title">Mis Listas</string>
+    <string name="lists_subtitle">Organiza tu mundo</string>
+    <string name="lists_search_placeholder">Buscar en mis listas...</string>
+    <string name="lists_filter_all">Todos</string>
+    <string name="lists_recent">Recientes</string>
+    <string name="lists_see_all">VER TODO</string>
+    <string name="lists_empty">No se encontraron listas</string>
+    <string name="lists_items_count">%1$d elementos</string>
+
+    <!-- List Detail -->
+    <string name="detail_public_list">LISTA PÚBLICA</string>
+    <string name="detail_private_list">LISTA PRIVADA</string>
+    <string name="detail_completed_count">%1$d de %2$d Completados</string>
+    <string name="detail_filter_all">Todos</string>
+    <string name="detail_filter_pending">Pendientes</string>
+    <string name="detail_filter_completed">Completados</string>
+    <string name="detail_empty_all">No hay elementos. ¡Añade uno!</string>
+    <string name="detail_empty_completed">No hay elementos completados</string>
+    <string name="detail_empty_pending">¡Todos los elementos completados! 🎉</string>
+    <string name="detail_status_completed">Completado</string>
+    <string name="detail_status_pending">Pendiente</string>
+    <string name="detail_no_rating">Sin calificación</string>
+    <string name="detail_rating_format">%1$d/5</string>
+    <string name="detail_add_item">Añadir item</string>
+
+    <!-- Add Item -->
+    <string name="add_item_title">AÑADIR A %1$s</string>
+    <string name="add_item_search_button">Buscar</string>
+    <string name="add_item_search_placeholder">Buscar en el universo...</string>
+    <string name="add_item_top_10">Top 10 de %1$s</string>
+    <string name="add_item_results">Resultados de %1$s</string>
+    <string name="add_item_no_results">No se encontraron resultados para %1$s</string>
+    <string name="add_item_cover">Portada de %1$s</string>
+
+    <!-- Create/Edit List -->
+    <string name="create_list_cancel">Cancelar</string>
+    <string name="create_list_title">Nueva Lista</string>
+    <string name="create_list_save">Guardar</string>
+    <string name="create_list_name_label">NOMBRE DE LA LISTA</string>
+    <string name="create_list_name_placeholder">ej. Mis libros favoritos 2024</string>
+    <string name="create_list_desc_label">DESCRIPCIÓN</string>
+    <string name="create_list_desc_placeholder">¿De qué trata esta lista? Añade algunos detalles...</string>
+    <string name="create_list_category">Categoría</string>
+    <string name="create_list_default_cover">Portada predeterminada: %1$s</string>
+    <string name="create_list_private">Lista Privada</string>
+    <string name="create_list_private_desc">Solo tú puedes ver esta lista</string>
+    <string name="edit_list_button">Editar</string>
+
+    <!-- Explore -->
+    <string name="explore_title">Explorar</string>
+    <string name="explore_subtitle">Descubre listas públicas</string>
+    <string name="explore_search_placeholder">Buscar listas públicas...</string>
+    <string name="explore_empty">No hay listas públicas disponibles</string>
+    <string name="explore_elements_count">%1$d elementos</string>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favoritos</string>
+    <string name="favorites_subtitle">Tus listas guardadas</string>
+    <string name="favorites_empty_title">Aún no hay favoritos</string>
+    <string name="favorites_empty_subtitle">Explora listas públicas y guárdalas\naquí para un acceso fácil</string>
+    <string name="favorites_remove">Quitar de favoritos</string>
+    <string name="favorites_add">Añadir a favoritos</string>
+    <string name="favorites_elements_info">%1$d elementos · %2$s</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Perfil</string>
+    <string name="profile_default_name">Usuario</string>
+    <string name="profile_logout">Cerrar sesión</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_dark_mode">Modo oscuro</string>
+    <string name="settings_language">Idioma</string>
+
+    <!-- Content Types - Singular -->
+    <string name="type_movie">Película</string>
+    <string name="type_series">Serie</string>
+    <string name="type_book">Libro</string>
+    <string name="type_videogame">Videojuego</string>
+
+    <!-- Content Types - Plural -->
+    <string name="type_movie_plural">Películas</string>
+    <string name="type_series_plural">Series</string>
+    <string name="type_book_plural">Libros</string>
+    <string name="type_videogame_plural">Videojuegos</string>
+
+    <!-- Content Types - Subtitles (ContentListsScreen cards) -->
+    <string name="type_movie_subtitle">Noche de pelis</string>
+    <string name="type_series_subtitle">Maratón</string>
+    <string name="type_book_subtitle">Próximas lecturas</string>
+    <string name="type_videogame_subtitle">Por completar</string>
+
+    <!-- Content Types - TV sublabel (ListDetailScreen) -->
+    <string name="type_series_tv">Serie de TV</string>
+
+    <!-- Explore subtitles -->
+    <string name="explore_movie_subtitle">Lista de películas</string>
+    <string name="explore_book_subtitle">Lista de libros</string>
+    <string name="explore_videogame_subtitle">Lista de videojuegos</string>
+    <string name="explore_series_subtitle">Lista de series</string>
+
+    <!-- Common -->
+    <string name="common_back">Atrás</string>
+    <string name="common_add">Añadir</string>
+    <string name="common_delete">Eliminar</string>
+    <string name="common_edit">Editar</string>
+    <string name="common_mark_seen">Marcar como visto</string>
+    <string name="common_mark_pending">Marcar como pendiente</string>
+
+    <!-- Maintenance -->
+    <string name="maintenance_loading">Iniciando aplicación…</string>
+    <string name="maintenance_title">En Mantenimiento</string>
+    <string name="maintenance_message">Estamos mejorando la aplicación.\nVuelve en unos momentos. 🚀</string>
+    <string name="maintenance_auto_recover">La app se recuperará automáticamente\ncuando el mantenimiento termine ✨</string>
+    <string name="maintenance_finished">¡Mantenimiento terminado! Los servicios se han restablecido correctamente</string>
 </resources>

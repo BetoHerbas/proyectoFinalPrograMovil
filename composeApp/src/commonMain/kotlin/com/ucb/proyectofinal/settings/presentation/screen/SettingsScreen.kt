@@ -17,6 +17,12 @@ import com.ucb.proyectofinal.navigation.BottomTab
 import com.ucb.proyectofinal.settings.presentation.intent.SettingsIntent
 import com.ucb.proyectofinal.settings.presentation.viewmodel.SettingsViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.common_back
+import proyectofinalprogramovil.composeapp.generated.resources.settings_title
+import proyectofinalprogramovil.composeapp.generated.resources.settings_dark_mode
+import proyectofinalprogramovil.composeapp.generated.resources.settings_language
 
 @Composable
 fun SettingsScreen(
@@ -51,9 +57,9 @@ fun SettingsScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onNavigateBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.White)
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.common_back), tint = Color.White)
                 }
-                Text("Ajustes", color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(Res.string.settings_title), color = Color.White, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
             }
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -63,7 +69,7 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Modo oscuro", color = Color.White)
+                Text(stringResource(Res.string.settings_dark_mode), color = Color.White)
                 Switch(
                     checked = state.isDarkMode,
                     onCheckedChange = { viewModel.onIntent(SettingsIntent.ToggleDarkMode(it)) },
@@ -74,7 +80,7 @@ fun SettingsScreen(
             HorizontalDivider(color = Color.Gray.copy(alpha = 0.2f), modifier = Modifier.padding(vertical = 16.dp))
 
             // Language selection
-            Text("Idioma", color = Color.White, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(Res.string.settings_language), color = Color.White, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 listOf("es" to "Español", "en" to "English", "fr" to "Français").forEach { (code, label) ->

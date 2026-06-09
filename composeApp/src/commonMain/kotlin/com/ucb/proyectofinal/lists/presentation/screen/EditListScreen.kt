@@ -20,6 +20,16 @@ import com.ucb.proyectofinal.lists.presentation.effect.EditListEffect
 import com.ucb.proyectofinal.lists.presentation.intent.EditListIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.EditListViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_cancel
+import proyectofinalprogramovil.composeapp.generated.resources.edit_list_button
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_name_label
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_name_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_desc_label
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_desc_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_private
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_private_desc
 
 // ─── Color palette (consistent with the app) ───
 private val BgGradientStart = Color(0xFF0A1D26)
@@ -109,7 +119,7 @@ fun EditListScreen(
                 ) {
                     TextButton(onClick = onNavigateBack) {
                         Text(
-                            "Cancelar",
+                            stringResource(Res.string.create_list_cancel),
                             color = TextSecondary,
                             style = MaterialTheme.typography.labelLarge
                         )
@@ -134,7 +144,7 @@ fun EditListScreen(
                             Spacer(modifier = Modifier.width(6.dp))
                         }
                         Text(
-                            "Editar",
+                            stringResource(Res.string.edit_list_button),
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -144,7 +154,7 @@ fun EditListScreen(
 
                 // ─── Name field ───
                 Text(
-                    "NOMBRE DE LA LISTA",
+                    stringResource(Res.string.create_list_name_label),
                     color = TextLabel,
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -152,7 +162,7 @@ fun EditListScreen(
                 OutlinedTextField(
                     value = state.name,
                     onValueChange = { viewModel.onIntent(EditListIntent.UpdateName(it)) },
-                    placeholder = { Text("Ej. Mis libros favoritos 2024", color = TextMuted) },
+                    placeholder = { Text(stringResource(Res.string.create_list_name_placeholder), color = TextMuted) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(0.dp),
@@ -176,7 +186,7 @@ fun EditListScreen(
 
                 // ─── Description field ───
                 Text(
-                    "DESCRIPCIÓN",
+                    stringResource(Res.string.create_list_desc_label),
                     color = TextLabel,
                     style = MaterialTheme.typography.labelSmall
                 )
@@ -186,7 +196,7 @@ fun EditListScreen(
                     onValueChange = { viewModel.onIntent(EditListIntent.UpdateDescription(it)) },
                     placeholder = {
                         Text(
-                            "¿De qué trata esta lista? Añade algunos detalles...",
+                            stringResource(Res.string.create_list_desc_placeholder),
                             color = TextMuted
                         )
                     },
@@ -225,12 +235,12 @@ fun EditListScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            "Lista Privada",
+                            stringResource(Res.string.create_list_private),
                             color = TextPrimary,
                             style = MaterialTheme.typography.titleSmall
                         )
                         Text(
-                            "Solo tú podrás ver esta lista",
+                            stringResource(Res.string.create_list_private_desc),
                             color = SubtitleColor,
                             style = MaterialTheme.typography.bodySmall
                         )

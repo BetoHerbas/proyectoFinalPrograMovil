@@ -28,6 +28,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.nav_home
+import proyectofinalprogramovil.composeapp.generated.resources.nav_explore
+import proyectofinalprogramovil.composeapp.generated.resources.nav_add_list
+import proyectofinalprogramovil.composeapp.generated.resources.nav_favorites
+import proyectofinalprogramovil.composeapp.generated.resources.nav_settings
+
 enum class BottomTab { HOME, EXPLORE, FAVORITES, SETTINGS }
 
 @Composable
@@ -49,13 +57,13 @@ fun AppBottomBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             BottomNavItem(
-                label = "Inicio",
+                label = stringResource(Res.string.nav_home),
                 icon = Icons.Default.Home,
                 selected = currentTab == BottomTab.HOME,
                 onClick = onNavigateToHome
             )
             BottomNavItem(
-                label = "Explorar",
+                label = stringResource(Res.string.nav_explore),
                 icon = Icons.Default.Search,
                 selected = currentTab == BottomTab.EXPLORE,
                 onClick = onNavigateToExplore
@@ -66,16 +74,16 @@ fun AppBottomBar(
                 contentColor = Color(0xFF043F40),
                 modifier = Modifier.size(58.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar lista")
+                Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.nav_add_list))
             }
             BottomNavItem(
-                label = "Favoritos",
+                label = stringResource(Res.string.nav_favorites),
                 icon = Icons.Default.Favorite,
                 selected = currentTab == BottomTab.FAVORITES,
                 onClick = onNavigateToFavorites
             )
             BottomNavItem(
-                label = "Ajustes",
+                label = stringResource(Res.string.nav_settings),
                 icon = Icons.Default.Settings,
                 selected = currentTab == BottomTab.SETTINGS,
                 onClick = onNavigateToSettings
