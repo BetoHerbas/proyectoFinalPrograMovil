@@ -11,6 +11,7 @@ import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.ucb.proyectofinal.settings.data.AppSettingsStore
 import com.ucb.proyectofinal.worker.ABTestingScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -201,15 +202,19 @@ actual class RemoteConfigRepository actual constructor() {
 
         suspend fun fetchAndEmit() {
             try { remoteConfig.fetchAndActivate().await() } catch (_: Exception) {}
-            trySend(remoteConfig.getBoolean("mantainence"))
+            val isMaintenance = remoteConfig.getBoolean("mantainence")
+            AppSettingsStore.setUnderMaintenance(isMaintenance)
+            trySend(isMaintenance)
         }
 
         fetchAndEmit()
 
         val listener = object : ConfigUpdateListener {
             override fun onUpdate(configUpdate: ConfigUpdate) {
-                remoteConfig.activate().addOnSuccessListener {
-                    trySend(remoteConfig.getBoolean("mantainence"))
+                remoteConfig.fetchAndActivate().addOnCompleteListener {
+                    val isMaintenance = remoteConfig.getBoolean("mantainence")
+                    AppSettingsStore.setUnderMaintenance(isMaintenance)
+                    trySend(isMaintenance)
                 }
             }
             override fun onError(error: FirebaseRemoteConfigException) {}

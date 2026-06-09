@@ -29,7 +29,9 @@ fun ContentItemEntity.toDomain(): ContentItem = ContentItem(
     title = ItemTitle(title),
     type = ContentType.valueOf(type),
     seen = seen,
-    rating = rating?.let { Rating(it) }
+    rating = rating?.let { Rating(it) },
+    imageUrl = imageUrl,
+    sourceId = sourceId
 )
 
 fun ContentItem.toEntity(): ContentItemEntity = ContentItemEntity(
@@ -38,5 +40,7 @@ fun ContentItem.toEntity(): ContentItemEntity = ContentItemEntity(
     title = title.value,
     type = type.name,
     seen = seen,
-    rating = rating?.value
+    rating = rating?.value,
+    imageUrl = imageUrl,
+    sourceId = sourceId
 )

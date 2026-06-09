@@ -1,9 +1,10 @@
 package com.ucb.proyectofinal.fakes
 
+import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList
-import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentType
+import com.ucb.proyectofinal.lists.domain.model.ItemDetailSourceData
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
@@ -87,10 +88,21 @@ class FakeContentListRepository : ContentListRepository {
     override suspend fun addItem(
         listId: ListId,
         title: ItemTitle,
-        type: ContentType
+        type: ContentType,
+        imageUrl: String?,
+        sourceId: String?
     ): Result<ContentItem> {
         if (shouldFail) return Result.failure(Exception(failureMessage))
-        val item = ContentItem(ItemId("item-${idCounter++}"), listId, title, type, false, null)
+        val item = ContentItem(
+            id = ItemId("item-${idCounter++}"),
+            listId = listId,
+            title = title,
+            type = type,
+            seen = false,
+            rating = null,
+            imageUrl = imageUrl,
+            sourceId = sourceId
+        )
         val current = _items.value[listId.value] ?: emptyList()
         _items.value = _items.value + (listId.value to current + item)
         return Result.success(item)
@@ -149,5 +161,22 @@ class FakeContentListRepository : ContentListRepository {
         val current = _items.value[item.listId.value] ?: emptyList()
         _items.value = _items.value + (item.listId.value to current.filter { it.id != item.id })
         return Result.success(Unit)
+    }
+
+    override suspend fun fetchDetail(
+        sourceId: String,
+        type: ContentType
+    ): Result<ItemDetailSourceData> {
+        if (shouldFail) return Result.failure(Exception(failureMessage))
+        return Result.success(
+            ItemDetailSourceData(
+                description = "Fake description for $sourceId",
+                rating = 8.0,
+                tags = listOf("Fake", type.name),
+                cast = emptyList(),
+                reviews = emptyList(),
+                year = "2024"
+            )
+        )
     }
 }

@@ -227,6 +227,8 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
         "type" to type.name,
         "seen" to seen,
         "rating" to rating?.value,
+        "imageUrl" to imageUrl,
+        "sourceId" to sourceId,
         "updatedAt" to System.currentTimeMillis()
     )
 
@@ -237,6 +239,8 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
         val seen = child("seen").getValue(Boolean::class.java) ?: false
         val ratingValue = child("rating").getValue(Int::class.java)
         val listId = child("listId").getValue(String::class.java) ?: defaultListId
+        val imageUrl = child("imageUrl").getValue(String::class.java)
+        val sourceId = child("sourceId").getValue(String::class.java)
         val contentType = runCatching { ContentType.valueOf(type) }.getOrNull() ?: return null
 
         return ContentItem(
@@ -245,7 +249,9 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
             title = ItemTitle(title),
             type = contentType,
             seen = seen,
-            rating = ratingValue?.let { Rating(it) }
+            rating = ratingValue?.let { Rating(it) },
+            imageUrl = imageUrl,
+            sourceId = sourceId
         )
     }
 }

@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Database(
     entities = [TodoEntity::class, ContentListEntity::class, ContentItemEntity::class, UserEntity::class],
-    version = 3
+    version = 5
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
