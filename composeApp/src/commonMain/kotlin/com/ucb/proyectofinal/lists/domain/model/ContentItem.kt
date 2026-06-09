@@ -11,5 +11,7 @@ data class ContentItem(
     val title: ItemTitle,
     val type: ContentType,
     val seen: Boolean,
-    val rating: Rating?
+    val rating: Rating?,
+    val imageUrl: String? = null,
+    val sourceId: String? = null
 )

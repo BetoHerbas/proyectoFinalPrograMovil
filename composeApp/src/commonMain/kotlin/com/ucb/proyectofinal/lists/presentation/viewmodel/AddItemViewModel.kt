@@ -109,7 +109,9 @@ class AddItemViewModel(
             addItemToListUseCase(
                 listId = ListId(current.listId),
                 title = title.getOrThrow(),
-                type = current.listType
+                type = current.listType,
+                imageUrl = item.imageUrl,
+                sourceId = item.sourceId
             )
                 .onSuccess {
                     _state.update { it.copy(addingItemId = null) }

@@ -3,6 +3,7 @@ package com.ucb.proyectofinal.lists.presentation.screen
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -86,11 +87,11 @@ fun ListDetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAddItem: () -> Unit,
     onNavigateToEdit: () -> Unit,
+    onNavigateToItemDetail: (String) -> Unit,
     viewModel: ListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    var selectedItem by remember { mutableStateOf<ContentItem?>(null) }
 
     LaunchedEffect(listId) {
         viewModel.onIntent(
@@ -386,17 +387,13 @@ fun ListDetailScreen(
                         onToggleSeen = { viewModel.onIntent(ListDetailIntent.ToggleSeen(item)) },
                         onRate = { rating -> viewModel.onIntent(ListDetailIntent.RateItem(item, rating)) },
                         onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) },
-                        onClick = { selectedItem = item }
+                        onClick = { onNavigateToItemDetail(item.id.value) }
                     )
                 }
             }
         }
     }
 
-    // ─── Item detail bottom sheet ───
-    selectedItem?.let { item ->
-        ItemDetailSheet(item = item, onDismiss = { selectedItem = null })
-    }
 }
 
 // ─── Filter chip component ───
@@ -437,7 +434,7 @@ private fun ContentItemCard(
     onToggleSeen: () -> Unit,
     onRate: (Int) -> Unit,
     onDelete: () -> Unit,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -448,7 +445,9 @@ private fun ContentItemCard(
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier
+                .padding(12.dp)
+                .clickable { onClick() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Circular checkbox
@@ -594,82 +593,4 @@ private fun categoryChipColor(type: ContentType): Color = when (type) {
     ContentType.VIDEOGAME -> Color(0xFFFFB74D)
 }
 
-// ─── Item detail bottom sheet ───
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        containerColor = Color(0xFF1A2E3A),
-        contentColor = TextPrimary
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 40.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = typeEmoji(item.type),
-                fontSize = 56.sp
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = item.title.value,
-                color = TextPrimary,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = categoryChipColor(item.type).copy(alpha = 0.2f)
-            ) {
-                Text(
-                    text = categoryLabel(item.type),
-                    color = categoryChipColor(item.type),
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = if (item.seen) "✅" else "⏳",
-                        fontSize = 28.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = if (item.seen) stringResource(Res.string.detail_status_completed) else stringResource(Res.string.detail_status_pending),
-                        color = if (item.seen) Accent else TextMuted,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Row {
-                        (1..5).forEach { star ->
-                            Text(
-                                text = if ((item.rating?.value ?: 0) >= star) "★" else "☆",
-                                color = if ((item.rating?.value ?: 0) >= star) Accent else TextMuted,
-                                fontSize = 22.sp
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = item.rating?.let { stringResource(Res.string.detail_rating_format, it.value) } ?: stringResource(Res.string.detail_no_rating),
-                        color = TextMuted,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-    }
-}
+
