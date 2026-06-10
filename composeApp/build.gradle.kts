@@ -124,6 +124,17 @@ kotlin {
         androidInstrumentedTest.dependencies {
             implementation(libs.ui.test.junit4)
         }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.junit)
+                implementation(libs.mockk)
+                implementation(libs.robolectric)
+                implementation(libs.ui.test.junit4)
+                implementation(libs.androidx.compose.ui.test.manifest)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.koin.test)
+            }
+        }
         
     }
 }
@@ -161,6 +172,13 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
     }
     buildTypes {
