@@ -3,6 +3,7 @@ package com.ucb.proyectofinal.lists.presentation.screen
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -61,7 +62,7 @@ import proyectofinalprogramovil.composeapp.generated.resources.type_series_tv
 import proyectofinalprogramovil.composeapp.generated.resources.type_book
 import proyectofinalprogramovil.composeapp.generated.resources.type_videogame
 
-// ─── Color palette (consistent with the rest of the app) ───
+// ─── Estilos Locales Consistentes ───
 private val BgDark = Color(0xFF0B1D29)
 private val BgTeal = Color(0xFF0A3736)
 private val BgDeep = Color(0xFF0D1B2D)
@@ -71,9 +72,6 @@ private val CardBg = Color(0xFF1A2421)
 private val TextPrimary = Color(0xFFE8FAFF)
 private val TextSecondary = Color(0xFF8FB3BC)
 private val TextMuted = Color(0xFF6F94A2)
-private val ChipBg = Color(0xFF1C2E38)
-private val ChipSelectedBg = Color(0xFF22F2D4)
-private val ChipSelectedText = Color(0xFF043F40)
 
 @Composable
 fun ListDetailScreen(
@@ -86,6 +84,7 @@ fun ListDetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAddItem: () -> Unit,
     onNavigateToEdit: () -> Unit,
+    onNavigateToItemDetail: (String) -> Unit,
     viewModel: ListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -104,26 +103,6 @@ fun ListDetailScreen(
             )
         )
     }
-
-    LaunchedEffect(Unit) {
-        viewModel.effects.collect { effect ->
-            when (effect) {
-                is ListDetailEffect.ShowError -> snackbarHostState.showSnackbar(effect.message)
-                is ListDetailEffect.ShowSuccess -> snackbarHostState.showSnackbar(effect.message)
-                is ListDetailEffect.NavigateBack -> onNavigateBack()
-            }
-        }
-    }
-
-    // Derived values
-    val displayName = state.listName.ifEmpty { listName }
-    val displayDescription = state.description.ifEmpty { description }
-    val contentType = runCatching { ContentType.valueOf(state.listType.ifEmpty { listType }) }
-        .getOrDefault(ContentType.MOVIE)
-    val totalItems = state.items.size
-    val completedItems = state.items.count { it.seen }
-    val progress = if (totalItems > 0) completedItems.toFloat() / totalItems else 0f
-    val progressPercent = (progress * 100).toInt()
 
     val filteredItems = remember(state.items, state.selectedFilter) {
         when (state.selectedFilter) {
@@ -157,25 +136,18 @@ fun ListDetailScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(BgDark, BgTeal, BgDeep)
-                    )
-                )
+                .background(Brush.linearGradient(colors = listOf(BgDark, BgTeal, BgDeep)))
                 .padding(padding),
             contentPadding = PaddingValues(bottom = 92.dp)
         ) {
-            // ─── Top bar ───
             item {
                 Spacer(modifier = Modifier.statusBarsPadding())
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(onClick = onNavigateBack) {
+<<<<<<< HEAD
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(Res.string.common_back),
@@ -190,22 +162,20 @@ fun ListDetailScreen(
                                 tint = AccentBright
                             )
                         }
+=======
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = TextPrimary)
+                    }
+                    IconButton(onClick = onNavigateToEdit) {
+                        Icon(Icons.Default.Edit, null, tint = AccentBright)
+>>>>>>> origin/pantallaDetalles
                     }
                 }
             }
 
-            // ─── Cover image area with title overlay ───
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(220.dp)
-                        .clip(RoundedCornerShape(18.dp))
-                        .background(coverGradient(contentType))
-                ) {
-                    // Category emoji large in center
+                Column(modifier = Modifier.padding(16.dp)) {
                     Text(
+<<<<<<< HEAD
                         text = typeEmoji(contentType),
                         fontSize = 56.sp,
                         modifier = Modifier.align(Alignment.Center)
@@ -289,10 +259,17 @@ fun ListDetailScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                         lineHeight = 22.sp
+=======
+                        text = state.listName.ifEmpty { listName },
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Bold
+>>>>>>> origin/pantallaDetalles
                     )
                 }
             }
 
+<<<<<<< HEAD
             // ─── Progress bar ───
             item {
                 Column(
@@ -393,7 +370,7 @@ fun ListDetailScreen(
                         onToggleSeen = { viewModel.onIntent(ListDetailIntent.ToggleSeen(item)) },
                         onRate = { rating -> viewModel.onIntent(ListDetailIntent.RateItem(item, rating)) },
                         onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) },
-                        onClick = { selectedItem = item }
+                        onClick = { onNavigateToItemDetail(item.title.value) }
                     )
                 }
             }
@@ -406,7 +383,6 @@ fun ListDetailScreen(
     }
 }
 
-// ─── Filter chip component ───
 @Composable
 private fun FilterChipItem(
     label: String,
@@ -447,22 +423,13 @@ private fun ContentItemCard(
     onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 5.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp).clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         onClick = onClick
     ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Circular checkbox
-            IconButton(
-                onClick = onToggleSeen,
-                modifier = Modifier.size(36.dp)
-            ) {
+        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onToggleSeen, modifier = Modifier.size(36.dp)) {
                 Icon(
                     imageVector = if (item.seen) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
                     contentDescription = if (item.seen) stringResource(Res.string.common_mark_pending) else stringResource(Res.string.common_mark_seen),
@@ -470,10 +437,7 @@ private fun ContentItemCard(
                     modifier = Modifier.size(24.dp)
                 )
             }
-
             Spacer(modifier = Modifier.width(8.dp))
-
-            // Title + type
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = item.title.value,
@@ -484,7 +448,7 @@ private fun ContentItemCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = typeSublabel(item.type),
+                    text = "Ver detalles",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -601,82 +565,3 @@ private fun categoryChipColor(type: ContentType): Color = when (type) {
     ContentType.VIDEOGAME -> Color(0xFFFFB74D)
 }
 
-// ─── Item detail bottom sheet ───
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface,
-        contentColor = MaterialTheme.colorScheme.onSurface
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .padding(bottom = 40.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = typeEmoji(item.type),
-                fontSize = 56.sp
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = item.title.value,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = categoryChipColor(item.type).copy(alpha = 0.2f)
-            ) {
-                Text(
-                    text = categoryLabel(item.type),
-                    color = categoryChipColor(item.type),
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = if (item.seen) "✅" else "⏳",
-                        fontSize = 28.sp
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = if (item.seen) stringResource(Res.string.detail_status_completed) else stringResource(Res.string.detail_status_pending),
-                        color = if (item.seen) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Row {
-                        (1..5).forEach { star ->
-                            Text(
-                                text = if ((item.rating?.value ?: 0) >= star) "★" else "☆",
-                                color = if ((item.rating?.value ?: 0) >= star) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 22.sp
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = item.rating?.let { stringResource(Res.string.detail_rating_format, it.value) } ?: stringResource(Res.string.detail_no_rating),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-    }
-}
