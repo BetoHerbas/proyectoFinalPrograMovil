@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Loco xml export: Android strings
+ Project: Final-project-mobile-programming
+ Locale: es-BO, Spanish (Bolivia)
+ Exported by: Luzhania Cespedes Arancibia
+ Exported at: Wed, 10 Jun 2026 14:22:23 -0400
+-->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Proyecto Final</string>
     <string name="hello_world">¡Hola Mundo!</string>
     <string name="welcome_message">Bienvenido a la aplicación de prueba</string>
-
     <!-- Screen Titles -->
     <string name="login_screen_title">Pantalla de Login</string>
     <string name="register_screen_title">Pantalla de Registro</string>
@@ -13,21 +19,35 @@
     <string name="list_detail_screen_title">Pantalla de Detalle de Lista</string>
     <string name="profile_screen_title">Pantalla de Perfil</string>
     <string name="settings_screen_title">Pantalla de Ajustes</string>
-
+    <string name="explore"></string>
+    <string name="sign_in_title"></string>
+    <string name="sign_in_email"></string>
+    <string name="sign_in_password"></string>
+    <string name="sign_in_btn"></string>
+    <string name="login_title"></string>
+    <string name="login_email"></string>
+    <string name="login_password"></string>
+    <string name="login_btn"></string>
+    <string name="github_find"></string>
+    <string name="github_title"></string>
+    <string name="github_text_hint"></string>
+    <string name="portfolio_title"></string>
+    <string name="portfolio_current_value_label"></string>
+    <string name="portfolio_no_data"></string>
+    <string name="portfolio_test_save_btn"></string>
+    <string name="portfolio_test_msg_template"></string>
     <!-- Onboarding Buttons -->
     <string name="onboarding_next">Siguiente</string>
     <string name="onboarding_previous">Anterior</string>
     <string name="onboarding_skip">Omitir</string>
     <string name="onboarding_start">Iniciar</string>
     <string name="onboarding_loading">Cargando…</string>
-
     <!-- Navigation / Bottom Bar -->
     <string name="nav_home">Inicio</string>
     <string name="nav_explore">Explorar</string>
     <string name="nav_add_list">Crear lista</string>
     <string name="nav_favorites">Favoritos</string>
     <string name="nav_settings">Ajustes</string>
-
     <!-- Auth: Login -->
     <string name="login_header">Iniciar Sesión</string>
     <string name="login_welcome">Bienvenido de nuevo</string>
@@ -40,7 +60,6 @@
     <string name="login_or_continue">O continúa con</string>
     <string name="login_no_account">¿No tienes cuenta?</string>
     <string name="login_register">Registrate</string>
-
     <!-- Auth: Register -->
     <string name="register_header">Registrarse</string>
     <string name="register_title">Únete al club</string>
@@ -55,7 +74,6 @@
     <string name="register_or_continue">O regístrate con</string>
     <string name="register_has_account">¿Ya tienes cuenta?</string>
     <string name="register_login">Inicia sesión</string>
-
     <!-- Content Lists -->
     <string name="lists_title">Mis Listas</string>
     <string name="lists_subtitle">Organiza tu mundo</string>
@@ -65,7 +83,6 @@
     <string name="lists_see_all">VER TODO</string>
     <string name="lists_empty">No se encontraron listas</string>
     <string name="lists_items_count">%1$d elementos</string>
-
     <!-- List Detail -->
     <string name="detail_public_list">LISTA PÚBLICA</string>
     <string name="detail_private_list">LISTA PRIVADA</string>
@@ -81,7 +98,6 @@
     <string name="detail_no_rating">Sin calificación</string>
     <string name="detail_rating_format">%1$d/5</string>
     <string name="detail_add_item">Añadir item</string>
-
     <!-- Add Item -->
     <string name="add_item_title">AÑADIR A %1$s</string>
     <string name="add_item_search_button">Buscar</string>
@@ -90,7 +106,6 @@
     <string name="add_item_results">Resultados de %1$s</string>
     <string name="add_item_no_results">No se encontraron resultados para %1$s</string>
     <string name="add_item_cover">Portada de %1$s</string>
-
     <!-- Create/Edit List -->
     <string name="create_list_cancel">Cancelar</string>
     <string name="create_list_title">Nueva Lista</string>
@@ -104,14 +119,12 @@
     <string name="create_list_private">Lista Privada</string>
     <string name="create_list_private_desc">Solo tú puedes ver esta lista</string>
     <string name="edit_list_button">Editar</string>
-
     <!-- Explore -->
     <string name="explore_title">Explorar</string>
     <string name="explore_subtitle">Descubre listas públicas</string>
     <string name="explore_search_placeholder">Buscar listas públicas...</string>
     <string name="explore_empty">No hay listas públicas disponibles</string>
     <string name="explore_elements_count">%1$d elementos</string>
-
     <!-- Favorites -->
     <string name="favorites_title">Favoritos</string>
     <string name="favorites_subtitle">Tus listas guardadas</string>
@@ -120,44 +133,36 @@
     <string name="favorites_remove">Quitar de favoritos</string>
     <string name="favorites_add">Añadir a favoritos</string>
     <string name="favorites_elements_info">%1$d elementos · %2$s</string>
-
     <!-- Profile -->
     <string name="profile_title">Perfil</string>
     <string name="profile_default_name">Usuario</string>
     <string name="profile_logout">Cerrar sesión</string>
-
     <!-- Settings -->
     <string name="settings_title">Ajustes</string>
     <string name="settings_dark_mode">Modo oscuro</string>
     <string name="settings_language">Idioma</string>
-
     <!-- Content Types - Singular -->
     <string name="type_movie">Película</string>
     <string name="type_series">Serie</string>
     <string name="type_book">Libro</string>
     <string name="type_videogame">Videojuego</string>
-
     <!-- Content Types - Plural -->
     <string name="type_movie_plural">Películas</string>
     <string name="type_series_plural">Series</string>
     <string name="type_book_plural">Libros</string>
     <string name="type_videogame_plural">Videojuegos</string>
-
     <!-- Content Types - Subtitles (ContentListsScreen cards) -->
     <string name="type_movie_subtitle">Noche de pelis</string>
     <string name="type_series_subtitle">Maratón</string>
     <string name="type_book_subtitle">Próximas lecturas</string>
     <string name="type_videogame_subtitle">Por completar</string>
-
     <!-- Content Types - TV sublabel (ListDetailScreen) -->
     <string name="type_series_tv">Serie de TV</string>
-
     <!-- Explore subtitles -->
     <string name="explore_movie_subtitle">Lista de películas</string>
     <string name="explore_book_subtitle">Lista de libros</string>
     <string name="explore_videogame_subtitle">Lista de videojuegos</string>
     <string name="explore_series_subtitle">Lista de series</string>
-
     <!-- Common -->
     <string name="common_back">Atrás</string>
     <string name="common_add">Añadir</string>
@@ -165,7 +170,6 @@
     <string name="common_edit">Editar</string>
     <string name="common_mark_seen">Marcar como visto</string>
     <string name="common_mark_pending">Marcar como pendiente</string>
-
     <!-- Maintenance -->
     <string name="maintenance_loading">Iniciando aplicación…</string>
     <string name="maintenance_title">En Mantenimiento</string>

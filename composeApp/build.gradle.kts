@@ -235,6 +235,20 @@ tasks.configureEach {
     }
 }
 
-tasks.register<LocoSyncTask>("syncTranslations") {
+val locoDownload = tasks.register<LocoSyncTask>("locoDownload") {
     apiKey = EnvLoader.get("LOCO_API_KEY") ?: "TU_API_KEY_AQUI"
 }
+
+tasks.register<LocoUploadTask>("locoUploadAndTranslate") {
+    apiKey = EnvLoader.get("LOCO_API_KEY") ?: "TU_API_KEY_AQUI"
+    locale = "es"
+    sourceFile = project.file("src/commonMain/composeResources/values-es/strings.xml")
+}
+
+// Configurar para que preBuild dependa de locoDownload
+tasks.configureEach {
+    if (name == "preBuild") {
+        dependsOn(locoDownload)
+    }
+}
+
