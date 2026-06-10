@@ -1,7 +1,7 @@
 package com.ucb.proyectofinal.auth.domain.model
 
-import com.ucb.proyectofinal.auth.domain.model.vo.Email
-import com.ucb.proyectofinal.auth.domain.model.vo.UserId
+import com.ucb.proyectofinal.auth.domain.vo.Email
+import com.ucb.proyectofinal.auth.domain.vo.UserId
 
 data class User(
     val id: UserId,

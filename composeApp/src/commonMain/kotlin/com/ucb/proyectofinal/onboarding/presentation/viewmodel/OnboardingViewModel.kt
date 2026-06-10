@@ -2,11 +2,8 @@ package com.ucb.proyectofinal.onboarding.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
-import com.ucb.proyectofinal.onboarding.data.datasource.getDeviceLanguage
-import com.ucb.proyectofinal.onboarding.data.datasource.OnboardingPreferences
-import com.ucb.proyectofinal.onboarding.domain.model.OnboardingConfigResponse
-import com.ucb.proyectofinal.onboarding.domain.model.OnboardingSlide
+import com.ucb.proyectofinal.onboarding.domain.usecase.CompleteOnboardingUseCase
+import com.ucb.proyectofinal.onboarding.domain.usecase.GetOnboardingSlidesUseCase
 import com.ucb.proyectofinal.onboarding.presentation.state.OnboardingEffect
 import com.ucb.proyectofinal.onboarding.presentation.state.OnboardingUiState
 import kotlinx.coroutines.channels.Channel
@@ -17,11 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 class OnboardingViewModel(
-    private val remoteConfigRepository: RemoteConfigRepository,
-    private val onboardingPreferences: OnboardingPreferences
+    private val getOnboardingSlidesUseCase: GetOnboardingSlidesUseCase,
+    private val completeOnboardingUseCase: CompleteOnboardingUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(OnboardingUiState())
@@ -30,8 +26,6 @@ class OnboardingViewModel(
     private val _effects = Channel<OnboardingEffect>(Channel.BUFFERED)
     val effects: Flow<OnboardingEffect> = _effects.receiveAsFlow()
 
-    private val json = Json { ignoreUnknownKeys = true }
-
     init {
         loadOnboardingConfig()
     }
@@ -39,20 +33,7 @@ class OnboardingViewModel(
     private fun loadOnboardingConfig() {
         viewModelScope.launch {
             try {
-                val configJson = remoteConfigRepository.fetchOnboardingConfig()
-                val deviceLang = getDeviceLanguage()
-                val config = json.decodeFromString<OnboardingConfigResponse>(configJson)
-                val slides = config.slides.map { slideConfig ->
-                    OnboardingSlide(
-                        id = slideConfig.id,
-                        title = slideConfig.title[deviceLang]
-                            ?: slideConfig.title["en"] ?: "",
-                        description = slideConfig.description[deviceLang]
-                            ?: slideConfig.description["en"] ?: "",
-                        imageUrl = slideConfig.imageUrl[deviceLang]
-                            ?: slideConfig.imageUrl["en"] ?: ""
-                    )
-                }
+                val slides = getOnboardingSlidesUseCase()
                 _state.update { it.copy(slides = slides, isLoading = false) }
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.message) }
@@ -69,7 +50,7 @@ class OnboardingViewModel(
 
     /** "Iniciar" — saves the flag permanently and navigates to Home. */
     fun completeOnboarding() {
-        onboardingPreferences.setOnboardingCompleted(true)
+        completeOnboardingUseCase()
         viewModelScope.launch {
             _effects.send(OnboardingEffect.NavigateToHome)
         }

@@ -18,8 +18,8 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { AuthViewModel(get(), get(), get(), get()) }
     viewModel { ContentListsViewModel(get(), get(), get()) }
-    viewModel { ExploreViewModel(get()) }
-    viewModel { FavoritesViewModel(get()) }
+    viewModel { ExploreViewModel(get(), get(), get(), get()) }
+    viewModel { FavoritesViewModel(get(), get()) }
     viewModel { AddItemViewModel(get(), get(), get()) }
     viewModel { ListDetailViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { EditListViewModel(get()) }

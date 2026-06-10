@@ -2,7 +2,7 @@ package com.ucb.proyectofinal.maintenance.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
+import com.ucb.proyectofinal.maintenance.domain.usecase.ObserveMaintenanceUseCase
 import com.ucb.proyectofinal.maintenance.presentation.state.MaintenanceState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
  * si el valor cambia en Firebase Console, la pantalla reacciona sin reiniciar la app.
  */
 class MaintenanceViewModel(
-    private val remoteConfigRepository: RemoteConfigRepository
+    private val observeMaintenanceUseCase: ObserveMaintenanceUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<MaintenanceState>(MaintenanceState.Loading)
@@ -29,8 +29,7 @@ class MaintenanceViewModel(
 
     private fun observeMaintenance() {
         viewModelScope.launch {
-            remoteConfigRepository
-                .observeMaintenance()
+            observeMaintenanceUseCase()
                 .catch { e ->
                     // Si el Flow falla, dejamos pasar (fail-open)
                     _state.value = MaintenanceState.Error(e.message ?: "Error desconocido")

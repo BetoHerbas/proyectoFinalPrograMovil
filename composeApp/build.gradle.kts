@@ -246,9 +246,6 @@ tasks.register<LocoUploadTask>("locoUploadAndTranslate") {
 }
 
 // Configurar para que preBuild dependa de locoDownload
-tasks.configureEach {
-    if (name == "preBuild") {
-        dependsOn(locoDownload)
-    }
+tasks.named("preBuild") {
+    // dependsOn(locoDownload)
 }
-

@@ -1,14 +1,14 @@
 package com.ucb.proyectofinal.auth.data.repository
 
 import com.ucb.proyectofinal.auth.domain.model.User
-import com.ucb.proyectofinal.auth.domain.model.vo.Email
-import com.ucb.proyectofinal.auth.domain.model.vo.Password
-import com.ucb.proyectofinal.auth.domain.model.vo.UserId
+import com.ucb.proyectofinal.auth.domain.vo.Email
+import com.ucb.proyectofinal.auth.domain.vo.Password
+import com.ucb.proyectofinal.auth.domain.vo.UserId
 import com.ucb.proyectofinal.auth.data.datasource.FirebaseAuthDataSource
 import com.ucb.proyectofinal.auth.data.dto.AuthRemoteUser
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
-import com.ucb.proyectofinal.auth.data.datasource.local.UserDao
-import com.ucb.proyectofinal.auth.data.datasource.local.UserEntity
+import com.ucb.proyectofinal.auth.data.dao.UserDao
+import com.ucb.proyectofinal.auth.data.entity.UserEntity
 import kotlinx.coroutines.runBlocking
 
 class AuthRepositoryImpl(

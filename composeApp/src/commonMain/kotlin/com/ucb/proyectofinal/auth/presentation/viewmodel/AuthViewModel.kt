@@ -2,8 +2,8 @@ package com.ucb.proyectofinal.auth.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ucb.proyectofinal.auth.domain.model.vo.Email
-import com.ucb.proyectofinal.auth.domain.model.vo.Password
+import com.ucb.proyectofinal.auth.domain.vo.Email
+import com.ucb.proyectofinal.auth.domain.vo.Password
 import com.ucb.proyectofinal.auth.domain.usecase.GetCurrentUserUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LoginUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LogoutUseCase

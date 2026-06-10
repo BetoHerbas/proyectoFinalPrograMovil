@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.explore.presentation.state.ExploreUiState
 import com.ucb.proyectofinal.lists.domain.model.ContentList
-import com.ucb.proyectofinal.lists.domain.repository.ContentListRepository
+import com.ucb.proyectofinal.lists.domain.usecase.AddFavoriteUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetFavoritesUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.GetPublicListsUseCase
+import com.ucb.proyectofinal.lists.domain.usecase.RemoveFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +16,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ExploreViewModel(
-    private val repository: ContentListRepository
+    private val getPublicListsUseCase: GetPublicListsUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ExploreUiState())
@@ -29,7 +35,7 @@ class ExploreViewModel(
     private fun loadPublicLists() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            repository.getPublicLists()
+            getPublicListsUseCase()
                 .catch { _state.update { it.copy(isLoading = false, error = "Error al cargar listas públicas") } }
                 .collect { lists -> _state.update { it.copy(isLoading = false, lists = lists) } }
         }
@@ -37,7 +43,7 @@ class ExploreViewModel(
 
     private fun observeFavorites() {
         viewModelScope.launch {
-            repository.getFavorites()
+            getFavoritesUseCase()
                 .catch { /* silently ignore */ }
                 .collect { favorites ->
                     _state.update { it.copy(favoriteIds = favorites.map { f -> f.id.value }.toSet()) }
@@ -48,9 +54,9 @@ class ExploreViewModel(
     fun toggleFavorite(list: ContentList) {
         viewModelScope.launch {
             if (_state.value.favoriteIds.contains(list.id.value)) {
-                repository.removeFavorite(list.id)
+                removeFavoriteUseCase(list.id)
             } else {
-                repository.addFavorite(list)
+                addFavoriteUseCase(list)
             }
         }
     }
