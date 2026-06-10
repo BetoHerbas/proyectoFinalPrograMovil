@@ -1,7 +1,7 @@
 package com.ucb.proyectofinal.auth.domain.usecase
 
-import com.ucb.proyectofinal.auth.domain.model.vo.Email
-import com.ucb.proyectofinal.auth.domain.model.vo.Password
+import com.ucb.proyectofinal.auth.domain.vo.Email
+import com.ucb.proyectofinal.auth.domain.vo.Password
 import com.ucb.proyectofinal.fakes.FakeAuthRepository
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest

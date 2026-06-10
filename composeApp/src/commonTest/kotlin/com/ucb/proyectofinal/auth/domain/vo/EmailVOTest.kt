@@ -1,6 +1,6 @@
 package com.ucb.proyectofinal.auth.domain.vo
 
-import com.ucb.proyectofinal.auth.domain.model.vo.Email
+import com.ucb.proyectofinal.auth.domain.vo.Email
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

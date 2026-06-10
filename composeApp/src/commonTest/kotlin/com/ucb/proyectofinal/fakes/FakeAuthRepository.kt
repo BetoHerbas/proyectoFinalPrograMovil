@@ -1,9 +1,9 @@
 package com.ucb.proyectofinal.fakes
 
 import com.ucb.proyectofinal.auth.domain.model.User
-import com.ucb.proyectofinal.auth.domain.model.vo.Email
-import com.ucb.proyectofinal.auth.domain.model.vo.Password
-import com.ucb.proyectofinal.auth.domain.model.vo.UserId
+import com.ucb.proyectofinal.auth.domain.vo.Email
+import com.ucb.proyectofinal.auth.domain.vo.Password
+import com.ucb.proyectofinal.auth.domain.vo.UserId
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
 
 class FakeAuthRepository : AuthRepository {

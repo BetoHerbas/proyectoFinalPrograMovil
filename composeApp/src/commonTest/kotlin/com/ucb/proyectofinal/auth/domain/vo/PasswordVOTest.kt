@@ -1,6 +1,6 @@
 package com.ucb.proyectofinal.auth.domain.vo
 
-import com.ucb.proyectofinal.auth.domain.model.vo.Password
+import com.ucb.proyectofinal.auth.domain.vo.Password
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
