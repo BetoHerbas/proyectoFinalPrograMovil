@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.core.data.db
+package com.ucb.proyectofinal.lists.data.datasource.local
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow

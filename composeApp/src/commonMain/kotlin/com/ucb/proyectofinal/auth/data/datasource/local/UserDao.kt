@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.core.data.db
+package com.ucb.proyectofinal.auth.data.datasource.local
 
 import androidx.room.Dao
 import androidx.room.Insert

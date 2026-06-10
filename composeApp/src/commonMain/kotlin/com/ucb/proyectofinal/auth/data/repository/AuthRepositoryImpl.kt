@@ -7,8 +7,8 @@ import com.ucb.proyectofinal.auth.domain.model.vo.UserId
 import com.ucb.proyectofinal.auth.data.datasource.FirebaseAuthDataSource
 import com.ucb.proyectofinal.auth.data.dto.AuthRemoteUser
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
-import com.ucb.proyectofinal.core.data.db.UserDao
-import com.ucb.proyectofinal.core.data.db.UserEntity
+import com.ucb.proyectofinal.auth.data.datasource.local.UserDao
+import com.ucb.proyectofinal.auth.data.datasource.local.UserEntity
 import kotlinx.coroutines.runBlocking
 
 class AuthRepositoryImpl(

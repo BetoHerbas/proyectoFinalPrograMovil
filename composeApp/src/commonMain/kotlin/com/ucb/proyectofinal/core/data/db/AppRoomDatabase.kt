@@ -1,6 +1,12 @@
 package com.ucb.proyectofinal.core.data.db
 
 import androidx.room.*
+import com.ucb.proyectofinal.auth.data.datasource.local.UserDao
+import com.ucb.proyectofinal.auth.data.datasource.local.UserEntity
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentItemDao
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentItemEntity
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentListDao
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentListEntity
 
 @Database(
     entities = [ContentListEntity::class, ContentItemEntity::class, UserEntity::class],

@@ -2,10 +2,10 @@ package com.ucb.proyectofinal.lists.data.repository
 
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
 import com.ucb.proyectofinal.core.config.AppSecrets
-import com.ucb.proyectofinal.core.data.db.ContentItemDao
-import com.ucb.proyectofinal.core.data.db.ContentItemEntity
-import com.ucb.proyectofinal.core.data.db.ContentListDao
-import com.ucb.proyectofinal.core.data.db.ContentListEntity
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentItemDao
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentItemEntity
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentListDao
+import com.ucb.proyectofinal.lists.data.datasource.local.ContentListEntity
 import com.ucb.proyectofinal.lists.domain.model.CastMember
 import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
