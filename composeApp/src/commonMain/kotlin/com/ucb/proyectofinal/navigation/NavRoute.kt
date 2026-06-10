@@ -58,4 +58,10 @@ sealed class NavRoute {
 
     @Serializable
     data object Favorites : NavRoute()
+
+    @Serializable
+    data class ItemDetail(
+        val listId: String,
+        val itemId: String
+    ) : NavRoute()
 }
