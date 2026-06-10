@@ -137,7 +137,7 @@ fun ContentListsScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             AppBottomBar(
                 currentTab = BottomTab.HOME,
@@ -149,12 +149,16 @@ fun ContentListsScreen(
             )
         }
     ) { padding ->
+        val bg = MaterialTheme.colorScheme.background
+        val onBg = MaterialTheme.colorScheme.onBackground
+        val onBgSub = MaterialTheme.colorScheme.onSurfaceVariant
+        val cardBg = MaterialTheme.colorScheme.surfaceVariant
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(Color(0xFF0B1D29), Color(0xFF0A3736), Color(0xFF0D1B2D))
+                        colors = listOf(bg, MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), bg)
                     )
                 )
                 .padding(padding)
@@ -171,36 +175,30 @@ fun ContentListsScreen(
                     Text(
                         text = stringResource(Res.string.lists_title),
                         style = MaterialTheme.typography.headlineLarge,
-                        color = Color(0xFFE8FAFF),
+                        color = onBg,
                         fontWeight = FontWeight.ExtraBold
                     )
                     Text(
                         text = stringResource(Res.string.lists_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFFA8C8D1)
+                        color = onBgSub
                     )
                 }
 
                 IconButton(onClick = onNavigateToProfile) {
                     Surface(
                         shape = RoundedCornerShape(999.dp),
-                        color = Color(0xFF2B4B56),
+                        color = cardBg,
                         border = BorderStroke(1.dp, Color(0x5538E3D1))
                     ) {
                         Box(
-                            modifier = Modifier
-                                .size(38.dp)
-                                .background(
-                                    Brush.linearGradient(
-                                        listOf(Color(0xFF2D5565), Color(0xFF1C313A))
-                                    )
-                                ),
+                            modifier = Modifier.size(38.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 Icons.Default.Person,
                                 contentDescription = stringResource(Res.string.profile_title),
-                                tint = Color(0xFFD9F6FF),
+                                tint = onBgSub,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -219,12 +217,12 @@ fun ContentListsScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color(0xAA102D3A),
-                    unfocusedContainerColor = Color(0xAA102D3A),
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     focusedBorderColor = Color(0xFF2AE2D0),
                     unfocusedBorderColor = Color(0x223AD8C7),
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+                    focusedTextColor = onBg,
+                    unfocusedTextColor = onBg,
                     cursorColor = Color(0xFF2AE2D0)
                 ),
                 modifier = Modifier.fillMaxWidth()
@@ -244,8 +242,8 @@ fun ContentListsScreen(
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = Color(0xFF22F2D4),
                         selectedLabelColor = Color(0xFF043F40),
-                        containerColor = Color(0x55304653),
-                        labelColor = Color(0xFFD1E8EF)
+                        containerColor = cardBg,
+                        labelColor = onBgSub
                     )
                 )
                 supportedTypes.forEach { type ->
@@ -256,8 +254,8 @@ fun ContentListsScreen(
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = Color(0xFF22F2D4),
                             selectedLabelColor = Color(0xFF043F40),
-                            containerColor = Color(0x55304653),
-                            labelColor = Color(0xFFD1E8EF)
+                            containerColor = cardBg,
+                            labelColor = onBgSub
                         )
                     )
                 }
@@ -272,7 +270,7 @@ fun ContentListsScreen(
                 Text(
                     text = stringResource(Res.string.lists_recent),
                     style = MaterialTheme.typography.titleLarge,
-                    color = Color(0xFFF0FBFF),
+                    color = onBg,
                     fontWeight = FontWeight.Bold
                 )
                 TextButton(onClick = onNavigateToSettings) {
@@ -293,7 +291,7 @@ fun ContentListsScreen(
 
                 filteredLists.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(stringResource(Res.string.lists_empty), color = Color(0xFF8AAAB5))
+                        Text(stringResource(Res.string.lists_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
@@ -342,7 +340,7 @@ private fun ContentListCard(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, Color(0x223EE5D0)),
-        colors = CardDefaults.cardColors(containerColor = Color(0xCC163545))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Box(
@@ -361,7 +359,7 @@ private fun ContentListCard(
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = list.name.value,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleMedium,
@@ -369,7 +367,7 @@ private fun ContentListCard(
             )
             Text(
                 text = subtitleByType(list.type),
-                color = Color(0xFF8DB2BD),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodySmall
