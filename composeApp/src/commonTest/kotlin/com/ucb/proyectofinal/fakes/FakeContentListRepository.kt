@@ -21,6 +21,7 @@ class FakeContentListRepository : ContentListRepository {
 
     private val _lists = MutableStateFlow<List<ContentList>>(emptyList())
     private val _items = MutableStateFlow<Map<String, List<ContentItem>>>(emptyMap())
+    private val _favorites = MutableStateFlow<List<ContentList>>(emptyList())
 
     val listsSnapshot: List<ContentList> get() = _lists.value
     val itemsSnapshot: Map<String, List<ContentItem>> get() = _items.value
@@ -148,6 +149,24 @@ class FakeContentListRepository : ContentListRepository {
         if (shouldFail) return Result.failure(Exception(failureMessage))
         val current = _items.value[item.listId.value] ?: emptyList()
         _items.value = _items.value + (item.listId.value to current.filter { it.id != item.id })
+        return Result.success(Unit)
+    }
+
+    override fun getPublicLists(): Flow<List<ContentList>> = _lists.map { lists ->
+        lists.filter { it.isPublic }
+    }
+
+    override fun getFavorites(): Flow<List<ContentList>> = _favorites
+
+    override suspend fun addFavorite(list: ContentList): Result<Unit> {
+        if (shouldFail) return Result.failure(Exception(failureMessage))
+        _favorites.value = _favorites.value + list
+        return Result.success(Unit)
+    }
+
+    override suspend fun removeFavorite(listId: ListId): Result<Unit> {
+        if (shouldFail) return Result.failure(Exception(failureMessage))
+        _favorites.value = _favorites.value.filter { it.id != listId }
         return Result.success(Unit)
     }
 }
