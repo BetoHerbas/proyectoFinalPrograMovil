@@ -6,10 +6,14 @@ import com.ucb.proyectofinal.core.data.db.ContentItemDao
 import com.ucb.proyectofinal.core.data.db.ContentItemEntity
 import com.ucb.proyectofinal.core.data.db.ContentListDao
 import com.ucb.proyectofinal.core.data.db.ContentListEntity
+import com.ucb.proyectofinal.lists.domain.model.CastMember
 import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList
 import com.ucb.proyectofinal.lists.domain.model.ContentType
+import com.ucb.proyectofinal.lists.domain.model.ItemDetail
+import com.ucb.proyectofinal.lists.domain.model.ParentsGuide
+import com.ucb.proyectofinal.lists.domain.model.Review
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
@@ -171,6 +175,16 @@ class ContentListRepositoryImpl(
             ContentType.SERIES -> searchSeries(normalized)
             ContentType.BOOK -> searchBooks(normalized)
             ContentType.VIDEOGAME -> searchVideogames(normalized)
+        }
+    }
+
+    override suspend fun getItemDetails(type: ContentType, title: String): Result<ItemDetail> = runCatching {
+        val normalized = title.trim()
+        when (type) {
+            ContentType.MOVIE -> getMovieDetail(normalized)
+            ContentType.SERIES -> getSeriesDetail(normalized)
+            ContentType.BOOK -> getBookDetail(normalized)
+            ContentType.VIDEOGAME -> getVideogameDetail(normalized)
         }
     }
 
@@ -577,5 +591,214 @@ class ContentListRepositoryImpl(
     override suspend fun removeFavorite(listId: ListId): Result<Unit> = runCatching {
         val userId = requireCurrentUserId()
         realtimeListsDataSource.removeFavorite(userId, listId.value)
+    }
+
+    private suspend fun getMovieDetail(title: String): ItemDetail {
+        val searchResults = searchMovies(title)
+        val firstResult = searchResults.firstOrNull() ?: error("Movie not found")
+        val tmdbId = firstResult.sourceId
+        
+        val url = "https://api.themoviedb.org/3/movie/$tmdbId?language=es-ES&append_to_response=credits,reviews"
+        val root = json.parseToJsonElement(
+            httpClient.get(url) {
+                header("Authorization", "Bearer $tmdbToken")
+            }.bodyAsText()
+        ).jsonObject
+        
+        val runtime = root["runtime"]?.jsonPrimitive?.content ?: ""
+        val runtimeStr = if (runtime.isNotBlank() && runtime != "null") "${runtime}m" else "N/A"
+        
+        val overview = root["overview"]?.jsonPrimitive?.content ?: ""
+        
+        val credits = root["credits"]?.jsonObject
+        val cast = credits?.get("cast")?.jsonArray?.take(10)?.mapNotNull {
+            val castObj = it.jsonObject
+            CastMember(
+                name = castObj.stringValue("name") ?: "",
+                role = castObj.stringValue("character") ?: "",
+                imageUrl = castObj.stringValue("profile_path")?.let { path -> "https://image.tmdb.org/t/p/w200$path" }
+            )
+        } ?: emptyList()
+        
+        val crew = credits?.get("crew")?.jsonArray
+        val director = crew?.firstOrNull { it.jsonObject.stringValue("job") == "Director" }
+            ?.jsonObject?.stringValue("name") ?: "Unknown"
+            
+        val reviewsArray = root["reviews"]?.jsonObject?.get("results")?.jsonArray?.take(5)
+        val reviews = reviewsArray?.mapNotNull {
+            val revObj = it.jsonObject
+            val author = revObj.stringValue("author") ?: ""
+            val content = revObj.stringValue("content") ?: ""
+            val authorDetails = revObj["author_details"]?.jsonObject
+            val rating = authorDetails?.stringValue("rating")?.toDoubleOrNull()?.toInt() ?: 0
+            val date = revObj.stringValue("created_at")?.take(10) ?: ""
+            Review(author, content, rating, date)
+        } ?: emptyList()
+        
+        val genres = root["genres"]?.jsonArray?.mapNotNull { it.jsonObject.stringValue("name") } ?: emptyList()
+        val voteAverage = root.stringValue("vote_average")?.toDoubleOrNull() ?: 0.0
+        val voteCount = root.stringValue("vote_count")?.toDoubleOrNull()?.toInt() ?: 0
+        val releaseDate = root.stringValue("release_date") ?: ""
+        val year = releaseDate.take(4)
+        
+        return ItemDetail.Movie(
+            id = ItemId(title),
+            title = ItemTitle.of(firstResult.title).getOrThrow(),
+            description = overview.ifBlank { "No description available." },
+            imageUrl = firstResult.imageUrl,
+            rating = voteAverage,
+            totalReviews = voteCount,
+            tags = genres.take(3),
+            parentsGuide = null,
+            cast = cast,
+            reviews = reviews,
+            director = director,
+            duration = runtimeStr,
+            genres = genres,
+            year = year
+        )
+    }
+
+    private suspend fun getSeriesDetail(title: String): ItemDetail {
+        val searchResults = searchSeries(title)
+        val firstResult = searchResults.firstOrNull() ?: error("Series not found")
+        val tmdbId = firstResult.sourceId
+        
+        val url = "https://api.themoviedb.org/3/tv/$tmdbId?language=es-ES&append_to_response=credits,reviews"
+        val root = json.parseToJsonElement(
+            httpClient.get(url) {
+                header("Authorization", "Bearer $tmdbToken")
+            }.bodyAsText()
+        ).jsonObject
+        
+        val overview = root.stringValue("overview") ?: ""
+        val numEpisodes = root.stringValue("number_of_episodes")?.toDoubleOrNull()?.toInt() ?: 0
+        val numSeasons = root.stringValue("number_of_seasons")?.toDoubleOrNull()?.toInt() ?: 0
+        
+        val credits = root["credits"]?.jsonObject
+        val cast = credits?.get("cast")?.jsonArray?.take(10)?.mapNotNull {
+            val castObj = it.jsonObject
+            CastMember(
+                name = castObj.stringValue("name") ?: "",
+                role = castObj.stringValue("character") ?: "",
+                imageUrl = castObj.stringValue("profile_path")?.let { path -> "https://image.tmdb.org/t/p/w200$path" }
+            )
+        } ?: emptyList()
+        
+        val creators = root["created_by"]?.jsonArray
+        val creator = creators?.firstOrNull()?.jsonObject?.stringValue("name") ?: "Unknown"
+        
+        val reviewsArray = root["reviews"]?.jsonObject?.get("results")?.jsonArray?.take(5)
+        val reviews = reviewsArray?.mapNotNull {
+            val revObj = it.jsonObject
+            val author = revObj.stringValue("author") ?: ""
+            val content = revObj.stringValue("content") ?: ""
+            val authorDetails = revObj["author_details"]?.jsonObject
+            val rating = authorDetails?.stringValue("rating")?.toDoubleOrNull()?.toInt() ?: 0
+            val date = revObj.stringValue("created_at")?.take(10) ?: ""
+            Review(author, content, rating, date)
+        } ?: emptyList()
+        
+        val genres = root["genres"]?.jsonArray?.mapNotNull { it.jsonObject.stringValue("name") } ?: emptyList()
+        val voteAverage = root.stringValue("vote_average")?.toDoubleOrNull() ?: 0.0
+        val voteCount = root.stringValue("vote_count")?.toDoubleOrNull()?.toInt() ?: 0
+        val releaseDate = root.stringValue("first_air_date") ?: ""
+        val year = releaseDate.take(4)
+        
+        return ItemDetail.Series(
+            id = ItemId(title),
+            title = ItemTitle.of(firstResult.title).getOrThrow(),
+            description = overview.ifBlank { "No description available." },
+            imageUrl = firstResult.imageUrl,
+            rating = voteAverage,
+            totalReviews = voteCount,
+            tags = genres.take(3),
+            parentsGuide = null,
+            cast = cast,
+            reviews = reviews,
+            creator = creator,
+            episodes = numEpisodes,
+            seasons = numSeasons,
+            year = year
+        )
+    }
+
+    private suspend fun getBookDetail(title: String): ItemDetail {
+        val keyParam = if (googleBooksKey.isBlank()) "" else "&key=${googleBooksKey.encodeURLQueryComponent()}"
+        val url = "https://www.googleapis.com/books/v1/volumes?q=${title.encodeURLQueryComponent()}&maxResults=1$keyParam"
+        val root = json.parseToJsonElement(httpClient.get(url).bodyAsText()).jsonObject
+        val doc = root["items"]?.jsonArray?.firstOrNull()?.jsonObject ?: error("Book not found")
+        val volumeInfo = doc["volumeInfo"]?.jsonObject ?: error("No info")
+        
+        val apiTitle = volumeInfo.stringValue("title") ?: title
+        val author = volumeInfo["authors"]?.jsonArray?.firstOrNull()?.let { primitiveContentOrNull(it) } ?: "Unknown Author"
+        val description = volumeInfo.stringValue("description") ?: "No description available."
+        val pages = volumeInfo.stringValue("pageCount")?.toDoubleOrNull()?.toInt() ?: 0
+        val publisher = volumeInfo.stringValue("publisher") ?: "Unknown Publisher"
+        val cover = googleBooksCoverUrl(volumeInfo)
+        val categories = volumeInfo["categories"]?.jsonArray?.mapNotNull { primitiveContentOrNull(it) } ?: emptyList()
+        val rating = volumeInfo.stringValue("averageRating")?.toDoubleOrNull() ?: 0.0
+        val ratingCount = volumeInfo.stringValue("ratingsCount")?.toDoubleOrNull()?.toInt() ?: 0
+        
+        return ItemDetail.Book(
+            id = ItemId(title),
+            title = ItemTitle.of(apiTitle).getOrThrow(),
+            description = description,
+            imageUrl = cover,
+            rating = rating,
+            totalReviews = ratingCount,
+            tags = categories.take(3),
+            parentsGuide = null,
+            cast = emptyList(),
+            reviews = emptyList(),
+            author = author,
+            pages = pages,
+            publisher = publisher
+        )
+    }
+
+    private suspend fun getVideogameDetail(title: String): ItemDetail {
+        val key = rawgApiKey
+        if (key.isBlank()) error("RAWG API Key missing")
+        
+        val urlSearch = "https://api.rawg.io/api/games?search=${title.encodeURLQueryComponent()}&key=$key&page_size=1"
+        val rootSearch = json.parseToJsonElement(httpClient.get(urlSearch).bodyAsText()).jsonObject
+        val doc = rootSearch["results"]?.jsonArray?.firstOrNull()?.jsonObject ?: error("Game not found")
+        
+        val sourceId = doc.stringValue("id") ?: error("No ID")
+        
+        val urlDetail = "https://api.rawg.io/api/games/$sourceId?key=$key"
+        val root = json.parseToJsonElement(httpClient.get(urlDetail).bodyAsText()).jsonObject
+        
+        val apiTitle = root.stringValue("name") ?: title
+        val description = root.stringValue("description_raw") ?: "No description available."
+        val background = root.stringValue("background_image")
+        val rating = root.stringValue("rating")?.toDoubleOrNull() ?: 0.0
+        val totalReviews = root.stringValue("reviews_count")?.toDoubleOrNull()?.toInt() ?: 0
+        val playtime = root.stringValue("playtime")?.toDoubleOrNull()?.toInt() ?: 0
+        val released = root.stringValue("released") ?: ""
+        
+        val developers = root["developers"]?.jsonArray?.mapNotNull { it.jsonObject.stringValue("name") } ?: emptyList()
+        val developer = developers.firstOrNull() ?: "Unknown Developer"
+        
+        val platforms = root["platforms"]?.jsonArray?.mapNotNull { it.jsonObject["platform"]?.jsonObject?.stringValue("name") } ?: emptyList()
+        val genres = root["genres"]?.jsonArray?.mapNotNull { it.jsonObject.stringValue("name") } ?: emptyList()
+        
+        return ItemDetail.Videogame(
+            id = ItemId(title),
+            title = ItemTitle.of(apiTitle).getOrThrow(),
+            description = description,
+            imageUrl = background,
+            rating = rating,
+            totalReviews = totalReviews,
+            tags = genres.take(3),
+            parentsGuide = null,
+            cast = emptyList(),
+            reviews = emptyList(),
+            developer = developer,
+            platforms = platforms,
+            playtime = playtime,
+            released = released
+        )
     }
 }

@@ -64,6 +64,23 @@ sealed interface ItemDetail {
         val pages: Int,
         val publisher: String
     ) : ItemDetail
+
+    data class Videogame(
+        override val id: ItemId,
+        override val title: ItemTitle,
+        override val description: String,
+        override val imageUrl: String?,
+        override val rating: Double,
+        override val totalReviews: Int,
+        override val tags: List<String>,
+        override val parentsGuide: ParentsGuide?,
+        override val cast: List<CastMember>,
+        override val reviews: List<Review>,
+        val developer: String,
+        val platforms: List<String>,
+        val playtime: Int,
+        val released: String
+    ) : ItemDetail
 }
 
 data class ParentsGuide(

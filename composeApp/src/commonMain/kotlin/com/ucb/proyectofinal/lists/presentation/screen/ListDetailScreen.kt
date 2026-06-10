@@ -87,7 +87,7 @@ fun ListDetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAddItem: () -> Unit,
     onNavigateToEdit: () -> Unit,
-    onNavigateToItemDetail: (String) -> Unit,
+    onNavigateToItemDetail: (String, String) -> Unit,
     viewModel: ListDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -374,7 +374,7 @@ fun ListDetailScreen(
                         onToggleSeen = { viewModel.onIntent(ListDetailIntent.ToggleSeen(item)) },
                         onRate = { rating -> viewModel.onIntent(ListDetailIntent.RateItem(item, rating)) },
                         onDelete = { viewModel.onIntent(ListDetailIntent.DeleteItem(item)) },
-                        onClick = { onNavigateToItemDetail(item.title.value) }
+                        onClick = { onNavigateToItemDetail(item.title.value, item.type.name) }
                     )
                 }
             }

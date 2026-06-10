@@ -54,13 +54,14 @@ private val TextSecondary = Color(0xFF8FB3BC)
 @Composable
 fun ItemDetailScreen(
     itemId: String,
+    itemType: String,
     onNavigateBack: () -> Unit,
     viewModel: ItemDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(itemId) {
-        viewModel.onIntent(ItemDetailIntent.LoadDetail(itemId))
+    LaunchedEffect(itemId, itemType) {
+        viewModel.onIntent(ItemDetailIntent.LoadDetail(itemId, itemType))
     }
 
     Box(
@@ -197,7 +198,8 @@ private fun DetailHeader(item: ItemDetail) {
             val metadata = when (item) {
                 is ItemDetail.Movie -> "${item.year}  •  ${item.duration}  •  "
                 is ItemDetail.Series -> "${item.year}  •  ${item.seasons} Seasons  •  "
-                is ItemDetail.Book -> "${item.author}  •  "
+                is ItemDetail.Book -> "${item.author}  •  ${item.pages} pages  •  "
+                is ItemDetail.Videogame -> "${item.released.take(4)}  •  ${item.playtime}h  •  "
             }
             Text(
                 text = metadata,
@@ -208,6 +210,7 @@ private fun DetailHeader(item: ItemDetail) {
                 is ItemDetail.Movie -> item.director
                 is ItemDetail.Series -> item.creator
                 is ItemDetail.Book -> item.publisher
+                is ItemDetail.Videogame -> item.developer
             }
             Text(
                 text = director,

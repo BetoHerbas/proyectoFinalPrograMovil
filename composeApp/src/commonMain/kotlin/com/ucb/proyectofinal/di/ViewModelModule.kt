@@ -12,7 +12,7 @@ import com.ucb.proyectofinal.maintenance.presentation.viewmodel.MaintenanceViewM
 import com.ucb.proyectofinal.onboarding.presentation.viewmodel.OnboardingViewModel
 import com.ucb.proyectofinal.profile.presentation.viewmodel.ProfileViewModel
 import com.ucb.proyectofinal.settings.presentation.viewmodel.SettingsViewModel
-import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -23,7 +23,7 @@ val viewModelModule = module {
     viewModel { AddItemViewModel(get(), get(), get()) }
     viewModel { ListDetailViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { EditListViewModel(get()) }
-    viewModel { ItemDetailViewModel() }
+    viewModel { ItemDetailViewModel(get()) }
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { SettingsViewModel() }
     viewModel { MaintenanceViewModel(get()) }

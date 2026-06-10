@@ -62,6 +62,7 @@ sealed class NavRoute {
     @Serializable
     data class ItemDetail(
         val listId: String,
-        val itemId: String
+        val itemId: String,
+        val itemType: String
     ) : NavRoute()
 }

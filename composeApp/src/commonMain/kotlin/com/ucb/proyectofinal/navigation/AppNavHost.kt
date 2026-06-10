@@ -178,11 +178,12 @@ fun AppNavHost() {
                         )
                     )
                 },
-                onNavigateToItemDetail = { itemId ->
+                onNavigateToItemDetail = { itemId, itemType ->
                     navController.navigate(
                         NavRoute.ItemDetail(
                             listId = route.listId,
-                            itemId = itemId
+                            itemId = itemId,
+                            itemType = itemType
                         )
                     )
                 }
@@ -193,6 +194,7 @@ fun AppNavHost() {
             val route = backStackEntry.toRoute<NavRoute.ItemDetail>()
             ItemDetailScreen(
                 itemId = route.itemId,
+                itemType = route.itemType,
                 onNavigateBack = { navController.popBackStack() }
             )
         }
