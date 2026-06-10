@@ -21,8 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ucb.proyectofinal.lists.domain.model.ContentType
-import com.ucb.proyectofinal.lists.presentation.effect.ContentListsEffect
-import com.ucb.proyectofinal.lists.presentation.intent.ContentListsIntent
+import com.ucb.proyectofinal.lists.presentation.state.ContentListsEffect
+import com.ucb.proyectofinal.lists.presentation.state.ContentListsIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
 import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
 import org.koin.compose.koinInject

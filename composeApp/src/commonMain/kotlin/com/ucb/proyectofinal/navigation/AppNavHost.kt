@@ -20,7 +20,7 @@ import com.ucb.proyectofinal.lists.presentation.screen.CreateListScreen
 import com.ucb.proyectofinal.lists.presentation.screen.EditListScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ItemDetailScreen
 import com.ucb.proyectofinal.lists.presentation.screen.ListDetailScreen
-import com.ucb.proyectofinal.onboarding.data.local.OnboardingPreferences
+import com.ucb.proyectofinal.onboarding.data.datasource.OnboardingPreferences
 import com.ucb.proyectofinal.onboarding.presentation.screen.OnboardingScreen
 import com.ucb.proyectofinal.profile.presentation.screen.ProfileScreen
 import com.ucb.proyectofinal.settings.presentation.screen.SettingsScreen

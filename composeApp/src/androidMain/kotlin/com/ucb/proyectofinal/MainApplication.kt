@@ -19,7 +19,6 @@ class MainApplication : Application() {
             platformModules = listOf(
                 org.koin.dsl.module {
                     single { DatabaseFactory(get()) }
-                    single { com.ucb.proyectofinal.worker.FetchPopularMoviesUseCase() }
                 }
             )
         ) {

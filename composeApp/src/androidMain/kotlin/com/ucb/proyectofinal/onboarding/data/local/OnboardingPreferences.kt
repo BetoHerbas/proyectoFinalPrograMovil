@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.onboarding.data.local
+package com.ucb.proyectofinal.onboarding.data.datasource
 
 import android.content.Context
 import android.content.SharedPreferences

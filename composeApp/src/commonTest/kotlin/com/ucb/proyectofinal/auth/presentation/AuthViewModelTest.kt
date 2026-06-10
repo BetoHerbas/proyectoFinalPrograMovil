@@ -5,8 +5,8 @@ import com.ucb.proyectofinal.auth.domain.usecase.GetCurrentUserUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LoginUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LogoutUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.RegisterUseCase
-import com.ucb.proyectofinal.auth.presentation.effect.AuthEffect
-import com.ucb.proyectofinal.auth.presentation.intent.AuthIntent
+import com.ucb.proyectofinal.auth.presentation.state.AuthEffect
+import com.ucb.proyectofinal.auth.presentation.state.AuthIntent
 import com.ucb.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 import com.ucb.proyectofinal.fakes.FakeAuthRepository
 import kotlinx.coroutines.Dispatchers

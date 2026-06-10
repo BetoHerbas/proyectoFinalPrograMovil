@@ -9,8 +9,8 @@ import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.usecase.AddItemToListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.SearchCatalogUseCase
-import com.ucb.proyectofinal.lists.presentation.effect.AddItemEffect
-import com.ucb.proyectofinal.lists.presentation.intent.AddItemIntent
+import com.ucb.proyectofinal.lists.presentation.state.AddItemEffect
+import com.ucb.proyectofinal.lists.presentation.state.AddItemIntent
 import com.ucb.proyectofinal.lists.presentation.state.AddItemUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

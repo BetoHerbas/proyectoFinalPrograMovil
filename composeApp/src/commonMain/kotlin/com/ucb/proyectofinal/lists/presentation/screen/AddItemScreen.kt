@@ -31,8 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.ucb.proyectofinal.lists.domain.model.CatalogSearchItem
 import com.ucb.proyectofinal.lists.domain.model.ContentType
-import com.ucb.proyectofinal.lists.presentation.effect.AddItemEffect
-import com.ucb.proyectofinal.lists.presentation.intent.AddItemIntent
+import com.ucb.proyectofinal.lists.presentation.state.AddItemEffect
+import com.ucb.proyectofinal.lists.presentation.state.AddItemIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.AddItemViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource

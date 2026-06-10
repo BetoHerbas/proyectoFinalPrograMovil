@@ -13,8 +13,8 @@ import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetListItemsUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
-import com.ucb.proyectofinal.lists.presentation.effect.ListDetailEffect
-import com.ucb.proyectofinal.lists.presentation.intent.ListDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ListDetailEffect
+import com.ucb.proyectofinal.lists.presentation.state.ListDetailIntent
 import com.ucb.proyectofinal.lists.presentation.state.ItemFilter
 import com.ucb.proyectofinal.lists.presentation.state.ListDetailUiState
 import kotlinx.coroutines.channels.Channel

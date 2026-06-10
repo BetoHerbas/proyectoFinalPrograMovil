@@ -6,7 +6,7 @@ import com.ucb.proyectofinal.lists.domain.model.ItemDetail
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
 import com.ucb.proyectofinal.lists.domain.repository.ContentListRepository
-import com.ucb.proyectofinal.lists.presentation.intent.ItemDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ItemDetailIntent
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

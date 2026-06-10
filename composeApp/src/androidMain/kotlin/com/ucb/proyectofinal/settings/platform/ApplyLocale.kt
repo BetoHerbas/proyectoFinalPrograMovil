@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.settings.platform
+package com.ucb.proyectofinal.settings.data.datasource
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat

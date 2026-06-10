@@ -37,7 +37,7 @@ import com.ucb.proyectofinal.designsystem.theme.AppTheme
 import com.ucb.proyectofinal.lists.domain.model.CastMember
 import com.ucb.proyectofinal.lists.domain.model.ItemDetail
 import com.ucb.proyectofinal.lists.domain.model.Review
-import com.ucb.proyectofinal.lists.presentation.intent.ItemDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ItemDetailIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ItemDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel
 

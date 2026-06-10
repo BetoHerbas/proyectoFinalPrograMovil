@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.presentation.effect
+package com.ucb.proyectofinal.lists.presentation.state
 
 sealed class ListDetailEffect {
     data object NavigateBack : ListDetailEffect()

@@ -8,8 +8,8 @@ import com.ucb.proyectofinal.auth.domain.usecase.GetCurrentUserUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LoginUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LogoutUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.RegisterUseCase
-import com.ucb.proyectofinal.auth.presentation.effect.AuthEffect
-import com.ucb.proyectofinal.auth.presentation.intent.AuthIntent
+import com.ucb.proyectofinal.auth.presentation.state.AuthEffect
+import com.ucb.proyectofinal.auth.presentation.state.AuthIntent
 import com.ucb.proyectofinal.auth.presentation.state.AuthUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

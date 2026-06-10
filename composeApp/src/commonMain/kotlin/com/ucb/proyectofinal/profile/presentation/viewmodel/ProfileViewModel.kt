@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.auth.domain.usecase.GetCurrentUserUseCase
 import com.ucb.proyectofinal.auth.domain.usecase.LogoutUseCase
-import com.ucb.proyectofinal.profile.presentation.effect.ProfileEffect
-import com.ucb.proyectofinal.profile.presentation.intent.ProfileIntent
+import com.ucb.proyectofinal.profile.presentation.state.ProfileEffect
+import com.ucb.proyectofinal.profile.presentation.state.ProfileIntent
 import com.ucb.proyectofinal.profile.presentation.state.ProfileUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

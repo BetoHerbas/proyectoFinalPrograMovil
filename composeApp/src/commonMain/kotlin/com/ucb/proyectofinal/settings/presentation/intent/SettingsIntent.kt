@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.settings.presentation.intent
+package com.ucb.proyectofinal.settings.presentation.state
 
 sealed class SettingsIntent {
     data class ToggleDarkMode(val isDark: Boolean) : SettingsIntent()

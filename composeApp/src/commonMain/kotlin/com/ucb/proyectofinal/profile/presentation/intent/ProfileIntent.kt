@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.profile.presentation.intent
+package com.ucb.proyectofinal.profile.presentation.state
 
 sealed class ProfileIntent {
     data object LoadProfile : ProfileIntent()

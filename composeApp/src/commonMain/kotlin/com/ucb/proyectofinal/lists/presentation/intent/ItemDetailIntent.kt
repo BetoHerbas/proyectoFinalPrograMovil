@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.presentation.intent
+package com.ucb.proyectofinal.lists.presentation.state
 
 sealed class ItemDetailIntent {
     data class LoadDetail(val itemId: String, val itemType: String) : ItemDetailIntent()

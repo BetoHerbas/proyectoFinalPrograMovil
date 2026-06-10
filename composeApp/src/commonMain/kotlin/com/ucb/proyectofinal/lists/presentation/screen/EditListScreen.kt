@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ucb.proyectofinal.lists.presentation.effect.EditListEffect
-import com.ucb.proyectofinal.lists.presentation.intent.EditListIntent
+import com.ucb.proyectofinal.lists.presentation.state.EditListEffect
+import com.ucb.proyectofinal.lists.presentation.state.EditListIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.EditListViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource

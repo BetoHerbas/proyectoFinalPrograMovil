@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.settings.data
+package com.ucb.proyectofinal.settings.data.datasource
 
 /**
  * Abstracción expect/actual para persistir la preferencia de modo oscuro.

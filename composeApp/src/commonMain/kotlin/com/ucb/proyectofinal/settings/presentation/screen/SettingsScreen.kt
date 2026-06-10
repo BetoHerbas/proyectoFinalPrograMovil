@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ucb.proyectofinal.navigation.AppBottomBar
 import com.ucb.proyectofinal.navigation.BottomTab
-import com.ucb.proyectofinal.settings.presentation.intent.SettingsIntent
+import com.ucb.proyectofinal.settings.presentation.state.SettingsIntent
 import com.ucb.proyectofinal.settings.presentation.viewmodel.SettingsViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource

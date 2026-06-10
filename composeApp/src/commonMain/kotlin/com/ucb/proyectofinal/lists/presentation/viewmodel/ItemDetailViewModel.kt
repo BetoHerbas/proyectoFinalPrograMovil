@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.lists.domain.model.*
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemId
 import com.ucb.proyectofinal.lists.domain.model.vo.ItemTitle
-import com.ucb.proyectofinal.lists.presentation.intent.ItemDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ItemDetailIntent
 import com.ucb.proyectofinal.lists.presentation.state.ItemDetailUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

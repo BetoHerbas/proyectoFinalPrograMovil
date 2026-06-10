@@ -1,10 +1,6 @@
-package com.ucb.proyectofinal.auth.domain.repository
+package com.ucb.proyectofinal.auth.data.datasource
 
-data class AuthRemoteUser(
-    val uid: String,
-    val email: String,
-    val name: String
-)
+import com.ucb.proyectofinal.auth.data.dto.AuthRemoteUser
 
 expect class FirebaseAuthDataSource() {
     suspend fun login(email: String, password: String): AuthRemoteUser

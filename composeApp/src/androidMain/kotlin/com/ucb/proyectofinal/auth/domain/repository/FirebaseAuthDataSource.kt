@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.auth.domain.repository
+package com.ucb.proyectofinal.auth.data.datasource
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -7,6 +7,7 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.ucb.proyectofinal.worker.ABTestingScheduler
+import com.ucb.proyectofinal.auth.data.dto.AuthRemoteUser
 import kotlinx.coroutines.tasks.await
 
 actual class FirebaseAuthDataSource actual constructor() {

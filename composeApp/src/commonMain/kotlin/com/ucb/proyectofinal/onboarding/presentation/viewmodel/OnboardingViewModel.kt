@@ -3,8 +3,8 @@ package com.ucb.proyectofinal.onboarding.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
-import com.ucb.proyectofinal.onboarding.data.getDeviceLanguage
-import com.ucb.proyectofinal.onboarding.data.local.OnboardingPreferences
+import com.ucb.proyectofinal.onboarding.data.datasource.getDeviceLanguage
+import com.ucb.proyectofinal.onboarding.data.datasource.OnboardingPreferences
 import com.ucb.proyectofinal.onboarding.domain.model.OnboardingConfigResponse
 import com.ucb.proyectofinal.onboarding.domain.model.OnboardingSlide
 import com.ucb.proyectofinal.onboarding.presentation.state.OnboardingEffect

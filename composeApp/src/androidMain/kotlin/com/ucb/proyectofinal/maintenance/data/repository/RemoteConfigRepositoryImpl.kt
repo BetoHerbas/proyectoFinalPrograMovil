@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.maintenance.domain.repository
+package com.ucb.proyectofinal.maintenance.data.repository
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -11,6 +11,7 @@ import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
 import com.ucb.proyectofinal.worker.ABTestingScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +28,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-actual class RemoteConfigRepository actual constructor() {
+class RemoteConfigRepositoryImpl : RemoteConfigRepository {
 
     companion object {
         private const val POLL_INTERVAL_MS = 10_000L
@@ -82,10 +83,6 @@ actual class RemoteConfigRepository actual constructor() {
 
     // ── Videogame feature ──────────────────────────────────────────────────────
 
-    /**
-     * Devuelve true si el usuario actual pertenece al grupo objetivo
-     * y la flag videogame_category_enabled esta en true.
-     */
     private suspend fun isVideogameEnabledForCurrentUser(): Boolean {
         val enabled = remoteConfig.getBoolean("videogame_category_enabled")
         if (!enabled) return false
@@ -108,7 +105,6 @@ actual class RemoteConfigRepository actual constructor() {
 
     private fun videogameCategoryEnabledFlow(): Flow<Boolean> = callbackFlow {
 
-        /** Emite el valor actual Y reprograma el worker con el intervalo correcto. */
         suspend fun emitAndSchedule(enabled: Boolean) {
             trySend(enabled)
             ABTestingScheduler(FirebaseApp.getInstance().applicationContext)
@@ -122,7 +118,6 @@ actual class RemoteConfigRepository actual constructor() {
 
         fetchAndEmit()
 
-        // Push en tiempo real desde Firebase
         val configListener = object : ConfigUpdateListener {
             override fun onUpdate(configUpdate: ConfigUpdate) {
                 remoteConfig.fetchAndActivate().addOnCompleteListener {
@@ -133,7 +128,6 @@ actual class RemoteConfigRepository actual constructor() {
         }
         val registration = remoteConfig.addOnConfigUpdateListener(configListener)
 
-        // Escucha cambios en abGroup del usuario en Realtime DB
         val auth = FirebaseAuth.getInstance()
         var userGroupListener: ValueEventListener? = null
         var userGroupRef = auth.currentUser?.uid?.let { uid ->
@@ -151,7 +145,6 @@ actual class RemoteConfigRepository actual constructor() {
             ref.addValueEventListener(listener)
         }
 
-        // Recalcula cuando cambia el usuario logueado
         val authListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
             userGroupListener?.let { userGroupRef?.removeEventListener(it) }
             userGroupRef = firebaseAuth.currentUser?.uid?.let { uid ->
@@ -171,7 +164,6 @@ actual class RemoteConfigRepository actual constructor() {
         }
         auth.addAuthStateListener(authListener)
 
-        // Polling periodico como respaldo
         val pollingJob = launch {
             while (isActive) {
                 delay(POLL_INTERVAL_MS)
@@ -193,11 +185,11 @@ actual class RemoteConfigRepository actual constructor() {
             .stateIn(scope, SharingStarted.Eagerly, false)
     }
 
-    actual fun observeVideogameCategoryEnabled(): Flow<Boolean> = _videogameEnabled
+    override fun observeVideogameCategoryEnabled(): Flow<Boolean> = _videogameEnabled
 
     // ── Maintenance ────────────────────────────────────────────────────────────
 
-    actual fun observeMaintenance(): Flow<Boolean> = callbackFlow {
+    override fun observeMaintenance(): Flow<Boolean> = callbackFlow {
 
         suspend fun fetchAndEmit() {
             try { remoteConfig.fetchAndActivate().await() } catch (_: Exception) {}
@@ -231,7 +223,7 @@ actual class RemoteConfigRepository actual constructor() {
 
     // ── Onboarding config ───────────────────────────────────────────────────────
 
-    actual suspend fun fetchOnboardingConfig(): String {
+    override suspend fun fetchOnboardingConfig(): String {
         try { remoteConfig.fetchAndActivate().await() } catch (_: Exception) {}
         return remoteConfig.getString("onboarding_config")
     }

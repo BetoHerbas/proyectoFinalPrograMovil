@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.domain.repository
+package com.ucb.proyectofinal.lists.data.datasource
 
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentList

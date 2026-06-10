@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ucb.proyectofinal.lists.domain.model.ContentItem
 import com.ucb.proyectofinal.lists.domain.model.ContentType
-import com.ucb.proyectofinal.lists.presentation.effect.ListDetailEffect
-import com.ucb.proyectofinal.lists.presentation.intent.ListDetailIntent
+import com.ucb.proyectofinal.lists.presentation.state.ListDetailEffect
+import com.ucb.proyectofinal.lists.presentation.state.ListDetailIntent
 import com.ucb.proyectofinal.lists.presentation.state.ItemFilter
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ListDetailViewModel
 import org.koin.compose.viewmodel.koinViewModel

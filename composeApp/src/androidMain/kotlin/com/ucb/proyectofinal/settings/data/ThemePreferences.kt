@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.settings.data
+package com.ucb.proyectofinal.settings.data.datasource
 
 import android.content.Context
 import android.content.SharedPreferences

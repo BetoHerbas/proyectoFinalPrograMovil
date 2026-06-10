@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ucb.proyectofinal.profile.presentation.effect.ProfileEffect
-import com.ucb.proyectofinal.profile.presentation.intent.ProfileIntent
+import com.ucb.proyectofinal.profile.presentation.state.ProfileEffect
+import com.ucb.proyectofinal.profile.presentation.state.ProfileIntent
 import com.ucb.proyectofinal.profile.presentation.viewmodel.ProfileViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.jetbrains.compose.resources.stringResource

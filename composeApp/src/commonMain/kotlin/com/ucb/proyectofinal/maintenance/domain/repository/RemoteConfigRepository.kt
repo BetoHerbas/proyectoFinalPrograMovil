@@ -3,11 +3,10 @@ package com.ucb.proyectofinal.maintenance.domain.repository
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Interfaz expect/actual para Firebase Remote Config.
- * La implementación Android escucha cambios en tiempo real vía
- * addOnConfigUpdateListener y los emite como un Flow.
+ * Contrato puro de Kotlin para Firebase Remote Config.
+ * El dominio depende únicamente de esta interfaz, sin acoplarse a KMP.
  */
-expect class RemoteConfigRepository() {
+interface RemoteConfigRepository {
     /**
      * Emite el valor actual de "mantainence" y luego emite cada vez que
      * Firebase Remote Config detecta un cambio publicado desde la consola.
@@ -26,4 +25,3 @@ expect class RemoteConfigRepository() {
      */
     suspend fun fetchOnboardingConfig(): String
 }
-

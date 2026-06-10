@@ -20,7 +20,7 @@ import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.model.vo.ListName
 import com.ucb.proyectofinal.lists.domain.model.vo.Rating
 import com.ucb.proyectofinal.lists.domain.repository.ContentListRepository
-import com.ucb.proyectofinal.lists.domain.repository.FirebaseRealtimeListsDataSource
+import com.ucb.proyectofinal.lists.data.datasource.FirebaseRealtimeListsDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header

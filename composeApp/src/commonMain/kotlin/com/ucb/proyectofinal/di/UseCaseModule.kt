@@ -14,6 +14,10 @@ import com.ucb.proyectofinal.lists.domain.usecase.RateItemUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.SearchCatalogUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.ToggleItemSeenUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.UpdateListUseCase
+import com.ucb.proyectofinal.settings.domain.usecase.ChangeLanguageUseCase
+import com.ucb.proyectofinal.settings.domain.usecase.GetLanguageUseCase
+import com.ucb.proyectofinal.settings.domain.usecase.GetThemeUseCase
+import com.ucb.proyectofinal.settings.domain.usecase.SaveThemeUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -31,4 +35,10 @@ val useCaseModule = module {
     factory { DeleteListUseCase(get()) }
     factory { DeleteItemUseCase(get()) }
     factory { UpdateListUseCase(get()) }
+    // Settings
+    factory { GetThemeUseCase(get()) }
+    factory { SaveThemeUseCase(get()) }
+    factory { GetLanguageUseCase(get()) }
+    factory { ChangeLanguageUseCase(get()) }
 }
+

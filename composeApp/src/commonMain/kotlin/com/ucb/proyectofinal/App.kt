@@ -15,12 +15,12 @@ import kotlinx.coroutines.launch
 import com.ucb.proyectofinal.designsystem.theme.DsTheme
 import com.ucb.proyectofinal.designsystem.theme.ThemeMode
 import com.ucb.proyectofinal.navigation.AppNavHost
-import com.ucb.proyectofinal.notification.getToken
+import com.ucb.proyectofinal.notification.data.datasource.getToken
 import com.ucb.proyectofinal.maintenance.presentation.composable.MaintenanceGate
 import org.jetbrains.compose.resources.stringResource
 import proyectofinalprogramovil.composeapp.generated.resources.Res
 import proyectofinalprogramovil.composeapp.generated.resources.maintenance_finished
-import com.ucb.proyectofinal.settings.data.AppSettingsStore
+import com.ucb.proyectofinal.settings.data.datasource.AppSettingsStore
 
 @Composable
 fun App() {

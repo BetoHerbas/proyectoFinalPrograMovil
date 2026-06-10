@@ -4,7 +4,8 @@ import com.ucb.proyectofinal.auth.domain.model.User
 import com.ucb.proyectofinal.auth.domain.model.vo.Email
 import com.ucb.proyectofinal.auth.domain.model.vo.Password
 import com.ucb.proyectofinal.auth.domain.model.vo.UserId
-import com.ucb.proyectofinal.auth.domain.repository.FirebaseAuthDataSource
+import com.ucb.proyectofinal.auth.data.datasource.FirebaseAuthDataSource
+import com.ucb.proyectofinal.auth.data.dto.AuthRemoteUser
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
 import com.ucb.proyectofinal.core.data.db.UserDao
 import com.ucb.proyectofinal.core.data.db.UserEntity
@@ -51,7 +52,7 @@ class AuthRepositoryImpl(
             ?.also { currentUser = it }
     }
 
-    private fun com.ucb.proyectofinal.auth.domain.repository.AuthRemoteUser.toDomainUser(): User = User(
+    private fun AuthRemoteUser.toDomainUser(): User = User(
         id = UserId(uid),
         email = Email.of(email).getOrElse {
             throw IllegalStateException("Email inválido devuelto por Firebase")

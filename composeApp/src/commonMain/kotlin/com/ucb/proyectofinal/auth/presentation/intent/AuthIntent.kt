@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.auth.presentation.intent
+package com.ucb.proyectofinal.auth.presentation.state
 
 sealed class AuthIntent {
     data class UpdateEmail(val email: String) : AuthIntent()

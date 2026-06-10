@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.onboarding.data.local
+package com.ucb.proyectofinal.onboarding.data.datasource
 
 /**
  * Abstracción expect/actual para persistir el flag de onboarding completado.

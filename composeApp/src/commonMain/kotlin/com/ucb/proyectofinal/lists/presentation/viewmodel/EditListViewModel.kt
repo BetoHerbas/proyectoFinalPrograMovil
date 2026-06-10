@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.model.vo.ListName
 import com.ucb.proyectofinal.lists.domain.usecase.UpdateListUseCase
-import com.ucb.proyectofinal.lists.presentation.effect.EditListEffect
-import com.ucb.proyectofinal.lists.presentation.intent.EditListIntent
+import com.ucb.proyectofinal.lists.presentation.state.EditListEffect
+import com.ucb.proyectofinal.lists.presentation.state.EditListIntent
 import com.ucb.proyectofinal.lists.presentation.state.EditListUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow

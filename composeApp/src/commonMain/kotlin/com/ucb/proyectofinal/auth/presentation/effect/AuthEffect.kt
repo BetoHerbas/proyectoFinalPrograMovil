@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.auth.presentation.effect
+package com.ucb.proyectofinal.auth.presentation.state
 
 sealed class AuthEffect {
     data object NavigateToHome : AuthEffect()

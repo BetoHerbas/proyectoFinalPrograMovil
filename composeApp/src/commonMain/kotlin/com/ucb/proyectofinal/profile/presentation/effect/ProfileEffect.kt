@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.profile.presentation.effect
+package com.ucb.proyectofinal.profile.presentation.state
 
 sealed class ProfileEffect {
     data object NavigateToLogin : ProfileEffect()

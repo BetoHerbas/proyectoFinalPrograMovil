@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.presentation.effect
+package com.ucb.proyectofinal.lists.presentation.state
 
 sealed class AddItemEffect {
     data class ShowError(val message: String) : AddItemEffect()

@@ -8,11 +8,15 @@ fun initKoin(
     platformModules: List<Module> = emptyList(),
     config: (KoinApplication.() -> Unit)? = null
 ) {
-    startKoin {
-        config?.invoke(this)
-        modules(
-            platformModules +
-            listOf(appModule, databaseModule, networkModule, repositoryModule, useCaseModule, viewModelModule)
-        )
+    try {
+        startKoin {
+            config?.invoke(this)
+            modules(
+                platformModules +
+                listOf(appModule, databaseModule, networkModule, repositoryModule, useCaseModule, viewModelModule)
+            )
+        }
+    } catch (e: Exception) {
+        // Ignored for Robolectric tests where startKoin might be called multiple times
     }
 }

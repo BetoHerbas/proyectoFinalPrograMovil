@@ -9,8 +9,8 @@ import com.ucb.proyectofinal.lists.domain.model.vo.ListName
 import com.ucb.proyectofinal.lists.domain.usecase.CreateContentListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.DeleteListUseCase
 import com.ucb.proyectofinal.lists.domain.usecase.GetContentListsUseCase
-import com.ucb.proyectofinal.lists.presentation.effect.ContentListsEffect
-import com.ucb.proyectofinal.lists.presentation.intent.ContentListsIntent
+import com.ucb.proyectofinal.lists.presentation.state.ContentListsEffect
+import com.ucb.proyectofinal.lists.presentation.state.ContentListsIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

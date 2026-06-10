@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.presentation.intent
+package com.ucb.proyectofinal.lists.presentation.state
 
 sealed class EditListIntent {
     data class LoadList(

@@ -2,7 +2,7 @@ package com.ucb.proyectofinal.favorites.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ucb.proyectofinal.lists.domain.model.ContentList
+import com.ucb.proyectofinal.favorites.presentation.state.FavoritesUiState
 import com.ucb.proyectofinal.lists.domain.model.vo.ListId
 import com.ucb.proyectofinal.lists.domain.repository.ContentListRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,12 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-data class FavoritesUiState(
-    val isLoading: Boolean = true,
-    val favorites: List<ContentList> = emptyList(),
-    val error: String? = null
-)
 
 class FavoritesViewModel(
     private val repository: ContentListRepository

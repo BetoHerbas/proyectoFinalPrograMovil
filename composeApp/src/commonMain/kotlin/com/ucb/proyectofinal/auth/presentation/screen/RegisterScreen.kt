@@ -58,8 +58,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ucb.proyectofinal.auth.presentation.effect.AuthEffect
-import com.ucb.proyectofinal.auth.presentation.intent.AuthIntent
+import com.ucb.proyectofinal.auth.presentation.state.AuthEffect
+import com.ucb.proyectofinal.auth.presentation.state.AuthIntent
 import com.ucb.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 import com.ucb.proyectofinal.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel

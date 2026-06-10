@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.lists.presentation.effect
+package com.ucb.proyectofinal.lists.presentation.state
 
 import com.ucb.proyectofinal.lists.domain.model.ContentType
 

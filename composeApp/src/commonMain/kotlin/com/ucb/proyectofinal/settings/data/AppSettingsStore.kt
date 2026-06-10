@@ -1,4 +1,4 @@
-package com.ucb.proyectofinal.settings.data
+package com.ucb.proyectofinal.settings.data.datasource
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,11 +1,13 @@
 package com.ucb.proyectofinal.di
 
+import com.ucb.proyectofinal.auth.data.datasource.FirebaseAuthDataSource
 import com.ucb.proyectofinal.auth.data.repository.AuthRepositoryImpl
 import com.ucb.proyectofinal.auth.domain.repository.AuthRepository
-import com.ucb.proyectofinal.auth.domain.repository.FirebaseAuthDataSource
+import com.ucb.proyectofinal.lists.data.datasource.FirebaseRealtimeListsDataSource
 import com.ucb.proyectofinal.lists.data.repository.ContentListRepositoryImpl
 import com.ucb.proyectofinal.lists.domain.repository.ContentListRepository
-import com.ucb.proyectofinal.lists.domain.repository.FirebaseRealtimeListsDataSource
+import com.ucb.proyectofinal.settings.data.repository.SettingsRepositoryImpl
+import com.ucb.proyectofinal.settings.domain.repository.SettingsRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -13,4 +15,5 @@ val repositoryModule = module {
     single { FirebaseRealtimeListsDataSource() }
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
     single<ContentListRepository> { ContentListRepositoryImpl(get(), get(), get(), get(), get()) }
+    single<SettingsRepository> { SettingsRepositoryImpl() }
 }
