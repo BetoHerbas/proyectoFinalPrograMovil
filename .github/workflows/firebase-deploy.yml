@@ -95,8 +95,10 @@ jobs:
       - name: Build and Upload to Firebase App Distribution
         env:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          GOOGLE_APPLICATION_CREDENTIALS: firebase-credentials.json
+          # Usamos la ruta absoluta del workspace para evitar pérdidas de contexto
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/firebase-credentials.json
         run: >
           ./gradlew :composeApp:assembleRelease :composeApp:appDistributionUploadRelease
+          --no-configuration-cache
           -x :composeApp:sentryUploadSourceBundleRelease
           -x :composeApp:generateSentryBundleIdRelease
