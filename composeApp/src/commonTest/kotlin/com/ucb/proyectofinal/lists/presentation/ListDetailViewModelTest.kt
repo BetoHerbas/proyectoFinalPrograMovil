@@ -74,14 +74,12 @@ class ListDetailViewModelTest {
         )
         fakeRepo.setItems("list-1", listOf(item))
 
-        viewModel.state.test {
-            viewModel.onIntent(ListDetailIntent.LoadDetail("list-1", "Movies"))
-            skipItems(1) // initial empty state
-            val state = awaitItem()
-            assertEquals(1, state.items.size)
-            assertEquals("Inception", state.items.first().title.value)
-            cancelAndIgnoreRemainingEvents()
-        }
+        viewModel.onIntent(ListDetailIntent.LoadDetail("list-1", "Movies", "", "", false, "MOVIE"))
+        kotlinx.coroutines.yield()
+        
+        val state = viewModel.state.value
+        assertEquals(1, state.items.size)
+        assertEquals("Inception", state.items.first().title.value)
     }
 
     @Test

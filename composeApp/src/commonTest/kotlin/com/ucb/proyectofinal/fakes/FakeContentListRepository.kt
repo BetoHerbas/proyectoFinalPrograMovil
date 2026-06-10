@@ -169,4 +169,29 @@ class FakeContentListRepository : ContentListRepository {
         _favorites.value = _favorites.value.filter { it.id != listId }
         return Result.success(Unit)
     }
+
+    override suspend fun getItemDetails(
+        type: ContentType,
+        title: String
+    ): Result<com.ucb.proyectofinal.lists.domain.model.ItemDetail> {
+        if (shouldFail) return Result.failure(Exception(failureMessage))
+        return Result.success(
+            com.ucb.proyectofinal.lists.domain.model.ItemDetail.Movie(
+                id = ItemId("mock-id"),
+                title = ItemTitle.of(title).getOrThrow(),
+                description = "Mock description",
+                imageUrl = null,
+                rating = 8.0,
+                totalReviews = 100,
+                tags = emptyList(),
+                parentsGuide = null,
+                cast = emptyList(),
+                reviews = emptyList(),
+                director = "Mock Director",
+                duration = "120m",
+                genres = emptyList(),
+                year = "2024"
+            )
+        )
+    }
 }

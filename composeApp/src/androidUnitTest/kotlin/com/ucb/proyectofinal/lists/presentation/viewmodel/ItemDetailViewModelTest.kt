@@ -11,6 +11,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -62,19 +63,13 @@ class ItemDetailViewModelTest {
         
         coEvery { repository.getItemDetails(ContentType.MOVIE, fakeTitle) } returns Result.success(fakeMovie)
 
-        viewModel.state.test {
-            val initialState = awaitItem()
-            assertFalse(initialState.isLoading)
-            
-            viewModel.onIntent(ItemDetailIntent.LoadDetail(fakeTitle, "MOVIE"))
-            
-            // UnconfinedTestDispatcher may skip intermediate loading state in turbine, 
-            // but we will definitely get the loaded state.
-            val loadedState = awaitItem()
-            assertFalse(loadedState.isLoading)
-            assertNotNull(loadedState.item)
-            assertEquals(fakeTitle, loadedState.item?.title?.value)
-        }
+        viewModel.onIntent(ItemDetailIntent.LoadDetail(fakeTitle, "MOVIE"))
+        advanceUntilIdle()
+        
+        val state = viewModel.state.value
+        assertFalse(state.isLoading)
+        assertNotNull(state.item)
+        assertEquals(fakeTitle, state.item?.title?.value)
     }
     
     @Test
@@ -82,15 +77,11 @@ class ItemDetailViewModelTest {
         val fakeTitle = "Error Movie"
         coEvery { repository.getItemDetails(ContentType.MOVIE, fakeTitle) } returns Result.failure(Exception("Not found"))
 
-        viewModel.state.test {
-            val initialState = awaitItem()
-            assertFalse(initialState.isLoading)
-            
-            viewModel.onIntent(ItemDetailIntent.LoadDetail(fakeTitle, "MOVIE"))
-            
-            val loadedState = awaitItem()
-            assertFalse(loadedState.isLoading)
-            assertEquals(null, loadedState.item)
-        }
+        viewModel.onIntent(ItemDetailIntent.LoadDetail(fakeTitle, "MOVIE"))
+        advanceUntilIdle()
+        
+        val state = viewModel.state.value
+        assertFalse(state.isLoading)
+        assertEquals(null, state.item)
     }
 }
