@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LiveTv
 import androidx.compose.material.icons.outlined.LocalMovies
 import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -50,16 +49,13 @@ fun CreateListScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(Color(0xFF0A1D26), Color(0xFF072F2C), Color(0xFF061A25))
-                )
-            )
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Row(
@@ -68,11 +64,11 @@ fun CreateListScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TextButton(onClick = onNavigateBack) {
-                    Text("Cancelar", color = Color(0xFFBCD1D8), style = MaterialTheme.typography.labelLarge)
+                    Text("Cancelar", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
                 }
                 Text(
                     "Nueva Lista",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -96,46 +92,6 @@ fun CreateListScreen(
                     )
                 ) {
                     Text("Guardar", fontWeight = FontWeight.SemiBold)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(210.dp)
-                    .border(
-                        border = BorderStroke(1.dp, Color(0x3346D4C3)),
-                        shape = RoundedCornerShape(14.dp)
-                    )
-                    .background(Color(0x2223404C), RoundedCornerShape(14.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        modifier = Modifier
-                            .size(58.dp)
-                            .background(Color(0x22394956), RoundedCornerShape(999.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = when (selectedType) {
-                                ContentType.BOOK -> Icons.Outlined.MenuBook
-                                ContentType.MOVIE -> Icons.Outlined.LocalMovies
-                                ContentType.SERIES -> Icons.Outlined.LiveTv
-                                ContentType.VIDEOGAME -> Icons.Outlined.SportsEsports
-                            },
-                            contentDescription = null,
-                            tint = Color(0xFF88A9B1)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "Portada por defecto: ${defaultCoverLabel(selectedType)}",
-                        color = Color(0xFF8BAAB2),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
                 }
             }
 
@@ -289,9 +245,4 @@ fun CreateListScreen(
     }
 }
 
-private fun defaultCoverLabel(type: ContentType): String = when (type) {
-    ContentType.BOOK -> "Libros"
-    ContentType.MOVIE -> "Películas"
-    ContentType.SERIES -> "Series"
-    ContentType.VIDEOGAME -> "Videojuegos"
-}
+

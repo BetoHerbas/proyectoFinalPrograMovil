@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,10 +33,6 @@ private val TextLabel = Color(0xFF23E9D0)
 private val FieldBg = Color(0x44233542)
 private val FieldBorderFocused = Color(0x5538DBC9)
 private val FieldBorderUnfocused = Color(0x3335AFA3)
-private val CoverBorderColor = Color(0x3346D4C3)
-private val CoverBgColor = Color(0x2223404C)
-private val IconBgColor = Color(0x22394956)
-private val IconTintColor = Color(0xFF88A9B1)
 private val DividerColor = Color(0x2236B4AA)
 private val SwitchTrackOff = Color(0xFF536D75)
 private val SwitchThumbOff = Color(0xFFE1ECEF)
@@ -99,6 +94,7 @@ fun EditListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .statusBarsPadding()
+                    .navigationBarsPadding()
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 // ─── Top bar: Cancelar + Editar ───

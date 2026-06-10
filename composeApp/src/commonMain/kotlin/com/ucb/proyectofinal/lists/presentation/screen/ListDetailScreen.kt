@@ -121,6 +121,13 @@ fun ListDetailScreen(
         },
         containerColor = Color.Transparent
     ) { padding ->
+        val BgDark = MaterialTheme.colorScheme.background
+        val BgTeal = MaterialTheme.colorScheme.surfaceVariant
+        val BgDeep = MaterialTheme.colorScheme.background
+        val TextPrimary = MaterialTheme.colorScheme.onBackground
+        val TextSecondary = MaterialTheme.colorScheme.onSurfaceVariant
+        val TextMuted = MaterialTheme.colorScheme.onSurfaceVariant
+        val CardBg = MaterialTheme.colorScheme.surfaceVariant
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -225,7 +232,7 @@ fun ListDetailScreen(
                             ) {
                                 Text(
                                     text = "•${categoryLabel(contentType)}",
-                                    color = TextSecondary,
+                                    color = Color.White.copy(alpha = 0.7f),
                                     style = MaterialTheme.typography.labelSmall,
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                                 )
@@ -237,7 +244,7 @@ fun ListDetailScreen(
                         // Title
                         Text(
                             text = displayName,
-                            color = TextPrimary,
+                            color = Color.White,
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
                             maxLines = 2,
@@ -293,7 +300,7 @@ fun ListDetailScreen(
                             .height(6.dp)
                             .clip(RoundedCornerShape(3.dp)),
                         color = Accent,
-                        trackColor = Color(0xFF1C2E38)
+                        trackColor = MaterialTheme.colorScheme.outlineVariant
                     )
                 }
             }
@@ -381,11 +388,11 @@ private fun FilterChipItem(
     onClick: () -> Unit
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (selected) ChipSelectedBg else ChipBg,
+        targetValue = if (selected) ChipSelectedBg else MaterialTheme.colorScheme.surfaceVariant,
         animationSpec = tween(250)
     )
     val textColor by animateColorAsState(
-        targetValue = if (selected) ChipSelectedText else TextSecondary,
+        targetValue = if (selected) ChipSelectedText else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(250)
     )
 
@@ -418,7 +425,7 @@ private fun ContentItemCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 5.dp),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = CardBg),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         onClick = onClick
     ) {
         Row(
@@ -433,7 +440,7 @@ private fun ContentItemCard(
                 Icon(
                     imageVector = if (item.seen) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
                     contentDescription = if (item.seen) "Marcar como pendiente" else "Marcar como visto",
-                    tint = if (item.seen) Accent else TextMuted,
+                    tint = if (item.seen) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -444,7 +451,7 @@ private fun ContentItemCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = item.title.value,
-                    color = TextPrimary,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
                     maxLines = 1,
@@ -452,7 +459,7 @@ private fun ContentItemCard(
                 )
                 Text(
                     text = typeSublabel(item.type),
-                    color = TextMuted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -492,7 +499,7 @@ private fun ContentItemCard(
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = "Eliminar",
-                    tint = TextMuted,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -512,7 +519,7 @@ private fun ContentItemCard(
                 ) {
                     Text(
                         if ((item.rating?.value ?: 0) >= star) "★" else "☆",
-                        color = if ((item.rating?.value ?: 0) >= star) Accent else TextMuted,
+                        color = if ((item.rating?.value ?: 0) >= star) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -572,8 +579,8 @@ private fun categoryChipColor(type: ContentType): Color = when (type) {
 private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = Color(0xFF1A2E3A),
-        contentColor = TextPrimary
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         Column(
             modifier = Modifier
@@ -589,7 +596,7 @@ private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = item.title.value,
-                color = TextPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -619,7 +626,7 @@ private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = if (item.seen) "Completado" else "Pendiente",
-                        color = if (item.seen) Accent else TextMuted,
+                        color = if (item.seen) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -628,7 +635,7 @@ private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
                         (1..5).forEach { star ->
                             Text(
                                 text = if ((item.rating?.value ?: 0) >= star) "★" else "☆",
-                                color = if ((item.rating?.value ?: 0) >= star) Accent else TextMuted,
+                                color = if ((item.rating?.value ?: 0) >= star) Accent else MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 22.sp
                             )
                         }
@@ -636,7 +643,7 @@ private fun ItemDetailSheet(item: ContentItem, onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = item.rating?.let { "${it.value}/5" } ?: "Sin calificar",
-                        color = TextMuted,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

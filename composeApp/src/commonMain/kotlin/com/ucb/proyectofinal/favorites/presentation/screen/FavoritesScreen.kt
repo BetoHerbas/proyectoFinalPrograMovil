@@ -59,7 +59,7 @@ fun FavoritesScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             AppBottomBar(
                 currentTab = BottomTab.FAVORITES,
@@ -71,12 +71,15 @@ fun FavoritesScreen(
             )
         }
     ) { padding ->
+        val bg = MaterialTheme.colorScheme.background
+        val onBg = MaterialTheme.colorScheme.onBackground
+        val onBgSub = MaterialTheme.colorScheme.onSurfaceVariant
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(Color(0xFF0B1D29), Color(0xFF0A3736), Color(0xFF0D1B2D))
+                        colors = listOf(bg, MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), bg)
                     )
                 )
                 .padding(padding)
@@ -87,13 +90,13 @@ fun FavoritesScreen(
             Text(
                 text = "Favoritos",
                 style = MaterialTheme.typography.headlineLarge,
-                color = Color(0xFFE8FAFF),
+                color = onBg,
                 fontWeight = FontWeight.ExtraBold
             )
             Text(
                 text = "Tus listas guardadas",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFFA8C8D1)
+                color = onBgSub
             )
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -120,14 +123,14 @@ fun FavoritesScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
                                 text = "Aún no tienes favoritos",
-                                color = Color(0xFFE8FAFF),
+                                color = MaterialTheme.colorScheme.onBackground,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = "Explora listas públicas y guárdalas\naquí para acceder fácilmente",
-                                color = Color(0xFF8AAAB5),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center
                             )
@@ -170,7 +173,7 @@ private fun FavoriteListCard(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
         border = BorderStroke(1.dp, Color(0x223EE5D0)),
-        colors = CardDefaults.cardColors(containerColor = Color(0xCC163545))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -184,7 +187,7 @@ private fun FavoriteListCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = list.name.value,
-                    color = Color(0xFFE8FAFF),
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
                     maxLines = 1,
@@ -192,7 +195,7 @@ private fun FavoriteListCard(
                 )
                 Text(
                     text = "${list.itemCount} elementos · ${typeLabel(list.type)}",
-                    color = Color(0xFF8DB2BD),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
