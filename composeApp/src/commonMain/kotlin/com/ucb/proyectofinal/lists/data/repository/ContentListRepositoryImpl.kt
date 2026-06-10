@@ -55,6 +55,9 @@ class ContentListRepositoryImpl(
     private val googleBooksKey: String
         get() = AppSecrets.googleBooksApiKey.trim()
 
+    private val rawgApiKey: String
+        get() = AppSecrets.rawgApiKey.trim()
+
     override fun getLists(): Flow<List<ContentList>> =
         currentUserIdOrNull()?.let { userId ->
             channelFlow {
@@ -167,7 +170,7 @@ class ContentListRepositoryImpl(
             ContentType.MOVIE -> searchMovies(normalized)
             ContentType.SERIES -> searchSeries(normalized)
             ContentType.BOOK -> searchBooks(normalized)
-            ContentType.VIDEOGAME -> emptyList()
+            ContentType.VIDEOGAME -> searchVideogames(normalized)
         }
     }
 
@@ -336,7 +339,69 @@ class ContentListRepositoryImpl(
         ContentType.MOVIE -> topTenMovies()
         ContentType.SERIES -> topTenSeries()
         ContentType.BOOK -> topTenBooks()
-        ContentType.VIDEOGAME -> emptyList()
+        ContentType.VIDEOGAME -> topTenVideogames()
+    }
+
+    private suspend fun searchVideogames(query: String): List<CatalogSearchItem> {
+        val key = rawgApiKey
+        if (key.isBlank()) return emptyList()
+
+        return runCatching {
+            val url = "https://api.rawg.io/api/games?search=${query.encodeURLQueryComponent()}&key=$key&page_size=24"
+            val root = json.parseToJsonElement(httpClient.get(url).bodyAsText()).jsonObject
+            val results = root["results"]?.jsonArray ?: JsonArray(emptyList())
+            
+            results.mapNotNull { result ->
+                val obj = result.jsonObject
+                val title = obj.stringValue("name") ?: return@mapNotNull null
+                val sourceId = obj.stringValue("id") ?: title
+                val date = obj.stringValue("released") ?: ""
+                val rating = obj.stringValue("rating") ?: ""
+                
+                val subtitle = listOf(
+                    rating.takeIf { it.isNotBlank() && it != "0.0" }?.let { "★ $it" },
+                    date.takeIf { it.isNotBlank() }?.take(4)
+                ).filterNotNull().joinToString(" • ")
+
+                CatalogSearchItem(
+                    sourceId = sourceId,
+                    title = title,
+                    subtitle = subtitle,
+                    imageUrl = obj.stringValue("background_image")
+                )
+            }
+        }.getOrElse { emptyList() }
+    }
+
+    private suspend fun topTenVideogames(): List<CatalogSearchItem> {
+        val key = rawgApiKey
+        if (key.isBlank()) return emptyList()
+
+        return runCatching {
+            val url = "https://api.rawg.io/api/games?key=$key&ordering=-added&page_size=10"
+            val root = json.parseToJsonElement(httpClient.get(url).bodyAsText()).jsonObject
+            val results = root["results"]?.jsonArray ?: JsonArray(emptyList())
+            
+            results.mapNotNull { result ->
+                val obj = result.jsonObject
+                val title = obj.stringValue("name") ?: return@mapNotNull null
+                val sourceId = obj.stringValue("id") ?: title
+                val date = obj.stringValue("released") ?: ""
+                val rating = obj.stringValue("rating") ?: ""
+                
+                val subtitle = listOf(
+                    rating.takeIf { it.isNotBlank() && it != "0.0" }?.let { "★ $it" },
+                    date.takeIf { it.isNotBlank() }?.take(4)
+                ).filterNotNull().joinToString(" • ")
+
+                CatalogSearchItem(
+                    sourceId = sourceId,
+                    title = title,
+                    subtitle = subtitle,
+                    imageUrl = obj.stringValue("background_image")
+                )
+            }
+        }.getOrElse { emptyList() }
     }
 
     private suspend fun topTmdb(path: String): List<CatalogSearchItem> {

@@ -152,6 +152,11 @@ android {
             "GOOGLE_BOOKS_API_KEY",
             "\"${project.readSecret("GOOGLE_BOOKS_API_KEY", "google.books.api.key")}\""
         )
+        buildConfigField(
+            "String",
+            "RAWG_API_KEY",
+            "\"${project.readSecret("RAWG_API_KEY", "rawg.api.key")}\""
+        )
     }
     packaging {
         resources {
