@@ -85,6 +85,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .systemBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 16.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Color(0xAA0E181A))

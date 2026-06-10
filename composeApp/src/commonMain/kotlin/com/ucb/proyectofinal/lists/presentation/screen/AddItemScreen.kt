@@ -77,14 +77,17 @@ fun AddItemScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        containerColor = Color(0xFF030C12)
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
+    val bg = MaterialTheme.colorScheme.background
+    val onBg = MaterialTheme.colorScheme.onBackground
+    val onBgSub = MaterialTheme.colorScheme.onSurfaceVariant
     Column(
         modifier = Modifier
             .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF050E15), Color(0xFF04171F), Color(0xFF030A10))
+                        colors = listOf(bg, MaterialTheme.colorScheme.surfaceVariant, bg)
                     )
                 )
                 .padding(padding)
@@ -92,9 +95,9 @@ fun AddItemScreen(
     ) {
             Spacer(modifier = Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.common_back), tint = Color.White)
-                }
+            IconButton(onClick = onNavigateBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.common_back), tint = onBg)
+            }
                 Text(
                     text = stringResource(Res.string.add_item_title, state.listName.ifBlank { listName }.uppercase()),
                     color = Color(0xFF12F1D8),
@@ -119,10 +122,10 @@ fun AddItemScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color(0xFF0A121A),
-                    unfocusedContainerColor = Color(0xFF0A121A),
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedTextColor = onBg,
+                    unfocusedTextColor = onBg,
                     focusedBorderColor = Color(0xFF12F1D8),
                     unfocusedBorderColor = Color(0xFF183341),
                     cursorColor = Color(0xFF12F1D8)
@@ -137,7 +140,7 @@ fun AddItemScreen(
                 } else {
                     stringResource(Res.string.add_item_results, labelForType(state.listType))
                 },
-                color = Color(0xFFA8CDD8),
+                color = onBgSub,
                 style = MaterialTheme.typography.labelLarge
             )
             Spacer(modifier = Modifier.height(8.dp))

@@ -1,12 +1,18 @@
 package com.ucb.proyectofinal.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
@@ -14,6 +20,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -47,15 +55,17 @@ fun AppBottomBar(
     onNavigateToFavorites: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
-    Surface(color = Color(0xFF0F2730)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(horizontal = 8.dp, vertical = 10.dp),
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Surface(color = MaterialTheme.colorScheme.surface) {
+        Column {
+            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(horizontal = 4.dp, vertical = 6.dp),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
             BottomNavItem(
                 label = stringResource(Res.string.nav_home),
                 icon = Icons.Default.Home,
@@ -88,6 +98,7 @@ fun AppBottomBar(
                 selected = currentTab == BottomTab.SETTINGS,
                 onClick = onNavigateToSettings
             )
+            }
         }
     }
 }
@@ -99,19 +110,27 @@ private fun BottomNavItem(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val contentColor = if (selected) Color(0xFF22F2D4) else Color(0xFFA2BBC5)
+    val contentColor = if (selected) Color(0xFF22F2D4) else Color(0xFF7EA8B4)
     TextButton(
         onClick = onClick,
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(if (selected) Color(0xFF22F2D4) else Color.Transparent)
+            )
+            Spacer(Modifier.height(4.dp))
             CompositionLocalProvider(LocalContentColor provides contentColor) {
-                Icon(icon, contentDescription = label)
+                Icon(icon, contentDescription = label, modifier = Modifier.size(22.dp))
             }
             Text(
                 text = label,
                 color = contentColor,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }

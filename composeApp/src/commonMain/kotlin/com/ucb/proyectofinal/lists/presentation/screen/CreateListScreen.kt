@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LiveTv
 import androidx.compose.material.icons.outlined.LocalMovies
 import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -67,16 +66,13 @@ fun CreateListScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(Color(0xFF0A1D26), Color(0xFF072F2C), Color(0xFF061A25))
-                )
-            )
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Row(
@@ -85,11 +81,11 @@ fun CreateListScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TextButton(onClick = onNavigateBack) {
-                    Text(stringResource(Res.string.create_list_cancel), color = Color(0xFFBCD1D8), style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(Res.string.create_list_cancel), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
                 }
                 Text(
                     stringResource(Res.string.create_list_title),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
