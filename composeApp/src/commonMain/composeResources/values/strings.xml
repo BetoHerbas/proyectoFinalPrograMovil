@@ -4,7 +4,7 @@
  Project: Final-project-mobile-programming
  Locale: en-US, English (USA)
  Exported by: Luzhania Cespedes Arancibia
- Exported at: Wed, 10 Jun 2026 14:22:23 -0400
+ Exported at: Wed, 10 Jun 2026 14:25:58 -0400
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Final Project</string>
@@ -45,7 +45,7 @@
     <!-- Navigation / Bottom Bar -->
     <string name="nav_home">Home</string>
     <string name="nav_explore">Explore</string>
-    <string name="nav_add_list">Create list</string>
+    <string name="nav_add_list">Create new list</string>
     <string name="nav_favorites">Favorites</string>
     <string name="nav_settings">Settings</string>
     <!-- Auth: Login -->
