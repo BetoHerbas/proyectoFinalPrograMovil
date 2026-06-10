@@ -37,6 +37,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name="androidx.activity.ComponentActivity" android:exported="true"/>
         
     </application>
 
