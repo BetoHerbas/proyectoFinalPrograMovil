@@ -1,12 +1,21 @@
-<resources>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Loco xml export: Android strings
+ Project: PrograMovil
+ Locale: fr-FR, French (France)
+ Exported by: nicole herbas
+ Exported at: Mon, 08 Jun 2026 20:09:36 -0400
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="hello"></string>
     <string name="app_name">Projet Final</string>
     <string name="hello_world">Bonjour le Monde !</string>
-    <string name="welcome_message">Bienvenue dans l\'application de test</string>
+    <string name="welcome_message">Bienvenue dans l'application de test</string>
 
     <!-- Screen Titles -->
     <string name="login_screen_title">Écran de Connexion</string>
-    <string name="register_screen_title">Écran d\'Inscription</string>
-    <string name="add_item_screen_title">Écran d\'Ajout d\'Élément</string>
+    <string name="register_screen_title">Écran d'Inscription</string>
+    <string name="add_item_screen_title">Écran d'Ajout d'Élément</string>
     <string name="content_lists_screen_title">Écran des Listes de Contenu</string>
     <string name="create_list_screen_title">Écran de Création de Liste</string>
     <string name="list_detail_screen_title">Détail de la Liste</string>
@@ -37,11 +46,11 @@
     <string name="login_forgot_password">Mot de passe oublié ?</string>
     <string name="login_button">Se connecter</string>
     <string name="login_or_continue">Ou continuer avec</string>
-    <string name="login_no_account">Vous n\'avez pas de compte ?</string>
-    <string name="login_register">S\'inscrire</string>
+    <string name="login_no_account">Vous n'avez pas de compte ?</string>
+    <string name="login_register">S'inscrire</string>
 
     <!-- Auth: Register -->
-    <string name="register_header">S\'inscrire</string>
+    <string name="register_header">S'inscrire</string>
     <string name="register_title">Rejoignez le club</string>
     <string name="register_subtitle">Organisez vos livres, films et séries\nau même endroit.</string>
     <string name="register_name_label">NOM COMPLET</string>
@@ -51,7 +60,7 @@
     <string name="register_password_label">MOT DE PASSE</string>
     <string name="register_password_placeholder">Minimum 6 caractères</string>
     <string name="register_button">Créer un compte</string>
-    <string name="register_or_continue">Ou s\'inscrire avec</string>
+    <string name="register_or_continue">Ou s'inscrire avec</string>
     <string name="register_has_account">Vous avez déjà un compte ?</string>
     <string name="register_login">Se connecter</string>
 
@@ -84,7 +93,7 @@
     <!-- Add Item -->
     <string name="add_item_title">AJOUTER À %1$s</string>
     <string name="add_item_search_button">Rechercher</string>
-    <string name="add_item_search_placeholder">Rechercher dans l\'univers...</string>
+    <string name="add_item_search_placeholder">Rechercher dans l'univers...</string>
     <string name="add_item_top_10">Top 10 de %1$s</string>
     <string name="add_item_results">Résultats pour %1$s</string>
     <string name="add_item_no_results">Aucun résultat trouvé pour %1$s</string>
@@ -114,8 +123,8 @@
     <!-- Favorites -->
     <string name="favorites_title">Favoris</string>
     <string name="favorites_subtitle">Vos listes enregistrées</string>
-    <string name="favorites_empty_title">Aucun favori pour l\'instant</string>
-    <string name="favorites_empty_subtitle">Explorez les listes publiques et enregistrez-les\nici pour un accès facile</string>
+    <string name="favorites_empty_title">Aucun favori pour l'instant</string>
+    <string name="favorites_empty_subtitle">Explorez les listes publiques et enregistrez-les\nici pour un acceso facile</string>
     <string name="favorites_remove">Retirer des favoris</string>
     <string name="favorites_add">Ajouter aux favoris</string>
     <string name="favorites_elements_info">%1$d éléments · %2$s</string>
@@ -163,12 +172,12 @@
     <string name="common_delete">Supprimer</string>
     <string name="common_edit">Modifier</string>
     <string name="common_mark_seen">Marquer comme vu</string>
-    <string name="common_mark_pending">Marquer comme en cours</string>
+    <string name="common_mark_pending">Marquer como en cours</string>
 
     <!-- Maintenance -->
-    <string name="maintenance_loading">Démarrage de l\'application…</string>
+    <string name="maintenance_loading">Démarrage de l'application…</string>
     <string name="maintenance_title">En Maintenance</string>
-    <string name="maintenance_message">Nous améliorons l\'application.\nRevenez dans un instant. 🚀</string>
-    <string name="maintenance_auto_recover">L\'application se rétablira automatiquement\nlorsque la maintenance sera terminée ✨</string>
+    <string name="maintenance_message">Nous améliorons l'application.\nRevenez dans un instant. 🚀</string>
+    <string name="maintenance_auto_recover">L'application se rétablira automatiquement\nlorsque la maintenance sera terminée ✨</string>
     <string name="maintenance_finished">Maintenance terminée ! Les services ont été rétablis avec succès</string>
 </resources>

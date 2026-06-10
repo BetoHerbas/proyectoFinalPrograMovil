@@ -47,6 +47,25 @@ import androidx.compose.material3.TextButton
 import com.ucb.proyectofinal.navigation.AppBottomBar
 import com.ucb.proyectofinal.navigation.BottomTab
 import androidx.compose.runtime.Composable
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.lists_title
+import proyectofinalprogramovil.composeapp.generated.resources.lists_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.profile_title
+import proyectofinalprogramovil.composeapp.generated.resources.lists_search_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.lists_filter_all
+import proyectofinalprogramovil.composeapp.generated.resources.lists_recent
+import proyectofinalprogramovil.composeapp.generated.resources.lists_see_all
+import proyectofinalprogramovil.composeapp.generated.resources.lists_empty
+import proyectofinalprogramovil.composeapp.generated.resources.lists_items_count
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_book_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.type_book_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame_subtitle
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -154,13 +173,13 @@ fun ContentListsScreen(
             ) {
                 Column {
                     Text(
-                        text = "Mis Listas",
+                        text = stringResource(Res.string.lists_title),
                         style = MaterialTheme.typography.headlineLarge,
                         color = onBg,
                         fontWeight = FontWeight.ExtraBold
                     )
                     Text(
-                        text = "Organiza tu mundo",
+                        text = stringResource(Res.string.lists_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = onBgSub
                     )
@@ -178,7 +197,7 @@ fun ContentListsScreen(
                         ) {
                             Icon(
                                 Icons.Default.Person,
-                                contentDescription = "Perfil",
+                                contentDescription = stringResource(Res.string.profile_title),
                                 tint = onBgSub,
                                 modifier = Modifier.size(20.dp)
                             )
@@ -194,7 +213,7 @@ fun ContentListsScreen(
                 leadingIcon = {
                     Icon(Icons.Outlined.Search, contentDescription = null, tint = Color(0xFF8AAAB5))
                 },
-                placeholder = { Text("Buscar en mis listas...", color = Color(0xFF6F94A2)) },
+                placeholder = { Text(stringResource(Res.string.lists_search_placeholder), color = Color(0xFF6F94A2)) },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -219,7 +238,7 @@ fun ContentListsScreen(
                 FilterChip(
                     selected = selectedFilter == null,
                     onClick = { selectedFilter = null },
-                    label = { Text("Todo") },
+                    label = { Text(stringResource(Res.string.lists_filter_all)) },
                     colors = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = Color(0xFF22F2D4),
                         selectedLabelColor = Color(0xFF043F40),
@@ -249,14 +268,14 @@ fun ContentListsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Recientes",
+                    text = stringResource(Res.string.lists_recent),
                     style = MaterialTheme.typography.titleLarge,
                     color = onBg,
                     fontWeight = FontWeight.Bold
                 )
                 TextButton(onClick = onNavigateToSettings) {
                     Text(
-                        text = "VER TODO",
+                        text = stringResource(Res.string.lists_see_all),
                         color = Color(0xFF23E8D3),
                         style = MaterialTheme.typography.labelLarge
                     )
@@ -272,7 +291,7 @@ fun ContentListsScreen(
 
                 filteredLists.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No se encontraron listas", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(Res.string.lists_empty), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
 
@@ -355,7 +374,7 @@ private fun ContentListCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${list.itemCount} ítems",
+                text = stringResource(Res.string.lists_items_count, list.itemCount),
                 color = Color(0xFF2BE2CF),
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Medium
@@ -378,16 +397,18 @@ private fun typeIcon(type: ContentType): String = when (type) {
     ContentType.VIDEOGAME -> "🎮"
 }
 
+@Composable
 private fun typeChipLabel(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Películas"
-    ContentType.SERIES -> "Series"
-    ContentType.BOOK -> "Libros"
-    ContentType.VIDEOGAME -> "Videojuegos"
+    ContentType.MOVIE -> stringResource(Res.string.type_movie_plural)
+    ContentType.SERIES -> stringResource(Res.string.type_series_plural)
+    ContentType.BOOK -> stringResource(Res.string.type_book_plural)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame_plural)
 }
 
+@Composable
 private fun subtitleByType(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Sesión de cine"
-    ContentType.SERIES -> "Para maratón"
-    ContentType.BOOK -> "Próximas lecturas"
-    ContentType.VIDEOGAME -> "Para completar"
+    ContentType.MOVIE -> stringResource(Res.string.type_movie_subtitle)
+    ContentType.SERIES -> stringResource(Res.string.type_series_subtitle)
+    ContentType.BOOK -> stringResource(Res.string.type_book_subtitle)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame_subtitle)
 }

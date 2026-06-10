@@ -17,6 +17,12 @@ import com.ucb.proyectofinal.profile.presentation.effect.ProfileEffect
 import com.ucb.proyectofinal.profile.presentation.intent.ProfileIntent
 import com.ucb.proyectofinal.profile.presentation.viewmodel.ProfileViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.common_back
+import proyectofinalprogramovil.composeapp.generated.resources.profile_title
+import proyectofinalprogramovil.composeapp.generated.resources.profile_default_name
+import proyectofinalprogramovil.composeapp.generated.resources.profile_logout
 
 @Composable
 fun ProfileScreen(
@@ -45,9 +51,9 @@ fun ProfileScreen(
     ) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = MaterialTheme.colorScheme.onBackground)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.common_back), tint = MaterialTheme.colorScheme.onBackground)
             }
-            Text("Perfil", color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(Res.string.profile_title), color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
         }
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -66,7 +72,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = state.user?.name ?: "Usuario",
+            text = state.user?.name ?: stringResource(Res.string.profile_default_name),
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleLarge
@@ -86,7 +92,7 @@ fun ProfileScreen(
             ),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF00E5B6))
         ) {
-            Text("Cerrar sesión", fontWeight = FontWeight.SemiBold)
+            Text(stringResource(Res.string.profile_logout), fontWeight = FontWeight.SemiBold)
         }
     }
 }

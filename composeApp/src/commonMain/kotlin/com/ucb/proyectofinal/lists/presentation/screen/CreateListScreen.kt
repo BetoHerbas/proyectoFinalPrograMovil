@@ -27,6 +27,23 @@ import com.ucb.proyectofinal.lists.presentation.viewmodel.ContentListsViewModel
 import com.ucb.proyectofinal.maintenance.domain.repository.RemoteConfigRepository
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_cancel
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_title
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_save
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_default_cover
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_name_label
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_name_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_desc_label
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_desc_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_category
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_private
+import proyectofinalprogramovil.composeapp.generated.resources.create_list_private_desc
+import proyectofinalprogramovil.composeapp.generated.resources.type_book_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame_plural
 
 @Composable
 fun CreateListScreen(
@@ -64,10 +81,10 @@ fun CreateListScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TextButton(onClick = onNavigateBack) {
-                    Text("Cancelar", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(Res.string.create_list_cancel), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
                 }
                 Text(
-                    "Nueva Lista",
+                    stringResource(Res.string.create_list_title),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
@@ -91,17 +108,57 @@ fun CreateListScreen(
                         contentColor = Color(0xFF043636)
                     )
                 ) {
-                    Text("Guardar", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(Res.string.create_list_save), fontWeight = FontWeight.SemiBold)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(210.dp)
+                    .border(
+                        border = BorderStroke(1.dp, Color(0x3346D4C3)),
+                        shape = RoundedCornerShape(14.dp)
+                    )
+                    .background(Color(0x2223404C), RoundedCornerShape(14.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Box(
+                        modifier = Modifier
+                            .size(58.dp)
+                            .background(Color(0x22394956), RoundedCornerShape(999.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = when (selectedType) {
+                                ContentType.BOOK -> Icons.Outlined.MenuBook
+                                ContentType.MOVIE -> Icons.Outlined.LocalMovies
+                                ContentType.SERIES -> Icons.Outlined.LiveTv
+                                ContentType.VIDEOGAME -> Icons.Outlined.SportsEsports
+                            },
+                            contentDescription = null,
+                            tint = Color(0xFF88A9B1)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = stringResource(Res.string.create_list_default_cover, defaultCoverLabel(selectedType)),
+                        color = Color(0xFF8BAAB2),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(18.dp))
-            Text("NOMBRE DE LA LISTA", color = Color(0xFF23E9D0), style = MaterialTheme.typography.labelSmall)
+            Text(stringResource(Res.string.create_list_name_label), color = Color(0xFF23E9D0), style = MaterialTheme.typography.labelSmall)
             Spacer(modifier = Modifier.height(6.dp))
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                placeholder = { Text("Ej. Mis libros favoritos 2024", color = Color(0xFF72919A)) },
+                placeholder = { Text(stringResource(Res.string.create_list_name_placeholder), color = Color(0xFF72919A)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(0.dp),
@@ -118,14 +175,14 @@ fun CreateListScreen(
             )
 
             Spacer(modifier = Modifier.height(14.dp))
-            Text("DESCRIPCIÓN", color = Color(0xFF23E9D0), style = MaterialTheme.typography.labelSmall)
+            Text(stringResource(Res.string.create_list_desc_label), color = Color(0xFF23E9D0), style = MaterialTheme.typography.labelSmall)
             Spacer(modifier = Modifier.height(6.dp))
             OutlinedTextField(
                 value = description,
                 onValueChange = {
                     if (it.length <= 150) description = it
                 },
-                placeholder = { Text("¿De qué trata esta lista? Añade algunos detalles...", color = Color(0xFF72919A)) },
+                placeholder = { Text(stringResource(Res.string.create_list_desc_placeholder), color = Color(0xFF72919A)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(92.dp),
@@ -149,14 +206,14 @@ fun CreateListScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Categoría", color = Color.White, style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(Res.string.create_list_category), color = Color.White, style = MaterialTheme.typography.titleSmall)
             Spacer(modifier = Modifier.height(10.dp))
 
             val categoryCards = buildList {
-                add(Triple(ContentType.BOOK, "Libros", Icons.Outlined.MenuBook))
-                add(Triple(ContentType.MOVIE, "Películas", Icons.Outlined.LocalMovies))
-                add(Triple(ContentType.SERIES, "Series", Icons.Outlined.LiveTv))
-                if (videogameEnabled) add(Triple(ContentType.VIDEOGAME, "Videojuegos", Icons.Outlined.SportsEsports))
+                add(Triple(ContentType.BOOK, stringResource(Res.string.type_book_plural), Icons.Outlined.MenuBook))
+                add(Triple(ContentType.MOVIE, stringResource(Res.string.type_movie_plural), Icons.Outlined.LocalMovies))
+                add(Triple(ContentType.SERIES, stringResource(Res.string.type_series_plural), Icons.Outlined.LiveTv))
+                if (videogameEnabled) add(Triple(ContentType.VIDEOGAME, stringResource(Res.string.type_videogame_plural), Icons.Outlined.SportsEsports))
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -221,9 +278,9 @@ fun CreateListScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Lista Privada", color = Color.White, style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(Res.string.create_list_private), color = Color.White, style = MaterialTheme.typography.titleSmall)
                     Text(
-                        "Solo tú podrás ver esta lista",
+                        stringResource(Res.string.create_list_private_desc),
                         color = Color(0xFF8AA7AF),
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -245,4 +302,10 @@ fun CreateListScreen(
     }
 }
 
-
+@Composable
+private fun defaultCoverLabel(type: ContentType): String = when (type) {
+    ContentType.BOOK -> stringResource(Res.string.type_book_plural)
+    ContentType.MOVIE -> stringResource(Res.string.type_movie_plural)
+    ContentType.SERIES -> stringResource(Res.string.type_series_plural)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame_plural)
+}

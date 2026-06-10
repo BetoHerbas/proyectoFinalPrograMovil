@@ -46,6 +46,18 @@ import com.ucb.proyectofinal.lists.domain.model.ContentType
 import com.ucb.proyectofinal.navigation.AppBottomBar
 import com.ucb.proyectofinal.navigation.BottomTab
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_title
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_empty_title
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_empty_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_elements_info
+import proyectofinalprogramovil.composeapp.generated.resources.favorites_remove
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_book_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame_plural
 
 @Composable
 fun FavoritesScreen(
@@ -88,13 +100,13 @@ fun FavoritesScreen(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Favoritos",
+                text = stringResource(Res.string.favorites_title),
                 style = MaterialTheme.typography.headlineLarge,
                 color = onBg,
                 fontWeight = FontWeight.ExtraBold
             )
             Text(
-                text = "Tus listas guardadas",
+                text = stringResource(Res.string.favorites_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = onBgSub
             )
@@ -122,14 +134,14 @@ fun FavoritesScreen(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Aún no tienes favoritos",
+                                text = stringResource(Res.string.favorites_empty_title),
                                 color = MaterialTheme.colorScheme.onBackground,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Explora listas públicas y guárdalas\naquí para acceder fácilmente",
+                                text = stringResource(Res.string.favorites_empty_subtitle),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center
@@ -194,7 +206,7 @@ private fun FavoriteListCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "${list.itemCount} elementos · ${typeLabel(list.type)}",
+                    text = stringResource(Res.string.favorites_elements_info, list.itemCount, typeLabel(list.type)),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -202,7 +214,7 @@ private fun FavoriteListCard(
             IconButton(onClick = onRemove) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "Quitar de favoritos",
+                    contentDescription = stringResource(Res.string.favorites_remove),
                     tint = Color(0xFFFF4F6D)
                 )
             }
@@ -217,9 +229,10 @@ private fun typeIcon(type: ContentType) = when (type) {
     ContentType.VIDEOGAME -> "🎮"
 }
 
-private fun typeLabel(type: ContentType) = when (type) {
-    ContentType.MOVIE -> "Películas"
-    ContentType.SERIES -> "Series"
-    ContentType.BOOK -> "Libros"
-    ContentType.VIDEOGAME -> "Videojuegos"
+@Composable
+private fun typeLabel(type: ContentType): String = when (type) {
+    ContentType.MOVIE -> stringResource(Res.string.type_movie_plural)
+    ContentType.SERIES -> stringResource(Res.string.type_series_plural)
+    ContentType.BOOK -> stringResource(Res.string.type_book_plural)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame_plural)
 }

@@ -35,6 +35,19 @@ import com.ucb.proyectofinal.auth.presentation.intent.AuthIntent
 import com.ucb.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 import com.ucb.proyectofinal.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.login_header
+import proyectofinalprogramovil.composeapp.generated.resources.login_welcome
+import proyectofinalprogramovil.composeapp.generated.resources.login_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.login_email_label
+import proyectofinalprogramovil.composeapp.generated.resources.login_email_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.login_password_label
+import proyectofinalprogramovil.composeapp.generated.resources.login_forgot_password
+import proyectofinalprogramovil.composeapp.generated.resources.login_button
+import proyectofinalprogramovil.composeapp.generated.resources.login_or_continue
+import proyectofinalprogramovil.composeapp.generated.resources.login_no_account
+import proyectofinalprogramovil.composeapp.generated.resources.login_register
 
 @Composable
 fun LoginScreen(
@@ -82,7 +95,7 @@ fun LoginScreen(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Log in",
+                text = stringResource(Res.string.login_header),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start,
                 color = Color(0xFF96A0A5),
@@ -101,7 +114,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
-                text = "Bienvenido de nuevo",
+                text = stringResource(Res.string.login_welcome),
                 style = AppTheme.typography.headlineLarge,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -111,7 +124,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Conecta con todo tu contenido favorito.",
+                text = stringResource(Res.string.login_subtitle),
                 style = AppTheme.typography.bodyLarge,
                 color = Color(0xFFA5B0B3),
                 textAlign = TextAlign.Center
@@ -120,10 +133,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(36.dp))
 
             AuthField(
-                title = "Correo Electrónico",
+                title = stringResource(Res.string.login_email_label),
                 value = state.emailInput,
                 onValueChange = { viewModel.onIntent(AuthIntent.UpdateEmail(it)) },
-                placeholder = "hola@ejemplo.com",
+                placeholder = stringResource(Res.string.login_email_placeholder),
                 icon = Icons.Outlined.Email,
                 isError = state.emailError != null,
                 errorText = state.emailError
@@ -136,10 +149,10 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Contraseña", color = Color.White, style = AppTheme.typography.labelLarge)
+                Text(stringResource(Res.string.login_password_label), color = Color.White, style = AppTheme.typography.labelLarge)
                 TextButton(onClick = { }, contentPadding = PaddingValues(0.dp)) {
                     Text(
-                        "¿Olvidaste tu contraseña?",
+                        stringResource(Res.string.login_forgot_password),
                         color = Color(0xFF1EF0C5),
                         style = AppTheme.typography.labelMedium
                     )
@@ -210,7 +223,7 @@ fun LoginScreen(
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color(0xFF0B2320))
                 } else {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Iniciar Sesión", fontWeight = FontWeight.SemiBold, style = AppTheme.typography.bodyLarge)
+                        Text(stringResource(Res.string.login_button), fontWeight = FontWeight.SemiBold, style = AppTheme.typography.bodyLarge)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("➜")
                     }
@@ -222,7 +235,7 @@ fun LoginScreen(
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0x3377848A))
                 Text(
-                    " O continúa con ",
+                    " " + stringResource(Res.string.login_or_continue) + " ",
                     color = Color(0xFF7D898F),
                     style = AppTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 8.dp)
@@ -252,13 +265,13 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "¿No tienes una cuenta?",
+                    text = stringResource(Res.string.login_no_account),
                     style = AppTheme.typography.bodyMedium,
                     color = Color(0xFF7E888E)
                 )
                 TextButton(onClick = onNavigateToRegister, contentPadding = PaddingValues(horizontal = 4.dp)) {
                     Text(
-                        text = "Regístrate",
+                        text = stringResource(Res.string.login_register),
                         style = AppTheme.typography.labelLarge,
                         color = Color(0xFF1EF0C5),
                         fontWeight = FontWeight.Bold

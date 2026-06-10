@@ -35,6 +35,21 @@ import com.ucb.proyectofinal.lists.presentation.effect.AddItemEffect
 import com.ucb.proyectofinal.lists.presentation.intent.AddItemIntent
 import com.ucb.proyectofinal.lists.presentation.viewmodel.AddItemViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.common_back
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_title
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_search_button
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_search_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_top_10
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_results
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_no_results
+import proyectofinalprogramovil.composeapp.generated.resources.add_item_cover
+import proyectofinalprogramovil.composeapp.generated.resources.common_add
+import proyectofinalprogramovil.composeapp.generated.resources.type_movie_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_series_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_book_plural
+import proyectofinalprogramovil.composeapp.generated.resources.type_videogame_plural
 
 @Composable
 fun AddItemScreen(
@@ -81,10 +96,10 @@ fun AddItemScreen(
             Spacer(modifier = Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onNavigateBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = onBg)
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.common_back), tint = onBg)
             }
                 Text(
-                    text = "AGREGAR A ${state.listName.ifBlank { listName }.uppercase()}",
+                    text = stringResource(Res.string.add_item_title, state.listName.ifBlank { listName }.uppercase()),
                     color = Color(0xFF12F1D8),
                     fontWeight = FontWeight.ExtraBold,
                     style = MaterialTheme.typography.titleMedium
@@ -100,10 +115,10 @@ fun AddItemScreen(
                 },
                 trailingIcon = {
                     TextButton(onClick = { viewModel.onIntent(AddItemIntent.Search) }) {
-                        Text("Buscar", color = Color(0xFF12F1D8))
+                        Text(stringResource(Res.string.add_item_search_button), color = Color(0xFF12F1D8))
                     }
                 },
-                placeholder = { Text("Buscar en el universo...", color = Color(0xFF5E808E)) },
+                placeholder = { Text(stringResource(Res.string.add_item_search_placeholder), color = Color(0xFF5E808E)) },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -121,9 +136,9 @@ fun AddItemScreen(
             Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = if (state.query.isBlank()) {
-                    "Top 10 ${labelForType(state.listType)}"
+                    stringResource(Res.string.add_item_top_10, labelForType(state.listType))
                 } else {
-                    "Resultados ${labelForType(state.listType)}"
+                    stringResource(Res.string.add_item_results, labelForType(state.listType))
                 },
                 color = onBgSub,
                 style = MaterialTheme.typography.labelLarge
@@ -137,7 +152,7 @@ fun AddItemScreen(
             } else if (state.items.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "No se encontraron resultados para ${labelForType(state.listType).lowercase()}",
+                        text = stringResource(Res.string.add_item_no_results, labelForType(state.listType).lowercase()),
                         color = Color(0xFF7398A5)
                     )
                 }
@@ -186,7 +201,7 @@ private fun SearchItemCard(
                 if (!item.imageUrl.isNullOrBlank()) {
                     AsyncImage(
                         model = item.imageUrl,
-                        contentDescription = "Portada de ${item.title}",
+                        contentDescription = stringResource(Res.string.add_item_cover, item.title),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -233,7 +248,7 @@ private fun SearchItemCard(
                             strokeWidth = 2.dp
                         )
                     } else {
-                        Icon(Icons.Default.Add, contentDescription = "Agregar")
+                        Icon(Icons.Default.Add, contentDescription = stringResource(Res.string.common_add))
                     }
                 }
             }
@@ -241,9 +256,10 @@ private fun SearchItemCard(
     }
 }
 
+@Composable
 private fun labelForType(type: ContentType): String = when (type) {
-    ContentType.MOVIE -> "Películas"
-    ContentType.SERIES -> "Series"
-    ContentType.BOOK -> "Libros"
-    ContentType.VIDEOGAME -> "Videojuegos"
+    ContentType.MOVIE -> stringResource(Res.string.type_movie_plural)
+    ContentType.SERIES -> stringResource(Res.string.type_series_plural)
+    ContentType.BOOK -> stringResource(Res.string.type_book_plural)
+    ContentType.VIDEOGAME -> stringResource(Res.string.type_videogame_plural)
 }

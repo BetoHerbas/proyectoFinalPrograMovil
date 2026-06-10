@@ -63,6 +63,21 @@ import com.ucb.proyectofinal.auth.presentation.intent.AuthIntent
 import com.ucb.proyectofinal.auth.presentation.viewmodel.AuthViewModel
 import com.ucb.proyectofinal.designsystem.theme.AppTheme
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import proyectofinalprogramovil.composeapp.generated.resources.Res
+import proyectofinalprogramovil.composeapp.generated.resources.register_header
+import proyectofinalprogramovil.composeapp.generated.resources.register_title
+import proyectofinalprogramovil.composeapp.generated.resources.register_subtitle
+import proyectofinalprogramovil.composeapp.generated.resources.register_name_label
+import proyectofinalprogramovil.composeapp.generated.resources.register_name_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.register_email_label
+import proyectofinalprogramovil.composeapp.generated.resources.register_email_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.register_password_label
+import proyectofinalprogramovil.composeapp.generated.resources.register_password_placeholder
+import proyectofinalprogramovil.composeapp.generated.resources.register_button
+import proyectofinalprogramovil.composeapp.generated.resources.register_or_continue
+import proyectofinalprogramovil.composeapp.generated.resources.register_has_account
+import proyectofinalprogramovil.composeapp.generated.resources.register_login
 
 @Composable
 fun RegisterScreen(
@@ -105,7 +120,7 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Sign Up",
+                text = stringResource(Res.string.register_header),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start,
                 color = Color(0xFF96A0A5),
@@ -117,7 +132,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Unete al club",
+                text = stringResource(Res.string.register_title),
                 style = AppTheme.typography.headlineLarge,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -125,7 +140,7 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Organiza tus libros, peliculas y series\nen un solo lugar.",
+                text = stringResource(Res.string.register_subtitle),
                 style = AppTheme.typography.bodyLarge,
                 color = Color(0xFFA5B0B3),
                 textAlign = TextAlign.Center
@@ -133,10 +148,10 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
             RegisterField(
-                title = "NOMBRE COMPLETO",
+                title = stringResource(Res.string.register_name_label),
                 value = state.nameInput,
                 onValueChange = { viewModel.onIntent(AuthIntent.UpdateName(it)) },
-                placeholder = "Ej. Ana Garcia",
+                placeholder = stringResource(Res.string.register_name_placeholder),
                 icon = Icons.Outlined.Person,
                 isError = state.nameError != null,
                 errorText = state.nameError
@@ -144,10 +159,10 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(14.dp))
             RegisterField(
-                title = "CORREO ELECTRONICO",
+                title = stringResource(Res.string.register_email_label),
                 value = state.emailInput,
                 onValueChange = { viewModel.onIntent(AuthIntent.UpdateEmail(it)) },
-                placeholder = "hola@ejemplo.com",
+                placeholder = stringResource(Res.string.register_email_placeholder),
                 icon = Icons.Outlined.Email,
                 isError = state.emailError != null,
                 errorText = state.emailError
@@ -155,7 +170,7 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(14.dp))
             Text(
-                text = "CONTRASENA",
+                text = stringResource(Res.string.register_password_label),
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.White,
                 style = AppTheme.typography.labelLarge
@@ -164,7 +179,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = state.passwordInput,
                 onValueChange = { viewModel.onIntent(AuthIntent.UpdatePassword(it)) },
-                placeholder = { Text("Minimo 6 caracteres", color = Color(0xFF748087)) },
+                placeholder = { Text(stringResource(Res.string.register_password_placeholder), color = Color(0xFF748087)) },
                 leadingIcon = {
                     Icon(Icons.Outlined.Lock, contentDescription = null, tint = Color(0xFF6E7B82))
                 },
@@ -220,7 +235,7 @@ fun RegisterScreen(
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color(0xFF0B2320))
                 } else {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Crear cuenta", fontWeight = FontWeight.SemiBold, style = AppTheme.typography.bodyLarge)
+                        Text(stringResource(Res.string.register_button), fontWeight = FontWeight.SemiBold, style = AppTheme.typography.bodyLarge)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("->")
                     }
@@ -231,7 +246,7 @@ fun RegisterScreen(
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0x3377848A))
                 Text(
-                    " O registrate con ",
+                    " " + stringResource(Res.string.register_or_continue) + " ",
                     color = Color(0xFF7D898F),
                     style = AppTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 8.dp)
@@ -248,13 +263,13 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(18.dp))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
                 Text(
-                    "Ya tienes una cuenta?",
+                    stringResource(Res.string.register_has_account),
                     style = AppTheme.typography.bodyMedium,
                     color = Color(0xFF7E888E)
                 )
                 TextButton(onClick = onNavigateToLogin, contentPadding = PaddingValues(horizontal = 4.dp)) {
                     Text(
-                        "Inicia sesion",
+                        stringResource(Res.string.register_login),
                         style = AppTheme.typography.labelLarge,
                         color = Color(0xFF1EF0C5),
                         fontWeight = FontWeight.Bold
