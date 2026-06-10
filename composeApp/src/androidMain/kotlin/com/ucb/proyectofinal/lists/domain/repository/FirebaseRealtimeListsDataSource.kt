@@ -28,13 +28,13 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
                 val lists = snapshot.children.mapNotNull { listSnapshot ->
                     val id = listSnapshot.key ?: return@mapNotNull null
                     val name = listSnapshot.child("name").getValue(String::class.java) ?: return@mapNotNull null
-                    val type = listSnapshot.child("type").getValue(String::class.java) ?: return@mapNotNull null
+                    val typeStr = listSnapshot.child("type").getValue(String::class.java) ?: "MOVIE"
                     val description = listSnapshot.child("description").getValue(String::class.java).orEmpty()
                     val coverImageUrl = listSnapshot.child("coverImageUrl").getValue(String::class.java)
                     val isPublic = listSnapshot.child("isPublic").getValue(Boolean::class.java) ?: true
                     val itemCount = listSnapshot.child("itemCount").getValue(Int::class.java)
                         ?: listSnapshot.child("items").childrenCount.toInt()
-                    val contentType = runCatching { ContentType.valueOf(type) }.getOrNull() ?: return@mapNotNull null
+                    val contentType = runCatching { ContentType.valueOf(typeStr) }.getOrDefault(ContentType.MOVIE)
                     ContentList(
                         id = ListId(id),
                         name = ListName(name),
@@ -64,12 +64,12 @@ actual class FirebaseRealtimeListsDataSource actual constructor() {
                 val lists = snapshot.children.mapNotNull { listSnapshot ->
                     val id = listSnapshot.key ?: return@mapNotNull null
                     val name = listSnapshot.child("name").getValue(String::class.java) ?: return@mapNotNull null
-                    val type = listSnapshot.child("type").getValue(String::class.java) ?: return@mapNotNull null
+                    val typeStr = listSnapshot.child("type").getValue(String::class.java) ?: "MOVIE"
                     val description = listSnapshot.child("description").getValue(String::class.java).orEmpty()
                     val coverImageUrl = listSnapshot.child("coverImageUrl").getValue(String::class.java)
                     val isPublic = listSnapshot.child("isPublic").getValue(Boolean::class.java) ?: true
                     val itemCount = listSnapshot.child("itemCount").getValue(Int::class.java) ?: 0
-                    val contentType = runCatching { ContentType.valueOf(type) }.getOrNull() ?: return@mapNotNull null
+                    val contentType = runCatching { ContentType.valueOf(typeStr) }.getOrDefault(ContentType.MOVIE)
                     ContentList(
                         id = ListId(id),
                         name = ListName(name),
