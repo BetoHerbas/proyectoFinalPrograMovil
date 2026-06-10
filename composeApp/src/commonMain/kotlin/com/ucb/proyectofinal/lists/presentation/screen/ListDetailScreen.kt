@@ -72,6 +72,9 @@ private val CardBg = Color(0xFF1A2421)
 private val TextPrimary = Color(0xFFE8FAFF)
 private val TextSecondary = Color(0xFF8FB3BC)
 private val TextMuted = Color(0xFF6F94A2)
+private val ChipBg = Color(0xFF1C2E38)
+private val ChipSelectedBg = Color(0xFF22F2D4)
+private val ChipSelectedText = Color(0xFF043F40)
 
 @Composable
 fun ListDetailScreen(
@@ -89,7 +92,6 @@ fun ListDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    var selectedItem by remember { mutableStateOf<ContentItem?>(null) }
 
     LaunchedEffect(listId) {
         viewModel.onIntent(
@@ -133,6 +135,16 @@ fun ListDetailScreen(
         val TextSecondary = MaterialTheme.colorScheme.onSurfaceVariant
         val TextMuted = MaterialTheme.colorScheme.onSurfaceVariant
         val CardBg = MaterialTheme.colorScheme.surfaceVariant
+        
+        val contentType = runCatching { ContentType.valueOf(listType) }.getOrDefault(ContentType.MOVIE)
+        val displayName = state.listName.ifEmpty { listName }
+        val displayDescription = state.description.ifEmpty { description }
+        
+        val totalItems = state.items.size
+        val completedItems = state.items.count { it.seen }
+        val progress = if (totalItems > 0) completedItems.toFloat() / totalItems else 0f
+        val progressPercent = (progress * 100).toInt()
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -147,7 +159,6 @@ fun ListDetailScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(onClick = onNavigateBack) {
-<<<<<<< HEAD
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(Res.string.common_back),
@@ -162,20 +173,20 @@ fun ListDetailScreen(
                                 tint = AccentBright
                             )
                         }
-=======
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = TextPrimary)
-                    }
-                    IconButton(onClick = onNavigateToEdit) {
-                        Icon(Icons.Default.Edit, null, tint = AccentBright)
->>>>>>> origin/pantallaDetalles
                     }
                 }
             }
 
             item {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(coverGradient(contentType))
+                ) {
                     Text(
-<<<<<<< HEAD
                         text = typeEmoji(contentType),
                         fontSize = 56.sp,
                         modifier = Modifier.align(Alignment.Center)
@@ -259,17 +270,10 @@ fun ListDetailScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                         lineHeight = 22.sp
-=======
-                        text = state.listName.ifEmpty { listName },
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = TextPrimary,
-                        fontWeight = FontWeight.Bold
->>>>>>> origin/pantallaDetalles
                     )
                 }
             }
 
-<<<<<<< HEAD
             // ─── Progress bar ───
             item {
                 Column(
@@ -375,11 +379,6 @@ fun ListDetailScreen(
                 }
             }
         }
-    }
-
-    // ─── Item detail bottom sheet ───
-    selectedItem?.let { item ->
-        ItemDetailSheet(item = item, onDismiss = { selectedItem = null })
     }
 }
 
